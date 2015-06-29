@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require("multer");  // newly added, regarding init express
 
-var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listing":"esapi";
+var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
 
 var mongoose = require('mongoose'),  // newly added, regarding init express
     db_models = require('./db_models/index.js'),
