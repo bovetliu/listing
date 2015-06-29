@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require("multer");  // newly added, regarding init express
+var cors = require('cors');
 
 var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
 
@@ -30,7 +31,7 @@ app.set('view engine', 'jade');
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT|| 3000);  
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,9 +53,19 @@ app.get('/edit/:id', function(req, res, next){
 app.get('/listing/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
+app.post('/listing', function(req,res,next){
+  var instance = new req.db_model(req.body);
+  instance.save(function(e){
+    if (e) return next(e);
+    res.send(instance);
+    console.log("created following new instance:")
+    console.log(instance);
+  });
+})
 app.delete('/edit/:id/:filename', s3lib.procDeleteObject);
 app.post('/edit/:id/upload_image',multer(), s3lib.procUpload); // the multer() between '/upload_image' and 's3lib.procUpload' is very importatn
 app.post('/edit/:id', listing_lib.dbUpdateAttr);
+
 
 
 // catch 404 and forward to error handler
