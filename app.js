@@ -58,8 +58,8 @@ app.post('/listing', function(req,res,next){
   instance.save(function(e){
     if (e) return next(e);
     res.send(instance);
-    console.log("created following new instance:")
-    console.log(instance);
+    // console.log("created following new instance:")
+    // console.log(instance);
   });
 })
 app.delete('/edit/:id/:filename', s3lib.procDeleteObject);

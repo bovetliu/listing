@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
-  "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "name": "easysublease listing demo",
+  "version": "0.0.2",
+  "description": "one nodeJS app to demo how user can post listing on easysublease",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -11,9 +11,9 @@
   "author": {
     "name": "Bowei Liu",
     "email": "bowei_liu@ymail.com",
-    "url": "http://www.openshift.com/"
+    "url": "http://boweiliu.wordpress.com"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://listingtest-u7yhjm.rhcloud.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/openshift/origin-server"
