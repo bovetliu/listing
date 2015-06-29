@@ -1,0 +1,24 @@
+extends layout.jade
+block content
+  #container.container
+    h1 Dropzone.js
+    div#dropzone-container
+      #actions.row
+        .col-lg-7
+          // The fileinput-button span is used to style the file input field as button
+          span.btn.btn-success.fileinput-button
+            i.glyphicon.glyphicon-plus.margin-left-right-1x
+            span Add files...
+          button.btn.btn-primary.start(type='submit')
+            i.glyphicon.glyphicon-upload.margin-left-right-1x
+            span Start upload
+          button.btn.btn-warning.cancel(type='reset')
+            i.glyphicon.glyphicon-ban-circle.margin-left-right-1x
+            span Cancel upload
+        .col-lg-5
+          // The global file processing state
+          span.fileupload-process
+            #total-progress.progress.progress-striped.active(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')
+              .progress-bar.progress-bar-success(style='width:0%;', data-dz-uploadprogress='')
+      //- following div will be used to hold previews
+      #previews.previews-container

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var _ = require('underscore');
 var detailed_rental_listing_schema = new mongoose.Schema({
   "unit_traits": {
       "lat": { type:Number, max: 85, min:-85},
@@ -71,14 +72,42 @@ var detailed_rental_listing_schema = new mongoose.Schema({
   }
 }, { collection: 'detailed_rental_listing' }
 );
+var saveCB = function( err, instance){
+  if (err) console.log("[! ERROR !]  NOT successfully saved");
+  else console.log("[INFO] "+ instance._id +" saved. ");
+};
 
-/* validation area begin */
-/*
-rental_point_schema.path('community').validate( function(value){
-  return value.length <= 120;
-},"too many chars in community attr");
-*/
+detailed_rental_listing_schema.method({
+  addOneImage:function( filename){
+    if (!filename) {
+      console.log("detailed_rental_listing instance addOneImage method: addOneImage, receives false data, will do nothing")
+      return;
+    }
+    this.listing_related.images.push(filename);
+    this.listing_related.images = _.uniq(this.listing_related.images);
+    console.log("[debug] check result of this.listing_related.images: " + JSON.stringify(this.listing_related.images) + " sentIn filename: " + filename);
+    this.save( saveCB);
+  },
+  deleteOneImage:function( filename){
+    if (!filename) {
+      console.log("detailed_rental_listing instance deleteOneImage method: addOneImage, receives false data, will do nothing")
+      return;
+    }
+    var target_index = this.listing_related.images.indexOf(filename);
+    if (target_index > -1){
+      this.listing_related.images.splice(target_index,1);
+      if (filename == this.listing_related.cover_image){ 
+        this.listing_related.cover_image="";
+        console.log("[INFO] the cover image of instance: " + this._id + " will be deleted, if updating successfully!");
+      }
+      this.save( saveCB)
+    }
+    else{
+      console.log("[WARNING] instnace does not have provided file named: " + filename );
+    }
+  }
+});
+/* static method*/
+
 /* validation area end*/
-
-
 module.exports = mongoose.model('DetailedRentalListing',detailed_rental_listing_schema);

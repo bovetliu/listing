@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  //- p
+    a(href="/template") template_airbnb
+  p
+    a(href="/template/dropzone") test dropzone
+  //- p
+    a(href="https://www.airbnb.com/rooms/2525228" target="_blank") target page
+  p: a(href="/listing/558b32440ca2f11b1cf1b0a2") listing/558b32440ca2f11b1cf1b0a2
+
+  //- p: a(href="/listing/create_new") listing/create_new

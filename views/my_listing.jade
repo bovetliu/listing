@@ -1,0 +1,340 @@
+extends my_layout.jade
+block photo
+  -var server_path = 'https://esimgserver.s3.amazonaws.com/'
+  -var folder_path = server_path + result._id+'/'
+  -var processPhotoData = function( onelist) {
+  -   var tbr = []
+  -   onelist.forEach( function (element, index, ar){
+  -     tbr.push({"image":folder_path+element, "thumb":folder_path+element});
+  -   });
+  -   return JSON.stringify(tbr)}
+  -var cover_img_path = function(){
+  - var tbr = (result.listing_related.cover_image == "default.png")?(server_path+"default.png"):(folder_path+result.listing_related.cover_image)
+  - 
+  - return tbr;
+  -}  
+  meta#photo-data-modal(name="photo-data-modal" content="#{processPhotoData(result.listing_related.images)}")
+  if editing
+    div#dropzone-container
+      #actions.row
+        .col-lg-7
+          // The fileinput-button span is used to style the file input field as button
+          span.btn.btn-success.fileinput-button
+            i.glyphicon.glyphicon-plus.margin-left-right-1x
+            span Add files...
+          button.btn.btn-primary.start(type='submit')
+            i.glyphicon.glyphicon-upload.margin-left-right-1x
+            span Start upload
+          button.btn.btn-warning.cancel(type='reset')
+            i.glyphicon.glyphicon-ban-circle.margin-left-right-1x
+            span Cancel upload
+        .col-lg-5
+          // The global file processing state
+          span.fileupload-process
+            #total-progress.progress.progress-striped.active(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')
+              .progress-bar.progress-bar-success(style='width:0%;', data-dz-uploadprogress='')
+      //- following div will be used to hold previews
+      #previews.previews-container
+  
+  else
+    //- follwing div.hidden is used to preload pic
+    div.hidden
+      -var cnt = 0
+      each val in JSON.parse(processPhotoData(result.listing_related.images))
+        img(src=val.thumb)
+        div #{cnt}
+        - cnt = cnt + 1
+    .cover-img(id="cover-img" data-toggle="modal" data-target="#photo-modal"   style="background-image:url(#{cover_img_path()})" ) 
+    #photo-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      //- .modal-dialog.modal-lg
+      .modal-dialog.modal-fullscreen-custom
+        .modal-content.transparent-bg
+          .galleria
+
+block summary
+  -var adaptiveEditable =function(){
+  -  return (editing)?"editable":""
+  -}
+  -var stringifyUsefulInfo = function(){
+  -  var temp = {};
+  -  temp.db_id = result._id;
+  -  temp.is_editing = editing;
+  -  return JSON.stringify(temp);
+  -}
+  meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
+  .container
+    .row
+      .col-lg-8
+        .row: .col-lg-9.col-lg-offset-2: h3(data-dbtarget="listing_related.title" class="#{adaptiveEditable()}") #{result.listing_related.title}
+        .row: .col-lg-9.col-lg-offset-2: div(data-dbtarget="unit_traits.addr" class="#{adaptiveEditable()}") #{result.unit_traits.addr}
+        .row: .col-lg-9.col-lg-offset-2.text-center
+          .row.margin-bottom-3x
+            .col-md-4
+              i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
+              | icon1 
+            .col-md-4
+              i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
+              | icon2 
+            .col-m3-4
+              i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
+              | icon3 
+      .col-lg-4
+        form(id="book_it_form" method="post" )
+          #pricing
+            #price_amount(class="book-it-price-amount pull-left h3") $60
+            i.fa.fa-bolt.fa-lg.pull-left.padding-left-right-1x#pricing-bolt
+            #payment-period-container.pull-right
+              #per_night.per-night
+                | Per Night
+              
+              #per_month.per-month.hide
+                | Per Month
+                i#price-info-tooltip.icon.icon-question.hide(data-behavior='tooltip')   
+          #book_it
+            .panel
+              .panel-body
+                //- .form-fields
+                //-   .row.row-condensed.row-space-3 test
+                .book_it_status
+                  #book_it_button_container.book-it-btn-container.margin-bottom-3x
+                    button#book_it_button.btn.btn-primary.btn-large.btn-block(type='submit')
+                      span.book-it.hide Request to Book
+                      span.instant-book.hide
+                        i.fa.fa-bolt.h4
+                        | Instant Book
+                      span.book-now Contact poster now
+                .wishlist-wrapper
+                  input(type="checkbox" class="hide" name="wishlist-button" id="wishlist-button")
+                  label(for="wishlist-button" class="btn btn-default btn-block btn-large")  
+                    i.fa.fa-heart-o.padding-left-right-1x
+                    | Save to Wish List
+                if (!editing)    
+                  .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
+                    a#edit-button.btn.btn-primary(href=current_page_url +'edit/' + result._id) enter edit mode
+                else    
+                  .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
+                    a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) enter listing mode
+                div(class="other-actions text-center margin-top-3x") Share:&nbsp;&nbsp;
+                  i.fa.fa-at.fa-lg.text-muted &nbsp;
+                  i.fa.fa-facebook.fa-lg.text-muted &nbsp; 
+                  i.fa.fa-twitter.fa-lg.text-muted  &nbsp;
+
+block #details
+  //-I need to process some raw database data here
+  -var adaptive =function(text){
+  -  return (editing)?(text):"";
+  -}
+  -var ppForHTMl = function(text) { return text.replace(/\r?\n/g, '\n<br>')};
+
+  - var html_about_this_listing  = result.listing_related.about_this_listing.replace(/\r?\n/g, '\n<br>');
+  .container: .row: .col-lg-offset-1.col-lg-7#details-column.margin-top-4x
+            //- basically put all details in this div
+            .margin-bottom-3x
+              h3
+                span#about_listing_locate About This Listing
+
+              div.margin-bottom-2x.margin-top-2xr
+                div(data-dbtarget="listing_related.about_this_listing" class="#{adaptive('editable')}") !{html_about_this_listing}
+              p
+                a.contact-host-link(href="#"): strong Contact Host
+              hr
+              .row.space 
+                .col-md-3
+                  .text-muted
+                    | The Space
+                .col-md-9
+                  .row
+                    //- meta(name="the-space-metadata" content='{"beds_options":[1,2,3,4,5,6],"baths_options":[1,2,3,4,5,6],"apartment_type_options":["apartment","house","duplex"]}')
+                    .col-md-6
+                      div
+                        | Bathrooms: 
+                        strong.selectable(data-dbtarget="unit_traits.baths") #{result.unit_traits.baths}
+                      div
+                        | Bedrooms: 
+                        strong.selectable(data-dbtarget="unit_traits.beds") #{result.unit_traits.beds}
+                    .col-md-6
+                      div
+                        | Property type: 
+                        strong.selectable(data-dbtarget="unit_traits.property_type") #{result.unit_traits.property_type}
+
+                      div
+                        | Pet Friendly: 
+                        strong.selectable(data-dbtarget="unit_traits.pet_friendly") #{result.unit_traits.pet_friendly.toString()}
+              hr
+              .row.amenities
+                .col-md-3.text-muted Amenities
+                //- following .col-md-9 if having class .expanded, then only display .expandable-content-full
+                .col-md-9.expandable.expandable-trigger-more
+                  //- -var avail_amenities = {"Kitchen","Internet","Essentials","Shampoo","Heating", "Air Conditioning"}
+                  .expandable-content-summary
+                    .row
+                      - var n = 0;
+                      - var summary_items = [];
+                      each val, key in result.unit_traits.amenities_status
+                        if (val)
+                          - summary_items.push(key)
+                          - n++
+                        if (n == 5)
+                          - break;
+
+                      .col-sm-6
+                        if (summary_items[0])
+                          .row-space-1
+                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                            span#amenity-short-tooltip-trigger-8 #{summary_items[0]}
+                        if (summary_items[1])
+                          .row-space-1
+                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                            span#amenity-short-tooltip-trigger-3 #{summary_items[1]}
+                        if (summary_items[2])
+                          .row-space-1
+                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                            span#amenity-short-tooltip-trigger-40 #{summary_items[2]}
+                      .col-sm-6
+                        if (summary_items[3])
+                          .row-space-1
+                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                            span#amenity-short-tooltip-trigger-41 #{summary_items[3]}
+                        if (summary_items[4])
+                          .row-space-1
+                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                            span#amenity-short-tooltip-trigger-30 #{summary_items[4]}
+                        a.expandable-trigger-more
+                          strong + More
+
+                  //-end of .expandable-content-summary
+                  .expandable-content-full(style='transition: none; -webkit-transition: none;')
+                      .row
+                        .col-sm-6
+                          //- I have amenities_status
+                          - var n = 0;
+                          each val, key in result.unit_traits.amenities_status
+                            
+                            if(val && n <= 14)
+                              .row-space-1
+                                i(class="fa fa-beer fa-lg padding-right-1x")
+                                span
+                                  strong #{key}
+                            else
+                              .row-space-1
+                                del #{key}
+                            - n ++
+                            if(n == 15)
+                              - break;
+                        .col-sm-6
+                          -var n = 0;
+                          each val, key in result.unit_traits.amenities_status
+                            if(val && n > 14)
+                              .row-space-1
+                                i(class="fa fa-beer fa-lg padding-right-1x")
+                                span
+                                  strong #{key}
+                            else if (!val && n > 14)
+                              .row-space-1
+                                del #{key}
+                            - n ++
+              hr
+              .row.prices
+                .col-md-3
+                    .text-muted Prices
+                  .col-md-9
+                    .row
+                      .col-md-6
+                        div
+                          | Extra people: 
+                          strong
+                            span#localized_people_pricing_description_string No Charge
+                        div
+                          | Monthly Price: 
+                          strong
+                            span#Monthly_price_string $360
+                            |  /month
+                      .col-md-6
+                        div
+                          | Cancellation: 
+                          strong
+                            a#cancellation-policy(href='#', data-popup='true') Flexible
+              hr
+              .row.availability
+                .col-md-3
+                  .text-muted
+                    | Availability
+                .col-md-9
+                  .row
+                    .col-md-6
+                      strong 1 night
+                      |  minimum stay
+                    .col-md-6
+                      a#view-calendar(href='#')
+                        strong View Calendar
+              hr
+              .row.description
+                .col-md-3.text-muted
+                  | Description
+                .col-md-9.expandable.expandable-trigger-more
+                  .expandable-content.expandable-content-long
+                    each para_listformat in result.unit_traits.description
+                      case para_listformat[1]
+                        when "strong"
+                          p: strong #{para_listformat[0]}
+                        when "h4"
+                          h4 #{para_listformat[0]}
+                        when "h3"
+                          h3 #{para_listformat[0]}
+                        when "h2"
+                          h2 #{para_listformat[0]}
+                        when "h1"
+                          h1 #{para_listformat[0]}
+                        default
+                          p #{para_listformat[0]}
+
+                  //-   .expandable-indicator
+                  //- a.expandable-trigger-more(href='#')
+                  //-   strong + More
+              hr
+              .row.house-rules
+                .col-md-3
+                  .text-muted
+                    | House Rules
+                //- .col-md-9.expandable.expandable-trigger-more.expanded
+                  .expandable-content
+                    p Please be kind, clean, respectful, peaceful. 
+                    p Please take off your shoes!
+                    p
+                      | Smoking is okay outside. We recycle. We compost. Keep the kitchen clean, always. Enjoy life.
+                    .expandable-indicator
+                  a.expandable-trigger-more(href='#')
+                    strong + More
+                .col-md-9
+                  div(data-dbtarget="unit_traits.house_rules" class="#{adaptiveEditable()}") !{ppForHTMl(result.unit_traits.house_rules)}
+
+              hr
+              .row.safety-features
+                .col-md-3
+                  .text-muted
+                    | Safety Features
+                .col-md-9
+                  .js-no-safety-features-text.hide
+                    | None
+                  .row
+                    .col-sm-6
+                      .space-1
+                        span.js-present-safety-feature Smoke Detector
+                      .space-1
+                        span.js-present-safety-feature Carbon Monoxide Detector
+                      .space-1
+                        span.js-present-safety-feature First Aid Kit
+                    .col-sm-6
+                      .space-1
+                        span.js-present-safety-feature Safety Card
+                      .space-1
+                        span.js-present-safety-feature Fire Extinguisher
+//- This block neighborhood-meta will accept neighborhood_data from server
+block neighborhood-meta
+  -var processNeighborhoodData = function(){
+  - var tbr = {}
+  - tbr.lat = result.unit_traits.lat;
+  - tbr.lng = result.unit_traits.lng;
+  - return JSON.stringify(tbr)
+  -}
+  meta#neighborhood-data( name="neighborhood-data" content="#{processNeighborhoodData()}")

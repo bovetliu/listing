@@ -1,6 +1,0 @@
-curl --request POST --data "isexpired=false" "http://localhost:3000/db_models/Route/556bef295db94c59aa597cf3/update"
-response:{"ok":1,"nModified":1,"n":1}
-
-curl --request GET  "http://localhost:3000/db_models/Route/conditional?cat=1"
-response: [objects]
-

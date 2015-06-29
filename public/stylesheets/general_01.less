@@ -1,0 +1,209 @@
+//constants
+@usual_space_value:6.25px;
+@theme-color:#333333;
+@primary-color:#008CBA;
+@brand-success: #43AC6A;
+@brand-info:    #31B0D5;
+@brand-warning: #E99002;
+@brand-danger:  #F04124;
+// mixin
+.marginTop(@space_value){
+  margin-top: @space_value;
+}
+
+.marginBottom(@space_value){
+  margin-bottom: @space_value;
+}
+.marginLeftRight(@space_value){
+  margin-right: @space_value;
+  margin-left:  @space_value;
+}
+
+.paddingRight(@space_value){
+  padding-right: @space_value;
+}
+
+.paddingLeftRight(@space_value){
+  padding-left: @space_value;
+  padding-right:@space_value;
+}
+.adjustLineHight(@value){
+  line-height: @value;
+}
+.havetTansition(@time_duration:0.3s){
+  -webkit-transition: all @time_duration; /* For Safari 3.1 to 6.0 */
+  transition: all @time_duration;
+}
+.haveTansition(@time_duration:0.3s){
+  -webkit-transition: all @time_duration; /* For Safari 3.1 to 6.0 */
+  transition: all @time_duration;
+}
+
+//style sheets
+
+.line-height-18{
+  line-height: 1.8;
+}
+.block-it{
+  display: block;
+}
+
+/*general box positioning classes*/
+.virtual-backgroundlized{
+  /*make sure the parent element is relative positioned, and have height and width*/
+  z-index: -1;
+  position: absolute;
+  top: 0px;
+  left:0%;
+  width: 100%;
+  height: 100%;
+}
+
+.hide{
+  display: none;
+}
+.margin-top-0x{
+  .marginTop(0px);
+}
+.margin-top-1x{
+  .marginTop(@usual_space_value);
+}
+.margin-top-5px{
+  .marginTop(5px);
+}
+
+.margin-top-2x{
+  .marginTop(@usual_space_value*2);
+}
+.margin-top-3x{
+  .marginTop(@usual_space_value*3);
+}
+.margin-top-4x{
+  .marginTop(@usual_space_value*4);
+}
+
+.margin-top-8x{
+  .marginTop(@usual_space_value*8);
+}
+
+.margin-bottom-1x, .row-space-1{
+  .marginBottom(@usual_space_value)
+}
+
+.margin-bottom-2x{
+  .marginBottom(@usual_space_value * 2)
+}
+.margin-bottom-3x{
+  .marginBottom(@usual_space_value * 3)
+}
+.margin-bottom-4x{
+  .marginBottom(@usual_space_value * 4)
+}
+
+.margin-bottom-8x{
+  .marginBottom(@usual_space_value * 8)
+}
+
+.margin-left-right-1x{
+  .marginLeftRight(@usual_space_value);
+}
+.margin-left-right-2x{
+  .marginLeftRight(@usual_space_value * 2);
+}
+
+.padding-right-1x {
+  .paddingRight(@usual_space_value);
+}
+.padding-left-right-0x{
+  .paddingLeftRight(0);
+
+}
+.padding-left-right-1x{
+  .paddingLeftRight(@usual_space_value);
+}
+
+/*general-purpose snippts */
+a.cancel-color,a.link-reset{
+  &:hover{
+    color:inherit;
+  }
+  color:inherit;
+}
+a{
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: none;
+}
+
+.standard-list{
+  list-style-type: none;
+  margin:0;
+  padding:0;
+  overflow: hidden;
+  & > li > a {
+    padding: 0px 10px;
+    color:inherit;
+  }
+}
+.standard-list-horizontal{
+  & > li {
+    float:left;
+  }
+}
+
+.panel{
+  border: 1px solid #dce0e0;
+  margin-bottom: 0;
+  .panel-body{
+    &:first-child{
+      border-top: 0;
+    }
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    border-top: 1px solid #dce0e0;
+
+  }
+  .panel-light{
+    background-color: #fff;
+  }
+}
+
+.border-it-debug{
+  border:1px solid #000;
+}
+
+
+/*This part is for suojiansuode v0.04*/
+/*This part is to make the editable*/
+.editable, .selectable{
+  .havetTansition(0.2s);
+  cursor: pointer;
+  position: relative;
+  &:hover{
+  background-color:lighten( @primary-color,50%);
+
+  }
+}
+.edit-field{
+  .havetTansition(0.2s);
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 5px;
+  color:#fff;
+  background-color:  @primary-color;
+  opacity: 0;
+  text-align: center;
+  &:hover{
+    opacity: 1;
+  }
+}
+
+.edit-button{
+  padding: 5px 5px;
+  float: left;
+}
+

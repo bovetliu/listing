@@ -1,0 +1,419 @@
+.line-height-18 {
+  line-height: 1.8;
+}
+.block-it {
+  display: block;
+}
+/*general box positioning classes*/
+.virtual-backgroundlized {
+  /*make sure the parent element is relative positioned, and have height and width*/
+  z-index: -1;
+  position: absolute;
+  top: 0px;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+}
+.hide {
+  display: none;
+}
+.margin-top-0x {
+  margin-top: 0px;
+}
+.margin-top-1x {
+  margin-top: 6.25px;
+}
+.margin-top-5px {
+  margin-top: 5px;
+}
+.margin-top-2x {
+  margin-top: 12.5px;
+}
+.margin-top-3x {
+  margin-top: 18.75px;
+}
+.margin-top-4x {
+  margin-top: 25px;
+}
+.margin-top-8x {
+  margin-top: 50px;
+}
+.margin-bottom-1x,
+.row-space-1 {
+  margin-bottom: 6.25px;
+}
+.margin-bottom-2x {
+  margin-bottom: 12.5px;
+}
+.margin-bottom-3x {
+  margin-bottom: 18.75px;
+}
+.margin-bottom-4x {
+  margin-bottom: 25px;
+}
+.margin-bottom-8x {
+  margin-bottom: 50px;
+}
+.margin-left-right-1x {
+  margin-right: 6.25px;
+  margin-left: 6.25px;
+}
+.margin-left-right-2x {
+  margin-right: 12.5px;
+  margin-left: 12.5px;
+}
+.padding-right-1x {
+  padding-right: 6.25px;
+}
+.padding-left-right-0x {
+  padding-left: 0;
+  padding-right: 0;
+}
+.padding-left-right-1x {
+  padding-left: 6.25px;
+  padding-right: 6.25px;
+}
+/*general-purpose snippts */
+a.cancel-color,
+a.link-reset {
+  color: inherit;
+}
+a.cancel-color:hover,
+a.link-reset:hover {
+  color: inherit;
+}
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+.standard-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.standard-list > li > a {
+  padding: 0px 10px;
+  color: inherit;
+}
+.standard-list-horizontal > li {
+  float: left;
+}
+.panel {
+  border: 1px solid #dce0e0;
+  margin-bottom: 0;
+}
+.panel .panel-body {
+  position: relative;
+  margin: 0;
+  padding: 20px;
+  border-top: 1px solid #dce0e0;
+}
+.panel .panel-body:first-child {
+  border-top: 0;
+}
+.panel .panel-light {
+  background-color: #fff;
+}
+.border-it-debug {
+  border: 1px solid #000;
+}
+/*This part is for suojiansuode v0.04*/
+/*This part is to make the editable*/
+.editable,
+.selectable {
+  -webkit-transition: all 0.2s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.editable:hover,
+.selectable:hover {
+  background-color: #baeeff;
+}
+.edit-field {
+  -webkit-transition: all 0.2s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.2s;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 5px;
+  color: #fff;
+  background-color: #008cba;
+  opacity: 0;
+  text-align: center;
+}
+.edit-field:hover {
+  opacity: 1;
+}
+.edit-button {
+  padding: 5px 5px;
+  float: left;
+}
+.subnav-container {
+  background-color: #565a5c;
+  margin: 0;
+  z-index: 1;
+}
+.subnav-container .subnav-item-container {
+  cursor: pointer;
+  color: #e6e6e6;
+  border-bottom: 3px solid #565a5c;
+  line-height: 37px;
+  padding-left: 6.25px;
+  padding-right: 6.25px;
+}
+.subnav-container .subnav-item-container:hover {
+  background-color: #3d4042;
+  border-bottom-color: #3d4042;
+}
+.subnav-container .selected {
+  color: #fff;
+  border-bottom: 3px solid #e6e6e6;
+}
+.FixedAtTop {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+#photos {
+  height: 402px;
+}
+#photos #cover-img-container {
+  position: relative;
+}
+#photos #cover-img-container #dropzone-container {
+  background: rgba(0, 0, 255, 0.1);
+  width: 100%;
+  height: 100%;
+}
+#photos #cover-img-container #dropzone-container #actions {
+  height: 40px;
+}
+#photos #cover-img-container #dropzone-container #actions .btn {
+  margin-right: 6.25px;
+  margin-left: 6.25px;
+}
+#photos #cover-img-container #dropzone-container .previews-container {
+  height: 360px;
+  width: 100%;
+  background: rgba(0, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container {
+  margin-right: 6.25px;
+  margin-left: 6.25px;
+  position: relative;
+  display: inline-block;
+  height: 120px;
+  width: 120px;
+  overflow: hidden ;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-image-container,
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-image-cover {
+  /*make sure the parent element is relative positioned, and have height and width*/
+  z-index: -1;
+  position: absolute;
+  top: 0px;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-image-container.blur {
+  text-align: center;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-image-container.blur img {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-image-cover {
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+  background-color: #fff;
+  opacity: 0;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-info-control {
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+  opacity: 0;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-status-container {
+  height: 40px;
+  overflow: hidden;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-container .preview-buttons-container .glyphicon {
+  font-size: 1.4em;
+  padding-right: 6.25px;
+  cursor: pointer;
+}
+#photos #cover-img-container #dropzone-container #total-progress {
+  opacity: 0;
+  transition: opacity 0.3s linear;
+}
+#photos #cover-img-container #dropzone-container #previews {
+  /* success situation*/
+  /*added but not submited*/
+}
+#photos #cover-img-container #dropzone-container #previews .preview-container.dz-success .progress {
+  opacity: 0;
+  transition: opacity 0.3s linear;
+}
+#photos #cover-img-container #dropzone-container #previews .preview-container.dz-success .start,
+#photos #cover-img-container #dropzone-container #previews .preview-container.dz-success .cancel {
+  display: none;
+}
+#photos #cover-img-container #dropzone-container #previews .preview-container.dz-success .delete,
+#photos #cover-img-container #dropzone-container #previews .preview-container.dz-success .set-cover {
+  display: inline-block;
+}
+#photos #cover-img-container #dropzone-container #previews .preview-container .delete,
+#photos #cover-img-container #dropzone-container #previews .preview-container .set-cover {
+  display: none;
+}
+#photos #cover-img-container > .cover-img {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-color: #f5f5f5;
+  height: 100%;
+}
+#photos #photo-modal .galleria {
+  width: 100%;
+  height: 100%;
+}
+#photos #photo-modal .transparent-bg {
+  background-color: rgba(0, 0, 0, 0);
+}
+#photos #photo-modal .galleria .galleria-container,
+#photos #photo-modal .galleria .galleria-theme-classic {
+  background: rgba(0, 0, 0, 0);
+}
+#photos .modal-fullscreen-custom {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0);
+}
+#book_it_form {
+  margin-top: -40px;
+  position: relative;
+}
+#book_it_form #pricing {
+  width: 358px;
+  background-color: rgba(60, 63, 64, 0.9);
+  border: 0;
+  height: 40px;
+  color: #fff;
+  padding: 0 20px;
+  text-transform: capitalize;
+  z-index: 1;
+}
+#book_it_form #pricing #price_amount {
+  margin: 0;
+  padding: 6px 0px;
+}
+#book_it_form #pricing #pricing-bolt {
+  line-height: 40px;
+}
+#book_it_form #pricing #payment-period-container {
+  line-height: 40px;
+}
+#book_it_form #book_it {
+  position: absolute;
+  width: 358px;
+}
+#book_it_form #pricing.fixed {
+  position: fixed;
+  top: 0px;
+}
+#book_it_form #book_it.fixed {
+  position: fixed;
+  top: 40px;
+}
+#book_it_form #book_it.bottom {
+  position: absolute;
+}
+#details {
+  background-color: #f5f5f5;
+}
+#neighborhood #map-div {
+  width: 100%;
+  height: 690px;
+}
+footer {
+  background: #1a1a1a;
+  color: #b3b3b3;
+  padding-top: 40px;
+  position: relative;
+  z-index: 2;
+}
+footer .links li {
+  color: #808080;
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .links li:hover {
+  color: #00b2ed;
+}
+footer .title {
+  margin-top: 0px;
+}
+footer .footer-col-inner .social {
+  margin-top: 6.25px;
+  margin-bottom: 12.5px;
+}
+footer .footer-col-inner .social li a {
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .footer-col-inner .social li a:hover {
+  color: #00b2ed;
+}
+footer hr {
+  border-top-color: #333333;
+}
+footer .download .download-list li {
+  margin-bottom: 12.5px;
+}
+footer .download .download-list li .btn-ghost {
+  opacity: 0.6;
+  background: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 8px 20px;
+  vertical-align: middle;
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .download .download-list li .btn-ghost:hover {
+  background: #4d4d4d;
+  opacity: 1;
+}
+footer .contact .fa-lg {
+  padding-top: 6.25px;
+  height: 20px;
+}
+/*offset some unwanted bootstrap effect*/
+.cancel-margin {
+  margin: 0px;
+}
+.cancel-padding-tb {
+  padding: 0px 12px;
+  height: 25px;
+}
