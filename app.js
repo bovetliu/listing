@@ -86,20 +86,26 @@ else{
   });
 } 
 
-var server = http.createServer(app);
-var boot = function () {
-  server.listen(app.get('port'), function(){
-    console.info('Express server listening on port ' + app.get('port'));
-  });
-}
-var shutdown = function() {
-  server.close();
-}
-if (require.main === module) {
-  boot();
-} else {
-  console.info('Running app as a module')
-  exports.boot = boot;
-  exports.shutdown = shutdown;
-  exports.port = app.get('port');
-}
+// var server = http.createServer(app);
+// var boot = function () {
+//   server.listen(app.get('port'), function(){
+//     console.info('Express server listening on port ' + app.get('port'));
+//   });
+// }
+// var shutdown = function() {
+//   server.close();
+// }
+// if (require.main === module) {
+//   boot();
+// } else {
+//   console.info('Running app as a module')
+//   exports.boot = boot;
+//   exports.shutdown = shutdown;
+//   exports.port = app.get('port');
+// }
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var ip   = process.env.OPENSHIFT_NODEJS_IP  || '127.0.0.1'
+
+app.listen(port,ip ,null, function(){
+  console.log( "server listening: " + ip + ":" +port );
+});

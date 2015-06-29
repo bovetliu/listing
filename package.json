@@ -42,6 +42,9 @@
     "superagent": "*",
     "expect.js": "*"
   },
+  "scripts":{
+    "start":"node app.js"
+  },
   "bundleDependencies": [],
   "private": true,
   "main": "app.js"
