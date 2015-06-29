@@ -1,5 +1,0 @@
-#!/bin/bash
-#  This bash is to setup local mongo server and Nodejs Http server
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-export PATH
-AWS_ACCESS_KEY=AKIAJUFX4J3TLWMNVS7A AWS_SECRET_KEY=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 local="true" node-dev app.js
