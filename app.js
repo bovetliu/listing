@@ -54,7 +54,9 @@ app.get('/listing/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 app.post('/listing', function(req,res,next){
-  var instance = new req.db_model(req.body);
+  var instance = new req.db_model( JSON.parse(req.body.model) );
+  console.log(req.body.model)
+  // console.log(JSON.stringify(instance));
   instance.save(function(e){
     if (e) return next(e);
     res.send(instance);

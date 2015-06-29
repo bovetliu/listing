@@ -118,7 +118,7 @@ document.getElementById('console').innerHTML = JSON.stringify({
 });
 
 
-/*delete those de*/
+/*delete those other lists, in local listing database*/
 db.detailed_rental_listing.remove(
 {_id: {$ne:  ObjectId("558b32440ca2f11b1cf1b0a2")}}
 )
