@@ -328,7 +328,7 @@ $(document).ready(function(){
         "unit_traits.pet_friendly":[true,false]
       } 
     },
-    apiServerURL:  "http://localhost:3001",
+    apiServerURL:  "http://localhost:3000",
     db_id:"123",
 
     mapOptionsIntoHTML:_.template(
@@ -348,10 +348,10 @@ $(document).ready(function(){
     },
     updateAttr: function( attr, value, onsuccessCB ){
       var ClassRef = this;
-      var generated_URL = [ClassRef.get("apiServerURL") , "/db_models/DetailedRentalListing/",ClassRef.get("db_id"),"/update"].join("");
+      // var generated_URL = [ClassRef.get("apiServerURL") , "eidt",ClassRef.get("db_id")].join("/");
       var to_be_uploaded = {}; to_be_uploaded[attr] = value;
       $.ajax({
-        url:generated_URL,
+        url:helpers.updateURL(),
         data: to_be_uploaded, // plain object
         type: 'POST',
         crossDomain:true,
@@ -457,11 +457,11 @@ $(document).ready(function(){
       var ClassRef = this;
       //updating position of api server
       if (window.location.href.slice(0,16) != "http://localhost")
-      ClassRef.set("apiServerURL", "http://esapi-u7yhjm.rhcloud.com") ;
+      ClassRef.set("apiServerURL", "http://listingtest-u7yhjm.rhcloud.com") ;
       else {
-        ClassRef.set("apiServerURL", "http://localhost:3001");
+        ClassRef.set("apiServerURL", "http://localhost:3000");
       }
-      ClassRef.set("db_id",window.location.href.match(/[a-z0-9]{24}/)[0]);
+      ClassRef.set("db_id", helpers.db_id);
       console.log("init of editables_controler , anonymous Class(): " + ClassRef.get("db_id"));
 
       /*make every editable  eligible for editing!*/
