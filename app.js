@@ -83,9 +83,8 @@ app.use('/', function(req, res){
 
 
 
-
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var ip   = process.env.OPENSHIFT_NODEJS_IP  || '127.0.0.1'
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
 app.listen(port,ip ,null, function(){
   console.log( "server listening: " + ip + ":" +port );
