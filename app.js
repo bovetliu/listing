@@ -7,7 +7,7 @@ var express = require('express'),
 var mongoose = require('mongoose'),
     db_models = require('./db_models/index.js'),
     db_url = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://@localhost:27017/',
-    db = mongoose.connect(db_url+"esapi", {safe: true}),
+    db = mongoose.connect(db_url+"listing", {safe: true}),
     id = mongoose.Types.ObjectId();
 
 
