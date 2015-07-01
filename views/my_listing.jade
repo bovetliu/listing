@@ -61,6 +61,7 @@ block summary
   -  temp.is_editing = editing;
   -  return JSON.stringify(temp);
   -}
+  -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
   meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
   .container
     .row
@@ -81,11 +82,11 @@ block summary
       .col-lg-4
         form(id="book_it_form" method="post" )
           #pricing
-            #price_amount(class="book-it-price-amount pull-left h3") $60
+            #price_amount(class="book-it-price-amount pull-left h3") $#{returnPrice()}
             i.fa.fa-bolt.fa-lg.pull-left.padding-left-right-1x#pricing-bolt
             #payment-period-container.pull-right
               #per_night.per-night
-                | Per Night
+                | Per Month
               
               #per_month.per-month.hide
                 | Per Month
@@ -127,6 +128,46 @@ block #details
   -var ppForHTMl = function(text) { return text.replace(/\r?\n/g, '\n<br>')};
 
   - var html_about_this_listing  = result.listing_related.about_this_listing.replace(/\r?\n/g, '\n<br>');
+  mixin checkbox(bool, key)
+    -var content = key.split("_").join(" ")
+    .checkbox
+      label
+        if (bool)
+          input(type='checkbox' name=key checked )
+        else 
+          input(type='checkbox' name=key )
+        |  #{content}
+  mixin checkbox_listingmode(val, key, isBold)
+    - key = key.split("_").join(" ")
+    if (val)
+      .row-space-1
+        if (isBold)
+          i(class="fa fa-beer fa-lg padding-right-1x")
+          span
+            strong #{key}
+        else 
+          span #{key}
+    else 
+      .row-space-1
+        del #{key}     
+  mixin group_checkbox_listingmode(start, end, jsobject, isBold)
+    - var n = 0
+    each val, key in jsobject
+      if ( n>= start && n < end)
+        +checkbox_listingmode(val, key, isBold)
+      - n ++
+      if (n==end)
+        - break;
+  - function regroupFeatures ( jsobject ) {
+  -   var tbr = {}
+  -   Object.keys(jsobject).forEach(function (key, index ,arr) {
+  -     if (jsobject[key]){ tbr[key] = true; }
+  -   });
+  -   Object.keys(jsobject).forEach(function (key, index ,arr) {
+  -     if (!jsobject[key]){ tbr[key] = false; }
+  -   });
+  -   return tbr
+  - }
   .container: .row: .col-lg-offset-1.col-lg-7#details-column.margin-top-4x
             //- basically put all details in this div
             .margin-bottom-3x
@@ -162,6 +203,7 @@ block #details
                         strong.selectable(data-dbtarget="unit_traits.pet_friendly") #{result.unit_traits.pet_friendly.toString()}
               hr
               .row.amenities
+
                 .col-md-3.text-muted Amenities
                 //- following .col-md-9 if having class .expanded, then only display .expandable-content-full
                 .col-md-9.expandable.expandable-trigger-more
@@ -169,41 +211,12 @@ block #details
                   if (!editing)
                     .expandable-content-summary
                       .row
-                        //-  I think I better process them before sending them
-
-                        - var n = 0;
-                        - var summary_items = [];
-                        each val, key in result.unit_traits.amenities_status
-                          if (val)
-                            - summary_items.push(key)
-                            - n++
-                          if (n == 5)
-                            - break;
+                        - var summary_items = regroupFeatures( result.unit_traits.amenities_status); 
+                        .col-sm-6
+                          +group_checkbox_listingmode(0,3,summary_items,false)
 
                         .col-sm-6
-                          if (summary_items[0])
-                            .row-space-1
-                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                              span#amenity-short-tooltip-trigger-8 #{summary_items[0]}
-                          if (summary_items[1])
-                            .row-space-1
-                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                              span#amenity-short-tooltip-trigger-3 #{summary_items[1]}
-                          if (summary_items[2])
-                            .row-space-1
-                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                              span#amenity-short-tooltip-trigger-40 #{summary_items[2]}
-
-
-                        .col-sm-6
-                          if (summary_items[3])
-                            .row-space-1
-                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                              span#amenity-short-tooltip-trigger-41 #{summary_items[3]}
-                          if (summary_items[4])
-                            .row-space-1
-                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                              span#amenity-short-tooltip-trigger-30 #{summary_items[4]}
+                          +group_checkbox_listingmode(3,5,summary_items,false)
                           a.expandable-trigger-more
                             strong + More
 
@@ -212,61 +225,31 @@ block #details
                         .row
                           .col-sm-6
                             //- I have amenities_status
-                            - var n = 0;
-                            each val, key in result.unit_traits.amenities_status
-                              
-                              if (val && n <= 14)
-                                .row-space-1
-                                  i(class="fa fa-beer fa-lg padding-right-1x")
-                                  span
-                                    strong #{key}
-                              else
-                                .row-space-1
-                                  del #{key}
-                              - n ++
-                              if(n == 15)
-                                - break;
+                            +group_checkbox_listingmode(0,15,result.unit_traits.amenities_status, true)      
+                          .col-sm-6
+                            +group_checkbox_listingmode(15,150,result.unit_traits.amenities_status, true)      
+                  if (editing)
+                    .selectable-group(data-dbtarget="unit_traits.amenities_status")
+                      form.selectable-group-form(data-dbtarget="unit_traits.amenities_status")
+                        .row
                           .col-sm-6
                             -var n = 0;
                             each val, key in result.unit_traits.amenities_status
-                              if(val && n > 14)
-                                .row-space-1
-                                  i(class="fa fa-beer fa-lg padding-right-1x")
-                                  span
-                                    strong #{key}
-                              else if (!val && n > 14)
-                                .row-space-1
-                                  del #{key}
+                              +checkbox(val, key)
                               - n ++
-                  if (editing)
-                    .selectable-group
-                      .row
-                        mixin checkbox(bool, content)
-                          .checkbox
-                            label
-                              if (bool)
-                                input(type='checkbox' checked )
-                              else 
-                                input(type='checkbox' )
-                              |  #{content}
-                        .col-sm-6
-                          -var n = 0;
-                          each val, index in result.unit_traits.amenities_status
-                            +checkbox(val, index)
-                            - n ++
-                              if ( n == 15)
-                                - break;
-                        .col-sm-6
-                          -var n=0;
-                          each val, index in result.unit_traits.amenities_status
-                            if (n > 14)
-                              +checkbox(val, index)
-                            - n ++
-                      .row
-                        .col-sm-12
-                          button.btn.btn-primary.marigin-right-1x Submit  
-                          button.btn.btn-default.marigin-right-1x Cancel
-                          //- put button save and cancel here
+                                if ( n == 15)
+                                  - break;
+                          .col-sm-6
+                            -var n=0;
+                            each val, key in result.unit_traits.amenities_status
+                              if (n > 14)
+                                +checkbox(val, key)
+                              - n ++
+                        .row
+                          .col-sm-12
+                            input.btn.btn-primary.marigin-right-1x.selectable-group-submit(type="submit" value="Submit")
+                            button.btn.btn-default.marigin-right-1x Cancel
+                            //- put button save and cancel here
               hr
               .row.prices
                 -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
@@ -346,21 +329,46 @@ block #details
                   .text-muted
                     | Safety Features
                 .col-md-9
-                  .js-no-safety-features-text.hide
-                    | None
-                  .row
-                    .col-sm-6
-                      .space-1
-                        span.js-present-safety-feature Smoke Detector
-                      .space-1
-                        span.js-present-safety-feature Carbon Monoxide Detector
-                      .space-1
-                        span.js-present-safety-feature First Aid Kit
-                    .col-sm-6
-                      .space-1
-                        span.js-present-safety-feature Safety Card
-                      .space-1
-                        span.js-present-safety-feature Fire Extinguisher
+                  if (!editing)
+                    .row
+                      .col-sm-6
+
+                        //- each val, key in result.unit_traits.safety_features
+                        +group_checkbox_listingmode(0,3,result.unit_traits.safety_features, false)
+                        //- .space-1
+                        //-   span.js-present-safety-feature Smoke Detector
+                        //- .space-1
+                        //-   span.js-present-safety-feature Carbon Monoxide Detector
+                        //- .space-1
+                        //-   span.js-present-safety-feature First Aid Kit
+                      .col-sm-6
+                        +group_checkbox_listingmode(3,30,result.unit_traits.safety_features, false)
+                        //- .space-1
+                        //-   span.js-present-safety-feature Safety Card
+                        //- .space-1
+                        //-   span.js-present-safety-feature Fire Extinguisher
+                  
+                  if (editing)
+                    .selectable-group(data-dbtarget="unit_traits.safety_features")
+                      form.selectable-group-form(data-dbtarget="unit_traits.safety_features")
+                        .row
+                          .col-sm-6
+                            -var n = 0;
+                            each val, key in result.unit_traits.safety_features
+                              +checkbox(val, key)
+                              - n ++
+                                if ( n == 3)
+                                  - break;
+                          .col-sm-6
+                            -var n=0;
+                            each val, key in result.unit_traits.safety_features
+                              if (n > 2)
+                                +checkbox(val, key)
+                              - n ++
+                        .row
+                          .col-sm-12
+                            input.btn.btn-primary.marigin-right-1x.selectable-group-submit(type="submit" value="Submit")
+                            button.btn.btn-default.marigin-right-1x Cancel
                 
 
 

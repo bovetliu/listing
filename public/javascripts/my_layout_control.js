@@ -349,16 +349,19 @@ $(document).ready(function(){
     updateAttr: function( attr, value, onsuccessCB ){
       var ClassRef = this;
       // var generated_URL = [ClassRef.get("apiServerURL") , "eidt",ClassRef.get("db_id")].join("/");
-      var to_be_uploaded = {}; to_be_uploaded[attr] = value;
+      var to_be_uploaded = {}; to_be_uploaded.attr_path = JSON.stringify(attr.split(".")); to_be_uploaded.value = JSON.stringify(value);
       $.ajax({
         url:helpers.updateURL(),
-        data: to_be_uploaded, // plain object
+        data: to_be_uploaded, // plain object   {"attr_path": ["unit_traits","amenities_status"], "value": {"kitchen": true, "internet": true, ...}}
         type: 'POST',
+        // dataType:"json",
+        conntentType:"text/plain",
         crossDomain:true,
         success: function(data, status){ 
-          if (data.n == 0){
+          if (!data._id){
             console.log([data,status]);
-          } else if (data.n == 1) {
+          } else if (data._id) {
+            console.log(data);
             onsuccessCB(attr, value);
           }
           else{
@@ -482,10 +485,12 @@ $(document).ready(function(){
       /*process slide bar*/
       $( "#price-slider" ).slider({
         value:parseInt($('#Monthly_price_string').html()),
-        max:2000,
+        max:1500,
         min:100,
+        step:5,
         slide:function(event, ui){
           $('#Monthly_price_string').html(ui.value);
+          $('#price_amount').text("$"+ui.value.toString());
         },
         change:function(event, ui) {
           console.log("going to set price at " + ui.value);
@@ -497,9 +502,33 @@ $(document).ready(function(){
               console.log("value successfully updated");  
           });
         }
-      }); 
+      });
+            /* submit button logic of .selectable-group*/
+
+      $.each($('.selectable-group-form'), function(index, value){
+        $(value).on('submit',function(event) {
+        event.preventDefault();
+        
+          var keys = [];
+          var values = [];
+          console.log(value)
+          console.log($(value).serializeArray());
+          _.each($(this).serializeArray(), function( element, index, array){
+            keys.push(element["name"]);
+            values.push(element["value"]== "on");
+          });
+          
+          var data = _.object( keys, values );
+          console.log("to be uploaded data " + JSON.stringify(data));
+          ClassRef.updateAttr( $(this).attr('data-dbtarget') , data, function(attr, value){
+            console.log("updateAttr invokded at for selectable-group-form");
+          });
+        });
+      });
     }
-  }))();  //end of editables_controler initialization and its class definition
+
+
+  }) )();  //end of editables_controler initialization and its class definition
 
   
 

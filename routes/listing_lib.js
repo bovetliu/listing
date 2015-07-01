@@ -30,16 +30,71 @@ exports.renderJade = function( req, res, next, is_editing){
 
   });  
 }
+var global_res = "";
+var global_next = "";
+var updateAttr = function(instance, object, attr_path, value){
+  var jb =3;
+  if (attr_path.length == 1){
+    // console.log("updateAttr updating value");
+    // console.log(attr_path[0]);
+    // console.log(value);
+    if (value){
+      // updating 
+      if (typeof value  =='object') {
+        _.each( _.keys(object[attr_path[0]].toObject()), function(keyname, index, array){
+          if (value[keyname]) {
+            console.log("setting " + keyname + " true");
+            object[attr_path[0]][keyname] = value[keyname];
+          }
+          else {
+            console.log("setting " + keyname + " false");
+            object[attr_path[0]][keyname] = false;
+          }
+        });
+
+      } else {
+        object[attr_path[0]] = value;
+      }
+
+    }
+    else {
+      console.log("value value is invalid")
+    }
+    instance.save( function(err, instance){
+      if (err){ console.log("[! ERROR !]  NOT successfully saved");
+        return global_next(err);
+      }
+      else {
+        console.log("[INFO] "+ instance._id +" saved. ")
+        global_res.status(200).send(instance.toObject());
+      };
+      global_next = "";
+      global_res = "";
+    });
+
+    return
+  }
+  else{
+    updateAttr( instance, object[attr_path.shift()], attr_path, value  );
+  }
+}
+
 exports.dbUpdateAttr =function(req, res , next){
-  req.db_model.update({_id: req.params.id},
-    {$set: req.body},
-    {safe: true, multi: false}, function(e, result){
-    if (e) return next(e)
-    console.log("[INFO] dbUpdateAttr result: " + JSON.stringify(result));
-    if (result.n <1){ 
-      res.status(404).send(result);
+  global_res = res;
+  global_next = next;
+  _.each(req.body, function(element, key, list){
+    req.body[key] = JSON.parse(req.body[key]);
+  });
+  // console.log(req.body);
+  req.db_model.findOne({_id:req.params.id} , null, {}, function(err, instance){
+    if (err) {
+      return next(err);
+    }
+    if (!instance) {
+      res.status(404).send("requested resource cannot be found").end();
       return;
     }
-    res.status(200).send(result);
-  })
+    updateAttr(instance, instance, req.body['attr_path'], req.body['value']);
+    console.log("end of updateAttr()")
+  });
 }
