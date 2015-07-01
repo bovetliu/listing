@@ -5,12 +5,12 @@ db.detailed_rental_listing.insert(
         "unit_traits": {
             "lat": 30.615976343318405,
             "lng": -96.31885528564453,
-            "price_single": null,
-            "price_total": null,
+            "price_single": 400,
+            "price_total": 800,
             "community": "community name",
             "addr": "addr string",
             "beds": 2,
-            "baths": 1,
+            "baths": 2,
             "property_type": "apartment",
             "pet_friendly": false,
             "amenities_status":
@@ -71,12 +71,12 @@ db.detailed_rental_listing.insert(
             "about_this_listing": "Briefly descrip the property you want to list, why you want to list, what you would like to offer or ask",
             "isexpired": false,
             "images":[],
-            "cover_image":"default.jpg",
+            "cover_image":"default.png",
             "post_date": "2015-06-01T09:46:16.000Z",
             "optional_traits_switch":{
-              "unit_traits.description":false,
-              "unit_traits.house_rules":false,
-              "unit_traits.safety_features":false
+              "unit_traits_description":false,
+              "unit_traits_house_rules":false,
+              "unit_traits_safety_features":false
             }
         }
     }
@@ -148,8 +148,10 @@ db.rentalpoint.update(
 
 
 
+// successful
 db.route.update(
-{isexpired:true},{ $set:{isexpired:false}}
+{ _id:"5593411348f2890a9a0f2926" },
+{ $set:{"listing_related.cover_image":"default.png"}}
 )
 
 db.routeshow.remove(

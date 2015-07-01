@@ -123,7 +123,11 @@ db.detailed_rental_listing.remove(
 {_id: {$ne:  ObjectId("558b32440ca2f11b1cf1b0a2")}}
 )
 
-
+/*delete online listing server other data*/
+55910d94008d84ed2912e1ae
+db.detailed_rental_listing.remove(
+{_id: {$ne:  ObjectId("55910d94008d84ed2912e1ae")}}
+)
 
 03:51 test successfully
 curl -X "DELETE" http://localhost:3000/edit/558b32440ca2f11b1cf1b0a2/7115050.png

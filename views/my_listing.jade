@@ -14,7 +14,7 @@ block photo
   - return tbr;
   -}  
   meta#photo-data-modal(name="photo-data-modal" content="#{processPhotoData(result.listing_related.images)}")
-  if editing
+  if (editing)
     div#dropzone-container
       #actions.row
         .col-lg-7
@@ -166,96 +166,128 @@ block #details
                 //- following .col-md-9 if having class .expanded, then only display .expandable-content-full
                 .col-md-9.expandable.expandable-trigger-more
                   //- -var avail_amenities = {"Kitchen","Internet","Essentials","Shampoo","Heating", "Air Conditioning"}
-                  .expandable-content-summary
-                    .row
-                      - var n = 0;
-                      - var summary_items = [];
-                      each val, key in result.unit_traits.amenities_status
-                        if (val)
-                          - summary_items.push(key)
-                          - n++
-                        if (n == 5)
-                          - break;
-
-                      .col-sm-6
-                        if (summary_items[0])
-                          .row-space-1
-                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                            span#amenity-short-tooltip-trigger-8 #{summary_items[0]}
-                        if (summary_items[1])
-                          .row-space-1
-                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                            span#amenity-short-tooltip-trigger-3 #{summary_items[1]}
-                        if (summary_items[2])
-                          .row-space-1
-                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                            span#amenity-short-tooltip-trigger-40 #{summary_items[2]}
-                      .col-sm-6
-                        if (summary_items[3])
-                          .row-space-1
-                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                            span#amenity-short-tooltip-trigger-41 #{summary_items[3]}
-                        if (summary_items[4])
-                          .row-space-1
-                            i(class="icon h3 #{summary_items[0].toLowerCase()}") 
-                            span#amenity-short-tooltip-trigger-30 #{summary_items[4]}
-                        a.expandable-trigger-more
-                          strong + More
-
-                  //-end of .expandable-content-summary
-                  .expandable-content-full(style='transition: none; -webkit-transition: none;')
+                  if (!editing)
+                    .expandable-content-summary
                       .row
+                        //-  I think I better process them before sending them
+
+                        - var n = 0;
+                        - var summary_items = [];
+                        each val, key in result.unit_traits.amenities_status
+                          if (val)
+                            - summary_items.push(key)
+                            - n++
+                          if (n == 5)
+                            - break;
+
                         .col-sm-6
-                          //- I have amenities_status
-                          - var n = 0;
-                          each val, key in result.unit_traits.amenities_status
-                            
-                            if(val && n <= 14)
-                              .row-space-1
-                                i(class="fa fa-beer fa-lg padding-right-1x")
-                                span
-                                  strong #{key}
-                            else
-                              .row-space-1
-                                del #{key}
-                            - n ++
-                            if(n == 15)
-                              - break;
+                          if (summary_items[0])
+                            .row-space-1
+                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                              span#amenity-short-tooltip-trigger-8 #{summary_items[0]}
+                          if (summary_items[1])
+                            .row-space-1
+                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                              span#amenity-short-tooltip-trigger-3 #{summary_items[1]}
+                          if (summary_items[2])
+                            .row-space-1
+                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                              span#amenity-short-tooltip-trigger-40 #{summary_items[2]}
+
+
+                        .col-sm-6
+                          if (summary_items[3])
+                            .row-space-1
+                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                              span#amenity-short-tooltip-trigger-41 #{summary_items[3]}
+                          if (summary_items[4])
+                            .row-space-1
+                              i(class="icon h3 #{summary_items[0].toLowerCase()}") 
+                              span#amenity-short-tooltip-trigger-30 #{summary_items[4]}
+                          a.expandable-trigger-more
+                            strong + More
+
+                    //-end of .expandable-content-summary
+                    .expandable-content-full(style='transition: none; -webkit-transition: none;')
+                        .row
+                          .col-sm-6
+                            //- I have amenities_status
+                            - var n = 0;
+                            each val, key in result.unit_traits.amenities_status
+                              
+                              if (val && n <= 14)
+                                .row-space-1
+                                  i(class="fa fa-beer fa-lg padding-right-1x")
+                                  span
+                                    strong #{key}
+                              else
+                                .row-space-1
+                                  del #{key}
+                              - n ++
+                              if(n == 15)
+                                - break;
+                          .col-sm-6
+                            -var n = 0;
+                            each val, key in result.unit_traits.amenities_status
+                              if(val && n > 14)
+                                .row-space-1
+                                  i(class="fa fa-beer fa-lg padding-right-1x")
+                                  span
+                                    strong #{key}
+                              else if (!val && n > 14)
+                                .row-space-1
+                                  del #{key}
+                              - n ++
+                  if (editing)
+                    .selectable-group
+                      .row
+                        mixin checkbox(bool, content)
+                          .checkbox
+                            label
+                              if (bool)
+                                input(type='checkbox' checked )
+                              else 
+                                input(type='checkbox' )
+                              |  #{content}
                         .col-sm-6
                           -var n = 0;
-                          each val, key in result.unit_traits.amenities_status
-                            if(val && n > 14)
-                              .row-space-1
-                                i(class="fa fa-beer fa-lg padding-right-1x")
-                                span
-                                  strong #{key}
-                            else if (!val && n > 14)
-                              .row-space-1
-                                del #{key}
+                          each val, index in result.unit_traits.amenities_status
+                            +checkbox(val, index)
                             - n ++
+                              if ( n == 15)
+                                - break;
+                        .col-sm-6
+                          -var n=0;
+                          each val, index in result.unit_traits.amenities_status
+                            if (n > 14)
+                              +checkbox(val, index)
+                            - n ++
+                      .row
+                        .col-sm-12
+                          button.btn.btn-primary.marigin-right-1x Submit  
+                          button.btn.btn-default.marigin-right-1x Cancel
+                          //- put button save and cancel here
               hr
               .row.prices
+                -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
                 .col-md-3
                     .text-muted Prices
                   .col-md-9
                     .row
                       .col-md-6
                         div
-                          | Extra people: 
-                          strong
-                            span#localized_people_pricing_description_string No Charge
-                        div
                           | Monthly Price: 
                           strong
-                            span#Monthly_price_string $360
-                            |  /month
+                            | $ 
+                            span#Monthly_price_string #{returnPrice()}
+                          |  /month
                       .col-md-6
-                        div
-                          | Cancellation: 
-                          strong
-                            a#cancellation-policy(href='#', data-popup='true') Flexible
-              hr
-              .row.availability
+                    if (editing)
+                      .row
+                        .col-md6.margin-top-2x.margin-left-right-2x
+                          #price-slider(data-dbtarget="unit_traits.price_single")
+              hr.hidden
+              .row.availability.hidden
                 .col-md-3
                   .text-muted
                     | Availability
@@ -329,6 +361,9 @@ block #details
                         span.js-present-safety-feature Safety Card
                       .space-1
                         span.js-present-safety-feature Fire Extinguisher
+                
+
+
 //- This block neighborhood-meta will accept neighborhood_data from server
 block neighborhood-meta
   -var processNeighborhoodData = function(){

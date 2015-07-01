@@ -1,3 +1,8 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
 .line-height-18 {
   line-height: 1.8;
 }
@@ -54,6 +59,9 @@
 .margin-bottom-8x {
   margin-bottom: 50px;
 }
+.marigin-right-1x {
+  margin-right: 6.25px;
+}
 .margin-left-right-1x {
   margin-right: 6.25px;
   margin-left: 6.25px;
@@ -61,6 +69,14 @@
 .margin-left-right-2x {
   margin-right: 12.5px;
   margin-left: 12.5px;
+}
+.margin-left-right-3x {
+  margin-right: 18.75px;
+  margin-left: 18.75px;
+}
+.margin-left-right-4x {
+  margin-right: 25px;
+  margin-left: 25px;
 }
 .padding-right-1x {
   padding-right: 6.25px;
@@ -182,10 +198,12 @@ a:hover {
   width: 100%;
 }
 #photos {
-  height: 402px;
+  height: 60%;
 }
 #photos #cover-img-container {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 #photos #cover-img-container #dropzone-container {
   background: rgba(0, 0, 255, 0.1);
@@ -200,7 +218,11 @@ a:hover {
   margin-left: 6.25px;
 }
 #photos #cover-img-container #dropzone-container .previews-container {
-  height: 360px;
+  height: calc(100% -  40px);
+  height: -moz-calc(100% -  40px);
+  height: -webkit-calc(100% -  40px);
+  height: -ms-calc(100% -  40px);
+  height: -o-calc(100% -  40px);
   width: 100%;
   background: rgba(0, 255, 255, 0.1);
   position: relative;

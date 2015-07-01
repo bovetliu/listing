@@ -7,6 +7,19 @@
 @brand-warning: #E99002;
 @brand-danger:  #F04124;
 // mixin
+html,body{
+  height:100%;
+  width: 100%;
+}
+
+.fullHeightMinus(@height){
+  height: calc(~"100% - "@height);
+  height: -moz-calc(~"100% - "@height);
+  height: -webkit-calc(~"100% - "@height);
+  height: -ms-calc(~"100% - "@height);
+  height: -o-calc(~"100% - "@height);
+}
+
 .marginTop(@space_value){
   margin-top: @space_value;
 }
@@ -17,6 +30,9 @@
 .marginLeftRight(@space_value){
   margin-right: @space_value;
   margin-left:  @space_value;
+}
+.mariginRight(@space_value){
+  margin-right: @space_value;
 }
 
 .paddingRight(@space_value){
@@ -103,12 +119,21 @@
 .margin-bottom-8x{
   .marginBottom(@usual_space_value * 8)
 }
+.marigin-right-1x{
+  .mariginRight(@usual_space_value);
+}
 
 .margin-left-right-1x{
   .marginLeftRight(@usual_space_value);
 }
 .margin-left-right-2x{
   .marginLeftRight(@usual_space_value * 2);
+}
+.margin-left-right-3x{
+  .marginLeftRight(@usual_space_value * 3);
+}
+.margin-left-right-4x{
+  .marginLeftRight(@usual_space_value * 4);
 }
 
 .padding-right-1x {

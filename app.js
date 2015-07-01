@@ -59,7 +59,7 @@ app.post('/listing', function(req,res,next){
   // console.log(JSON.stringify(instance));
   instance.save(function(e){
     if (e) return next(e);
-    res.send(instance);
+    res.send(instance.toObject());
     // console.log("created following new instance:")
     // console.log(instance);
   });

@@ -65,9 +65,9 @@ var detailed_rental_listing_schema = new mongoose.Schema({
       "images":Array,
       "simplified_rental_data_id":mongoose.Schema.ObjectId,
       "optional_traits_switch":{
-        "unit_traits.description":Boolean,
-        "unit_traits.house_rules":Boolean,
-        "unit_traits.safety_features":Boolean
+        "unit_traits_description":Boolean,
+        "unit_traits_house_rules":Boolean,
+        "unit_traits_safety_features":Boolean
       }
   }
 }, { collection: 'detailed_rental_listing' }

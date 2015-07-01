@@ -478,6 +478,26 @@ $(document).ready(function(){
         });
         ClassRef.addSelectField(DOMobject);
       });
+
+      /*process slide bar*/
+      $( "#price-slider" ).slider({
+        value:parseInt($('#Monthly_price_string').html()),
+        max:2000,
+        min:100,
+        slide:function(event, ui){
+          $('#Monthly_price_string').html(ui.value);
+        },
+        change:function(event, ui) {
+          console.log("going to set price at " + ui.value);
+
+          ClassRef.updateAttr(
+            $( "#price-slider" ).attr("data-dbtarget"),
+            ui.value,
+            function(attr, value){
+              console.log("value successfully updated");  
+          });
+        }
+      }); 
     }
   }))();  //end of editables_controler initialization and its class definition
 

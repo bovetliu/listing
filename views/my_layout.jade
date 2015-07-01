@@ -3,6 +3,7 @@ html
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel="stylesheet" href="/stylesheets/yeti_bootstrap.min.css")
+    link(href='/plugins/jquery-ui-flick/jquery-ui.css', rel='stylesheet')
     link(rel="stylesheet" href="/plugins/fa/css/font-awesome.min.css")
     link(rel="stylesheet" href="/stylesheets/specific_01.css")
     link(rel="stylesheet" href="/plugins/dropzone/dropzone.css")
@@ -205,7 +206,9 @@ html
       // //bottom-bar
 
     // jQuery (necessary for Bootstrap's JavaScript plugins) 
-    script(src="/javascripts/jquery.min.js") 
+    script(src="/javascripts/jquery.min.js")
+    // include control logic of jQuery-ui
+    script(src='/plugins/jquery-ui-flick/jquery-ui.js')
     // Include all compiled plugins (below), or include individual files as needed 
     script(src="/javascripts/bootstrap.min.js")
     // Inlcude plugin: galleria
