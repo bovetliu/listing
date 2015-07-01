@@ -37,14 +37,6 @@ $(document).ready(function(){
       }); // end of $.ajax  
     }
   };
-
-
-  /*prepare map*/
-  var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content")); 
-  var map_options ={ draggingCursor:"move",draggableCursor:"auto" , zoom: 14,scrollwheel: false, center: new google.maps.LatLng(neighborhood_data.lat, neighborhood_data.lng) };
-  var map = new google.maps.Map(  $('#map-div')[0], map_options ); 
-  
-
   /*photo_data stores URL towards photos stores on AWS*/
   var photo_data = JSON.parse($("meta[name='photo-data-modal']").attr("content"));   
   var galleria_control = new (Backbone.Model.extend({
@@ -535,7 +527,16 @@ $(document).ready(function(){
 
   } );  //end of editables_controler initialization and its class definition
   var editables_controler_01 = new Editables_Controler();
-
+  /*prepare map*/
+  var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content"));
+  neighborhood_data.LatLng = new google.maps.LatLng(neighborhood_data.lat, neighborhood_data.lng); 
+  var map_options ={ draggingCursor:"move",draggableCursor:"auto" , zoom: 14,scrollwheel: false, center: neighborhood_data.LatLng};
+  var map = new google.maps.Map(  $('#map-div')[0], map_options ); 
+  var property_marker = new google.maps.Marker({
+    position:neighborhood_data.LatLng,
+    map:map,
+    title:"target_property"
+  });
   
 
 }); // end of ready()
