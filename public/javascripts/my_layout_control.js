@@ -13,8 +13,31 @@ $(document).ready(function(){
     },
     isEditing:function(){
       return page_useful_info.is_editing;
+    },
+    updateAttr: function( attr, value, onsuccessCB ){
+      var to_be_uploaded = {}; to_be_uploaded.attr_path = JSON.stringify(attr.split(".")); to_be_uploaded.value = JSON.stringify(value);
+      $.ajax({
+        url:[window.location.origin,"edit",page_useful_info.db_id].join("/"),
+        data: to_be_uploaded, // plain object   {"attr_path": ["unit_traits","amenities_status"], "value": {"kitchen": true, "internet": true, ...}}
+        type: 'POST',
+        conntentType:"text/plain",
+        crossDomain:true,
+        success: function(data, status){ 
+          if (!data._id){
+            console.log([data,status]);
+          } else if (data._id) {
+            console.log(data);
+            onsuccessCB(attr, value);
+          }
+          else{
+            console.log(data);
+          } 
+          //EasySubOrg.MAP.cu_01.set('to_be_set_expired',"");    
+        },  
+      }); // end of $.ajax  
     }
   };
+
 
   /*prepare map*/
   var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content")); 
@@ -91,16 +114,22 @@ $(document).ready(function(){
         $(this).find('.preview-image-cover').css("opacity",0);
         $(this).find('.preview-info-control').css("opacity",0);
       });
-      $(file.previewElement).find(".set-cover").click(function(){
+      $(file.previewElement).find(".set-cover").click( function(){
         console.log(file);  
 
-        $.ajax({
-          url:helpers.updateURL() ,
-          method:"POST",
-          data:{"listing_related.cover_image":file.name}
-        }).done(function(data, status) {   //.done is an alternative of success functional attr 
-          console.log(data); 
+        helpers.updateAttr("listing_related.cover_image", file.name, function(data,status){
+          console.log("change cover image is a " + status);
         });
+
+        // $.ajax({
+        //   url:helpers.updateURL() ,
+        //   method:"POST",
+        //   data:{"listing_related.cover_image":file.name}
+        // }).done(function(data, status) {   //.done is an alternative of success functional attr 
+        //   console.log(data); 
+        // });
+
+
       });
 
     });
@@ -319,7 +348,7 @@ $(document).ready(function(){
   });
 
   /*editable */
-  var editables_controler = new (Backbone.Model.extend({
+  var Editables_Controler = Backbone.Model.extend({
     defaults:{
       options:{
         "unit_traits.beds":[1,2,3,4,5,6],
@@ -346,31 +375,7 @@ $(document).ready(function(){
     escapeHTML:function(text){
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     },
-    updateAttr: function( attr, value, onsuccessCB ){
-      var ClassRef = this;
-      // var generated_URL = [ClassRef.get("apiServerURL") , "eidt",ClassRef.get("db_id")].join("/");
-      var to_be_uploaded = {}; to_be_uploaded.attr_path = JSON.stringify(attr.split(".")); to_be_uploaded.value = JSON.stringify(value);
-      $.ajax({
-        url:helpers.updateURL(),
-        data: to_be_uploaded, // plain object   {"attr_path": ["unit_traits","amenities_status"], "value": {"kitchen": true, "internet": true, ...}}
-        type: 'POST',
-        // dataType:"json",
-        conntentType:"text/plain",
-        crossDomain:true,
-        success: function(data, status){ 
-          if (!data._id){
-            console.log([data,status]);
-          } else if (data._id) {
-            console.log(data);
-            onsuccessCB(attr, value);
-          }
-          else{
-            console.log(data);
-          } 
-          //EasySubOrg.MAP.cu_01.set('to_be_set_expired',"");    
-        },  
-      }); // end of $.ajax      
-    },
+    updateAttr: helpers.updateAttr,
     addRightIconField:function(DOMobject, font_awesome_icon_id){
       var ClassRef = this;
 
@@ -528,7 +533,8 @@ $(document).ready(function(){
     }
 
 
-  }) )();  //end of editables_controler initialization and its class definition
+  } );  //end of editables_controler initialization and its class definition
+  var editables_controler_01 = new Editables_Controler();
 
   
 
