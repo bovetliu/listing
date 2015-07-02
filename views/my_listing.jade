@@ -55,6 +55,9 @@ block summary
   -var adaptiveEditable =function(){
   -  return (editing)?"editable":""
   -}
+  -var adaptiveEditingClass =function(class_name){
+  -  return (editing)?class_name:""
+  -}
   -var stringifyUsefulInfo = function(){
   -  var temp = {};
   -  temp.db_id = result._id;
@@ -103,7 +106,7 @@ block summary
                       span.instant-book.hide
                         i.fa.fa-bolt.h4
                         | Instant Book
-                      span.book-now Contact poster now
+                      span.book-now Contact Listing Person
                 .wishlist-wrapper
                   input(type="checkbox" class="hide" name="wishlist-button" id="wishlist-button")
                   label(for="wishlist-button" class="btn btn-default btn-block btn-large")  
@@ -177,7 +180,7 @@ block #details
               div.margin-bottom-2x.margin-top-2xr
                 div(data-dbtarget="listing_related.about_this_listing" class="#{adaptive('editable')}") !{html_about_this_listing}
               p
-                a.contact-host-link(href="#"): strong Contact Host
+                a.contact-host-link(href="#"): strong Contact Listing Person
               hr
               .row.space 
                 .col-md-3
@@ -189,18 +192,18 @@ block #details
                     .col-md-6
                       div
                         | Bathrooms: 
-                        strong.selectable(data-dbtarget="unit_traits.baths") #{result.unit_traits.baths}
+                        strong(data-dbtarget="unit_traits.baths" class="#{adaptiveEditingClass('selectable')}") #{result.unit_traits.baths}
                       div
                         | Bedrooms: 
-                        strong.selectable(data-dbtarget="unit_traits.beds") #{result.unit_traits.beds}
+                        strong(data-dbtarget="unit_traits.beds" class="#{adaptiveEditingClass('selectable')}") #{result.unit_traits.beds}
                     .col-md-6
                       div
                         | Property type: 
-                        strong.selectable(data-dbtarget="unit_traits.property_type") #{result.unit_traits.property_type}
+                        strong(data-dbtarget="unit_traits.property_type" class="#{adaptiveEditingClass('selectable')}") #{result.unit_traits.property_type}
 
                       div
                         | Pet Friendly: 
-                        strong.selectable(data-dbtarget="unit_traits.pet_friendly") #{result.unit_traits.pet_friendly.toString()}
+                        strong(data-dbtarget="unit_traits.pet_friendly" class="#{adaptiveEditingClass('selectable')}") #{result.unit_traits.pet_friendly.toString()}
               hr
               .row.amenities
 

@@ -527,6 +527,7 @@ $(document).ready(function(){
 
   } );  //end of editables_controler initialization and its class definition
   var editables_controler_01 = new Editables_Controler();
+  
   /*prepare map*/
   var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content"));
   neighborhood_data.LatLng = new google.maps.LatLng(neighborhood_data.lat, neighborhood_data.lng); 
