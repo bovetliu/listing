@@ -1,6 +1,23 @@
 extends layout.jade
 block content
   #container.container
+    -var server_path = 'https://esimgserver.s3.amazonaws.com/'
+    -var folder_path = server_path + result._id+'/'
+    -var processPhotoData = function( onelist) {
+    -   var tbr = []
+    -   onelist.forEach( function (element, index, ar){
+    -     tbr.push({"image":folder_path+element, "thumb":folder_path+element});
+    -   });
+    -   return JSON.stringify(tbr)}
+
+    -var stringifyUsefulInfo = function(){
+    -  var temp = {};
+    -  temp.db_id = result._id;
+    -  return JSON.stringify(temp);
+    -}
+    -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
+    meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
+    meta#photo-data-modal(name="photo-data-modal" content="#{processPhotoData(result.listing_related.images)}")
     h1 Dropzone.js
     div#dropzone-container
       #actions.row

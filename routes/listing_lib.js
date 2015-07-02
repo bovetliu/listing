@@ -1,10 +1,5 @@
-var express = require('express');
-var router = express.Router();
-var http = require('http');
-var https = require('https');
 var _ = require('underscore');
 var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listingtest-u7yhjm.rhcloud.com/";
-var port = (process.env.local)? 3000:process.env.OPENSHIFT_NODEJS_PORT; // please be attention here might have problem
 
 
 exports.renderJade = function( req, res, next, is_editing){

@@ -39,6 +39,7 @@ $(document).ready(function(){
   };
   /*photo_data stores URL towards photos stores on AWS*/
   var photo_data = JSON.parse($("meta[name='photo-data-modal']").attr("content"));   
+  
   var galleria_control = new (Backbone.Model.extend({
     b_Galleria_started:false,  
     launchGalleria: function(){
@@ -120,11 +121,9 @@ $(document).ready(function(){
         // }).done(function(data, status) {   //.done is an alternative of success functional attr 
         //   console.log(data); 
         // });
-
-
       });
-
     });
+
     myDropzone.on("thumbnail", function(file){
       /*The dataUrl can be used to display the thumbnail image*/
       console.log("thumbnail event handler");
@@ -196,7 +195,7 @@ $(document).ready(function(){
           console.log(data); 
         });
       }
-    })
+    });
     // Hide the total progress bar when nothing's uploading anymore
     myDropzone.on("queuecomplete", function(progress) {
       document.querySelector("#total-progress").style.opacity = "0";
