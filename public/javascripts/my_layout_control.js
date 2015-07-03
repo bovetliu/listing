@@ -456,7 +456,7 @@ $(document).ready(function(){
       var ClassRef = this;
       //updating position of api server
       if (window.location.href.slice(0,16) != "http://localhost")
-      ClassRef.set("apiServerURL", "http://listingtest-u7yhjm.rhcloud.com") ;
+      ClassRef.set("apiServerURL", "http://listingtest-u7yhjm.rhcloud.com") ;  // this one no need to change into listing.easysublease.com // since this one does not gen visible url
       else {
         ClassRef.set("apiServerURL", "http://localhost:3000");
       }
