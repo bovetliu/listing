@@ -9,4 +9,8 @@ router.get('/', function(req, res, next) {
    });
 });
 
+router.get('/howitworks', function(req, res, next){
+  res.render('howitworks.jade',{});
+});
+
 module.exports = router;

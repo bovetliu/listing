@@ -1,0 +1,257 @@
+extends layout.jade
+block content
+  .sections-wrapper
+    // ******Why Section******
+    section#why.section.why
+      .container
+        h2.title.text-center How Can Easysublease Help You?
+        p.intro.text-center.text-muted
+          | We help you publish your rental listing(subletting, seeking co-lessee)
+          br
+          | And absolutely for free. Why free? Because I am expected to graduate at May 2016, I need to find a job at that time.
+          br
+          | So, when you are using this project website, you are actually 
+          | helping me! I feel grateful about that.
+        hr
+        .row.item
+          .content.col-md-4.col-sm-12.col-xs-12
+            h3.title Save you time and effort
+            .desc
+              p 
+                | To reduce learning cost of using EasySublease, It mimics the usage of Google Maps. You just need to 
+                | right click on map to pick you desired function.
+              p
+                | The markers in 2D map and street view map are synchronized. What you post on map, is what others see on map. 
+                | Throughout the whole project, I put emphasis on this concept, namely, what you are editing, is what other see.
+                | Quite straightforward right? 
+            //- .quote
+            //-   .quote-profile
+            //-     img.img-responsive.img-circle(src='assets/images/people/profile-s-1.png', alt='')
+            //-   // //profile
+            //-   .quote-content
+            //-     blockquote
+            //-       p
+            //-         a(href='https://twitter.com/3rdwave_themes', target='_blank') @velocity
+            //-         |  Love it! Thank you for making my life easier and saving me time! I’ll definitely recommend it to my friends. :)
+            //-     p.source @LisaW, Bristol
+            //-   //- quote-content ends
+            //- //- .quote ends
+          // //content
+          figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-offset-1.col-sm-offset-0.col-xs-offset-0
+            img.img-responsive(src='images/figures/figure-1.png', alt='')
+            figcaption.figure-caption (Screenshot: Easysublease mainsite, with Street View expanded ) 
+        // //item
+        .row.item.margin-top-3x
+          .content.col-md-4.col-sm-12.col-xs-12.col-md-push-8.col-sm-push-0.col-xs-push-0
+            h3.title Render your listing nicely
+            .desc
+              p
+                | Heavily borrowed the layout of Airbnb listing page. But without looking at
+                | its JavaScript or CSS. This page is much more straightforward than posts on CSSA forums
+              p
+                | There are many UI staffs, like graphic-font I have not implemented, and I cannot find fitting icons from "Font Awesome".
+              P 
+                | The editing button enables you enter editing mode instantly.  
+            //- .quote
+            //-   .quote-profile
+            //-     img.img-responsive.img-circle(src='assets/images/people/profile-s-2.png', alt='')
+            //-   // //profile
+            //-   .quote-content
+            //-     blockquote
+            //-       p
+            //-         | I find the mobile app very useful when I'm on the go. Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+            //-     p.source @JackT, San Francisco
+            //-   // //quote-content
+            //- // //quote
+          // //content
+          figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-pull-4.col-sm-pull-0.col-xs-pull-0
+            img.img-responsive(src='images/figures/figure-2.png', alt='')
+            .control.text-center
+              //- button.play-trigger(type='button', data-toggle='modal', data-target='#modal-video')
+              //-   i.fa.fa-play
+            // //control
+        // //item
+        .row.item.margin-top-3x
+          .content.col-md-4.col-sm-12.col-xs-12
+            h3.title Easy to manage your listing page
+            .desc
+              p
+                | Full server side implementation for DropzoneJS enables you to Drag and Upload images to Amazon S3 cloud storage. 
+              p
+                | If you know how to edit your Linkedin profile, you should know well how to edit your listing page. Pretty much the same way
+            //- .quote
+            //-   .quote-profile
+            //-     img.img-responsive.img-circle(src='assets/images/people/profile-s-3.png', alt='')
+            //-   // //profile
+            //-   .quote-content
+            //-     blockquote
+            //-       p
+            //-         | Nice template! It’s practical and there is no gimmicks. Very easy to customise as well!
+            //-     p.source
+            //-       a(href='#') @AlexD
+            //-       | , London
+            //-   // quote-content ends
+            //- // quote ends
+          // //content
+          figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-offset-1.col-sm-offset-0.col-xs-offset-0
+            img.img-responsive(src='images/figures/figure-3.png', alt='')
+            figcaption.figure-caption
+              | (Screenshot: 
+              a(href='http://themes.3rdwavemedia.com/website-templates/responsive-bootstrap-theme-for-startups-tempo/?ref=3wm', target='_blank') Tempo - Bootstrap template for startups)
+        // //item
+        .row.item.margin-top-3x
+          .content.col-md-4.col-sm-12.col-xs-12.col-md-push-8.col-sm-push-0.col-xs-push-0
+            h3.title Not only about rental listing 
+            .desc
+              p
+                | Share your ride 100x times easier than Zimride.
+                | If you know how to use Google Maps to search routes on map, then you are good. You have already known how to post and share
+                | your ride with others in this world.
+              p 
+                | (Under concept developping, finished work including routes combining algorithm, currently developping 
+                |  arbitrary route-transfer algorithm in a directed graph to enable "Relay" style shared-ride searching)
+            //- .quote
+            //-   .quote-profile
+            //-     img.img-responsive.img-circle(src='assets/images/people/profile-s-4.png', alt='')
+            //-   // //profile
+            //-   .quote-content
+            //-     blockquote
+            //-       p
+            //-         | I can connect to like-minded people lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            //-     p.source @JackT, San Francisco
+            //-   // quote-content ends
+            //-  //quote ends
+          // //content
+          figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-pull-4.col-sm-pull-0.col-xs-pull-0
+            img.img-responsive(src='images/figures/figure-4.png', alt='')
+        // //item
+        .feature-lead.text-center
+          h4.title Want to discover all the features?
+          p
+            a.btn.btn-cta.btn-cta-secondary(href='features.html') Take a youtube tour
+      //- container
+    //- "why" ends
+    
+    //- // ******Testimonials Section starts******
+    //- section.section.testimonials
+    //-   .container
+    //-     h2.title.text-center What are people saying about Velocity?
+    //-     #testimonials-carousel.carousel.slide(data-ride='carousel')
+    //-       ol.carousel-indicators
+    //-         li.active(data-target='#testimonials-carousel', data-slide-to='0')
+    //-         li(data-target='#testimonials-carousel', data-slide-to='1')
+    //-         li(data-target='#testimonials-carousel', data-slide-to='2')
+    //-       // //carousel-indicators
+    //-       .carousel-inner
+    //-         .item.active
+    //-           figure.profile
+    //-             img(src='assets/images/people/profile-m-1.png', alt='')
+    //-           .content
+    //-             blockquote
+    //-               i.fa.fa-quote-left
+    //-               p
+    //-                 | We used Velocity as a front-end design template for our product site. Lorem ipsum dolor sit amet, consectetur
+    //-                 | adipiscing elit. Vestibulum elit tortor, consectetur vitae varius at, interdum eget libero. Morbi.
+    //-             p.source
+    //-               | Kevin Knight
+    //-               br
+    //-               span.title Co-Founder, Startup Hub
+    //-           // //content
+    //-         // //item
+    //-         .item
+    //-           figure.profile
+    //-             img(src='assets/images/people/profile-m-2.png', alt='')
+    //-           .content
+    //-             blockquote
+    //-               i.fa.fa-quote-left
+    //-               p
+    //-                 | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque 
+    //-                 | corrupti quos dolores et quas molestias excepturi sint.
+    //-             p.source
+    //-               | Diana Luna
+    //-               br
+    //-               span.title Entrepreneur, Maecenas
+    //-           // //content
+    //-         // //item
+    //-         .item
+    //-           figure.profile
+    //-             img(src='assets/images/people/profile-m-3.png', alt='')
+    //-           .content
+    //-             blockquote
+    //-               i.fa.fa-quote-left
+    //-               p
+    //-                 | Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio 
+    //-                 | cumque nihil impedit quo minus id quod maxime placeat facere.
+    //-             p.source
+    //-               | Tony Lee
+    //-               br
+    //-               span.title CTO, Lorem Ipsum
+    //-           // //content
+    //-         // //item
+    //-       // //carousel-inner
+    //-     // //carousel
+    //-   // //container
+    //- // testimonials ends
+    //- // ******Press Section******
+    //- section.section.press
+    //-   .container.text-center
+    //-     h2.title Press Coverage
+    //-     ul.press-list.list-inline.row
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-1.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-2.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4.xs-break
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-3.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-4.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-5.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-6.png', alt='')
+    //-     // //press-list
+    //-     ul.press-list.list-inline.row.last
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-7.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-8.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4.xs-break
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-9.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-10.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-11.png', alt='')
+    //-       li.col-md-2.col-sm-2.col-xs-4
+    //-         a(href='#')
+    //-           img.img-responsive(src='assets/images/press/press-12.png', alt='')
+    //-     // //press-list
+    //-     .press-lead.text-center
+    //-       h3.title Have press inquires?
+    //-       p.press-links
+    //-         a(href='#') Download our press kit
+    //-         |  or 
+    //-         a(href='contact.html') Get in touch
+    //-   // //container
+    //- // //press
+    // ******CTA Section******
+    section#cta-section.section.cta-section.text-center.home-cta-section
+      .container
+        h2.title Ready to use EasySublease now?
+        p.intro
+          | More than 1,000 students are using EasySublease now. (Just kidding)
+        p
+          a.btn.btn-cta.btn-cta-primary(href='http://www.easysublease.org', target='_blank') Go EasySublease
+      // //container
+    // //cta-section
+  // //section-wrapper
