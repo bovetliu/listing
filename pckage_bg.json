@@ -1,14 +1,15 @@
 {
-  "name": "EasySublease.com RentalListing",
-  "version": "0.1.1",
-  "description": "Important component of EasySublease.com, edit list like editing linkedin, render page like Airbnb",
+  "name": "OpenShift-Sample-App",
+  "version": "1.0.0",
+  "description": "OpenShift Sample Application",
   "keywords": [
     "OpenShift",
     "Node.js",
-    "application"
+    "application",
+    "openshift"
   ],
   "author": {
-    "name": "Bowei Liu",
+    "name": "OpenShift",
     "email": "ramr@example.org",
     "url": "http://www.openshift.com/"
   },
