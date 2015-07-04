@@ -4,10 +4,54 @@
   .box-shadow(0px 0px 15px rgba(0, 0, 0, .5) ); 
 }
 
+html{
+  height: 100%;
+  #cover-container{
+    // .fullHeightMinus(66px);
+    .fullHeightMinus(45px);
+    width: 100%;
+    #cover-image-container{
+      z-index: -1;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top:0px;
+      left:0px;
+      background-repeat: no-repeat;
+      background-size: cover;   //this is important
+      background-position: 50% 50%; //put image at center of its container!
+      background-image: url('/images/background/bg-cover.jpg')
+
+    }
+    #cover-text-container{
+      //position MUST NOT be absolut
+      padding-top: 150px;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color:white;
+      h1{
+        // font-size: 50px;
+        font-weight: bold;
+      }
+      .intro{
+        padding: 0px 100px;
+        text-align: center;
+        opacity: 0.8;
+      }
+    }
+
+  }
+}
+
 .feature-lead{
 
 }
+.sections-wrapper{
 
+  background-color: #fff;
+
+}
 .cta-section{
   background: #253340 url('/images/background/bg-footer-2.jpg') no-repeat left top;
   background-size: cover;
