@@ -61,11 +61,17 @@
       .previews-container {
         .fullHeightMinus(40px);
         width:100%;
-        background: rgba(0, 255, 255, 0.1);
+        // background: rgba(0, 255, 255, 0.1);
         position:relative;
         overflow: hidden;
-        .preview-container{
+
+        .preview-as-cover.preview-container{
+          .box-shadow(0px 0px 15px rgba(0, 0, 0, .8) );  
+        }
+        .preview-container{  // the preview image dom
           .margin-left-right-1x;
+          .margin-top-1x;
+
           position: relative;
           // .border-it-debug;
           display: inline-block;
@@ -112,7 +118,6 @@
       }
       #previews{
         /* success situation*/
-
         .preview-container.dz-success{
           .progress{
             opacity: 0;

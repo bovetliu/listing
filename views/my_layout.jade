@@ -238,10 +238,10 @@ html
           .progress.progress-striped.active.margin-bottom-1x.margin-left-right-2x(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')
             .progress-bar.progress-bar-success(style='width:0%;', data-dz-uploadprogress='')
         div.preview-buttons-container.preview-info-control
-          i.glyphicon.glyphicon-upload.start
-          i.glyphicon.glyphicon-ban-circle.cancel(data-dz-remove='')
-          i.glyphicon.glyphicon-trash.delete(data-dz-remove='')
-          i.glyphicon.glyphicon-picture.set-cover 
+          i.glyphicon.glyphicon-upload.start(data-toggle="tooltip" data-placement="bottom" title="Upload" data-delay="0")
+          i.glyphicon.glyphicon-ban-circle.cancel(data-dz-remove='' data-toggle="tooltip" data-placement="bottom" title="Cancel uploading" data-delay="0")
+          i.glyphicon.glyphicon-trash.delete(data-dz-remove='' data-toggle="tooltip" data-placement="bottom" title="Remove this page" data-delay="0")
+          i.glyphicon.glyphicon-picture.set-cover(data-toggle="tooltip" data-placement="bottom" title="Set as cover" data-delay="0") 
     //- Following is for my_layout animation, visual effect control
     //- underscore templates
     //- script#options-template(type="text/template")

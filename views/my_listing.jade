@@ -34,6 +34,7 @@ block photo
             #total-progress.progress.progress-striped.active(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')
               .progress-bar.progress-bar-success(style='width:0%;', data-dz-uploadprogress='')
       //- following div will be used to hold previews
+      
       #previews.previews-container
   
   else
@@ -62,6 +63,7 @@ block summary
   -  var temp = {};
   -  temp.db_id = result._id;
   -  temp.is_editing = editing;
+  -  temp.cover_image = result.listing_related.cover_image;
   -  return JSON.stringify(temp);
   -}
   -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };

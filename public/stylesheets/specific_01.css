@@ -230,13 +230,17 @@ a:hover {
   height: -ms-calc(100% -  40px);
   height: -o-calc(100% -  40px);
   width: 100%;
-  background: rgba(0, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
+}
+#photos #cover-img-container #dropzone-container .previews-container .preview-as-cover.preview-container {
+  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
 }
 #photos #cover-img-container #dropzone-container .previews-container .preview-container {
   margin-right: 6.25px;
   margin-left: 6.25px;
+  margin-top: 6.25px;
   position: relative;
   display: inline-block;
   height: 120px;

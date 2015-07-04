@@ -97,19 +97,21 @@ $(document).ready(function(){
     myDropzone.on("addedfile", function(file) {
       // Hookup the start button
       file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
-      $(file.previewElement).mouseover(function(){
+      var jq_previewElement = $(file.previewElement);
+      jq_previewElement.mouseover(function(){
         $(this).find('.preview-image-container').addClass("blur");
         $(this).find('.preview-image-cover').css("opacity",0.7);
         $(this).find('.preview-info-control').css("opacity",1);
       });
-      $(file.previewElement).mouseout(function(){
+      jq_previewElement.mouseout(function(){
         $(this).find('.preview-image-container').removeClass("blur");
         $(this).find('.preview-image-cover').css("opacity",0);
         $(this).find('.preview-info-control').css("opacity",0);
       });
-      $(file.previewElement).find(".set-cover").click( function(){
+      jq_previewElement.find(".set-cover").click( function(){
         console.log(file);  
-
+        $('.preview-container').removeClass('preview-as-cover');
+        jq_previewElement.addClass('preview-as-cover')
         helpers.updateAttr("listing_related.cover_image", file.name, function(data,status){
           console.log("change cover image is a " + status);
         });
@@ -122,6 +124,9 @@ $(document).ready(function(){
         //   console.log(data); 
         // });
       });
+      if (page_useful_info.cover_image == file.name){
+        jq_previewElement.addClass('preview-as-cover');
+      }
     });
 
     myDropzone.on("thumbnail", function(file){
