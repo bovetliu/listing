@@ -1,19 +1,22 @@
 extends layout.jade
+block css
+  //- link(rel="stylesheet" href="/stylesheets/specific_01.css")
+  link(rel="stylesheet" href="/stylesheets/howitworks.css")
 block content
   .sections-wrapper
     // ******Why Section******
     section#why.section.why
       .container
         h2.title.text-center How Can Easysublease Help You?
-        p.intro.text-center.text-muted
-          | We help you publish your rental listing(subletting, seeking co-lessee)
+        p.intro.text-center.text-muted.margin-bottom-8x
+          | We help you publish your rental listing(subletting, seeking co-lessee) FOR FREE.
           br
-          | And absolutely for free. Why free? Because I am expected to graduate at May 2016, I need to find a job at that time.
+          | Why free? Because I am expected to graduate at May 2016, I need to find a job at that time.
           br
           | So, when you are using this project website, you are actually 
           | helping me! I feel grateful about that.
         hr
-        .row.item
+        .row.item.margin-top-8x
           .content.col-md-4.col-sm-12.col-xs-12
             h3.title Save you time and effort
             .desc
@@ -38,7 +41,7 @@ block content
             //- //- .quote ends
           // //content
           figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-offset-1.col-sm-offset-0.col-xs-offset-0
-            img.img-responsive(src='images/figures/figure-1.png', alt='')
+            img.img-responsive.img-thumbnail.img-shadow-es(src='images/figures/my-figure-1.png', alt='screenshot')
             figcaption.figure-caption (Screenshot: Easysublease mainsite, with Street View expanded ) 
         // //item
         .row.item.margin-top-3x
@@ -65,7 +68,7 @@ block content
             //- // //quote
           // //content
           figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-pull-4.col-sm-pull-0.col-xs-pull-0
-            img.img-responsive(src='images/figures/figure-2.png', alt='')
+            img.img-responsive.img-thumbnail.img-shadow-es(src='images/figures/my-figure-2.jpg', alt='')
             .control.text-center
               //- button.play-trigger(type='button', data-toggle='modal', data-target='#modal-video')
               //-   i.fa.fa-play
@@ -73,7 +76,7 @@ block content
         // //item
         .row.item.margin-top-3x
           .content.col-md-4.col-sm-12.col-xs-12
-            h3.title Easy to manage your listing page
+            h3.title Manage listing page with ease
             .desc
               p
                 | Full server side implementation for DropzoneJS enables you to Drag and Upload images to Amazon S3 cloud storage. 
@@ -94,18 +97,19 @@ block content
             //- // quote ends
           // //content
           figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-offset-1.col-sm-offset-0.col-xs-offset-0
-            img.img-responsive(src='images/figures/figure-3.png', alt='')
+            img.img-responsive.img-thumbnail.img-shadow-es(src='images/figures/my-figure-3.png', alt='')
             figcaption.figure-caption
               | (Screenshot: 
-              a(href='http://themes.3rdwavemedia.com/website-templates/responsive-bootstrap-theme-for-startups-tempo/?ref=3wm', target='_blank') Tempo - Bootstrap template for startups)
+              a(href='http://listing.easysublease.com/edit/559418e1731b61add4b8d532', target='_blank') Editing demo page 
+              | )
         // //item
-        .row.item.margin-top-3x
+        .row.item.margin-top-3x.margin-bottom-8x
           .content.col-md-4.col-sm-12.col-xs-12.col-md-push-8.col-sm-push-0.col-xs-push-0
             h3.title Not only about rental listing 
             .desc
               p
                 | Share your ride 100x times easier than Zimride.
-                | If you know how to use Google Maps to search routes on map, then you are good. You have already known how to post and share
+                | If you know how to use Google Maps to search routes on map, then you have already known how to post and share
                 | your ride with others in this world.
               p 
                 | (Under concept developping, finished work including routes combining algorithm, currently developping 
@@ -121,15 +125,16 @@ block content
             //-     p.source @JackT, San Francisco
             //-   // quote-content ends
             //-  //quote ends
-          // //content
+          //- content
           figure.figure.col-md-7.col-sm-12.col-xs-12.col-md-pull-4.col-sm-pull-0.col-xs-pull-0
-            img.img-responsive(src='images/figures/figure-4.png', alt='')
-        // //item
-        .feature-lead.text-center
+            img.img-responsive.img-thumbnail.img-shadow-es(src='images/figures/my-figure-4.jpg', alt='')
+        //- item
+
+        .feature-lead.text-center.margin-bottom-8x
           h4.title Want to discover all the features?
           p
-            a.btn.btn-cta.btn-cta-secondary(href='features.html') Take a youtube tour
-      //- container
+            a.btn.btn-primary.btn-lg(href="http://www.youtube.com") Take a Youtube tour
+      //- containerke
     //- "why" ends
     
     //- // ******Testimonials Section starts******
@@ -245,13 +250,17 @@ block content
     //-   // //container
     //- // //press
     // ******CTA Section******
-    section#cta-section.section.cta-section.text-center.home-cta-section
+    section.text-center.cta-section
       .container
         h2.title Ready to use EasySublease now?
         p.intro
-          | More than 1,000 students are using EasySublease now. (Just kidding)
+          | More than 
+          span.counting 10,000
+          |  users are using EasySUblease (I'm kidding)
+
         p
-          a.btn.btn-cta.btn-cta-primary(href='http://www.easysublease.org', target='_blank') Go EasySublease
+          a.btn.btn-primary.btn-lg(href='http://www.easysublease.org', target='_blank') Go EasySublease
+          //- a.btn.btn-cta.btn-cta-primary(href='http://www.easysublease.org', target='_blank') Go EasySublease
       // //container
     // //cta-section
   // //section-wrapper

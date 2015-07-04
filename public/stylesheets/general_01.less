@@ -236,6 +236,77 @@ a:hover{
 }
 
 
+/*footer */
+
+footer{
+  padding-top: 40px;
+  background: darken(@theme-color, 10%);
+  color: darken(#fff,30%);
+  padding-top: 40px;
+  position: relative;
+  z-index: 2;
+
+  .links{
+    li{
+      color: darken(#fff,50%);
+      .havetTansition;
+    }
+    li:hover{
+      color:lighten(@primary-color,10%);
+    }
+  }
+  
+  .title{
+    .margin-top-0x;
+  }
+
+  .footer-col-inner .social{
+    .margin-top-1x;
+    .margin-bottom-2x;
+    li a {
+      .havetTansition;
+    }
+    li a:hover {
+      color: lighten(@primary-color,10%);
+    }
+  }
+  hr{
+    border-top-color:lighten(@theme-color, 0%);
+  }
+  .download .download-list li{ 
+    .margin-bottom-2x;
+    .btn-ghost {
+      opacity: 0.6;
+      background: none;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 8px 20px;
+      vertical-align: middle;
+      .havetTansition;
+      &:hover{
+        background: lighten(@theme-color, 10%);
+        opacity: 1;
+      }
+    }
+  }
+
+  .contact{
+    .fa-lg{
+      padding-top: @usual_space_value;
+      height: 20px;
+    }
+  }
+}
+/*offset some unwanted bootstrap effect*/
+.cancel-margin{
+  margin: 0px;
+}
+.cancel-padding-tb{
+  padding: 0px 12px;
+  height: 25px;
+}
+
+
 
 
 //---------------------------------------------------
