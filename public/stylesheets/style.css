@@ -1,3 +1,6 @@
+body {
+  position: relative;
+}
 .line-height-18 {
   line-height: 1.8;
 }
@@ -54,6 +57,9 @@
 .margin-bottom-8x {
   margin-bottom: 50px;
 }
+.marigin-right-1x {
+  margin-right: 6.25px;
+}
 .margin-left-right-1x {
   margin-right: 6.25px;
   margin-left: 6.25px;
@@ -61,6 +67,14 @@
 .margin-left-right-2x {
   margin-right: 12.5px;
   margin-left: 12.5px;
+}
+.margin-left-right-3x {
+  margin-right: 18.75px;
+  margin-left: 18.75px;
+}
+.margin-left-right-4x {
+  margin-right: 25px;
+  margin-left: 25px;
 }
 .padding-right-1x {
   padding-right: 6.25px;
@@ -155,6 +169,71 @@ a:hover {
   padding: 5px 5px;
   float: left;
 }
+/*footer */
+footer {
+  background: #1a1a1a;
+  color: #b3b3b3;
+  padding-top: 40px;
+  position: relative;
+  z-index: 2;
+}
+footer .links li {
+  color: #808080;
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .links li:hover {
+  color: #00b2ed;
+}
+footer .title {
+  margin-top: 0px;
+}
+footer .footer-col-inner .social {
+  margin-top: 6.25px;
+  margin-bottom: 12.5px;
+}
+footer .footer-col-inner .social li a {
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .footer-col-inner .social li a:hover {
+  color: #00b2ed;
+}
+footer hr {
+  border-top-color: #333333;
+}
+footer .download .download-list li {
+  margin-bottom: 12.5px;
+}
+footer .download .download-list li .btn-ghost {
+  opacity: 0.6;
+  background: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 8px 20px;
+  vertical-align: middle;
+  -webkit-transition: all 0.3s;
+  /* For Safari 3.1 to 6.0 */
+  transition: all 0.3s;
+}
+footer .download .download-list li .btn-ghost:hover {
+  background: #4d4d4d;
+  opacity: 1;
+}
+footer .contact .fa-lg {
+  padding-top: 6.25px;
+  height: 20px;
+}
+/*offset some unwanted bootstrap effect*/
+.cancel-margin {
+  margin: 0px;
+}
+.cancel-padding-tb {
+  padding: 0px 12px;
+  height: 25px;
+}
 /* Mimic table appearance */
 #dropzone-container {
   background: rgba(0, 0, 255, 0.1);
@@ -246,4 +325,3 @@ a:hover {
 #dropzone-container #previews .preview-container .delete {
   display: none;
 }
-/* Hide the start and cancel buttons and show the delete button */

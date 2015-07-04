@@ -2,7 +2,7 @@ extends layout.jade
 block css
   link(rel="stylesheet" href="/stylesheets/style.css")
 block content
-  #container.container
+  #container.container.margin-bottom-8x
     -var server_path = 'https://esimgserver.s3.amazonaws.com/'
     -var folder_path = server_path + result._id+'/'
     -var processPhotoData = function( onelist) {
