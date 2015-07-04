@@ -1,3 +1,6 @@
+body {
+  position: relative;
+}
 .line-height-18 {
   line-height: 1.8;
 }
@@ -166,6 +169,14 @@ a:hover {
   padding: 5px 5px;
   float: left;
 }
+/*specifically for this project*/
+.anchor-position-fix {
+  border-top: 40px solid transparent;
+  margin-top: -40px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
 .subnav-container {
   background-color: #565a5c;
   margin: 0;
@@ -181,9 +192,9 @@ a:hover {
 }
 .subnav-container .subnav-item-container:hover {
   background-color: #3d4042;
-  border-bottom-color: #3d4042;
+  border-bottom-color: #cccccc;
 }
-.subnav-container .selected {
+.subnav-container .active {
   color: #fff;
   border-bottom: 3px solid #e6e6e6;
 }

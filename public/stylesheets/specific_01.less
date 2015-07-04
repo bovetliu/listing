@@ -1,5 +1,13 @@
 @import "general_01.less";
 
+/*specifically for this project*/
+.anchor-position-fix{
+  border-top: 40px solid transparent;
+  margin-top: -40px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
 
 .subnav-container{
   // line-height: 42px;
@@ -17,9 +25,9 @@
   }
   .subnav-item-container:hover{
     background-color: darken(@innerVariableColor, 10%);
-    border-bottom-color: darken(@innerVariableColor, 10%);
+    border-bottom-color: darken(#fff, 20%);
   }
-  .selected{
+  .active{
     color:#fff;
     border-bottom:3px solid darken(#fff,10%);
   }

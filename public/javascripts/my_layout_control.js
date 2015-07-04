@@ -238,8 +238,17 @@ $(document).ready(function(){
         $(this).find('.preview-info-control').css("opacity",0);
       });
     });
+  }// end of if(editing)
 
-  }
+ 
+  var jq_li_ar = $('#subnav-container li');
+  $.each( jq_li_ar, function(index, dom){
+    $(dom).click(function(){
+      console.log("clicked");
+      jq_li_ar.removeClass('active');
+      $(this).addClass('active');
+    });
+  });
   
 
   // add logic to .expandable
@@ -311,9 +320,10 @@ $(document).ready(function(){
     }
   });
 
+  // higher_bound_of_top is the distance of 
   var higher_bound_of_top = $('#details').height()  + $('#summary').height() + $('#photos').height() + $('#my-nav').height() - $("#pricing").height() - $("#book_it").height();
   var summary_top =  $('#photos').height() + $('#my-nav').height() ;
-  console.log(higher_bound_of_top);
+  console.log([higher_bound_of_top, summary_top]);
 
   var book_panel_01 = new BookPanel( 
     { model: new Backbone.Model({ 

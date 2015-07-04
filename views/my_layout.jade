@@ -46,11 +46,11 @@ html
         .container
           .row
             div.col-md-8: ul.standard-list.standard-list-horizontal
-              li.subnav-item-container.selected: a.subnav-item(href="#cover-img") Photos
-              li.subnav-item-container: a.subnav-item(href="#about_listing_locate") About the listing
-              li.subnav-item-container: a.subnav-item Reviews
-              li.subnav-item-container: a.subnav-item The Host
-              li.subnav-item-container: a.subnav-item Location
+              li.subnav-item-container.active: a.subnav-item(href="#cover-img") Photos
+              li.subnav-item-container: a.subnav-item(href="#details-column") About the listing
+              //- li.subnav-item-container: a.subnav-item Reviews
+              //- li.subnav-item-container: a.subnav-item The Host
+              li.subnav-item-container: a.subnav-item(href="#map-div") Location
       #room
         #photos
           #cover-img-container
@@ -66,7 +66,7 @@ html
         #neighborhood
           block neighborhood-meta
           .container-fluid.padding-left-right-0x
-            #map-div
+            #map-div.anchor-position-fix
     //- bascially obtained from velocity template
     footer.footer
       .footer-content
