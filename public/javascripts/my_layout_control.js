@@ -533,6 +533,11 @@ $(document).ready(function(){
           console.log("to be uploaded data " + JSON.stringify(data));
           ClassRef.updateAttr( $(this).attr('data-dbtarget') , data, function(attr, value){
             console.log("updateAttr invokded at for selectable-group-form");
+            $('#info_p').text("updated contents to server");
+            $('#info-modal').modal('show');
+            setTimeout(function(){
+              $('#info-modal').modal('hide');
+            },1400)
           });
         });
       });

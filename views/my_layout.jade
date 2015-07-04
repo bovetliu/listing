@@ -67,6 +67,17 @@ html
           block neighborhood-meta
           .container-fluid.padding-left-right-0x
             #map-div.anchor-position-fix
+
+        #info-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+          .modal-dialog.modal-sm
+            // Modal content
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h4.modal-title Info
+              .modal-body
+                p#info_p Some text in the modal.
+
     //- bascially obtained from velocity template
     footer.footer
       .footer-content
