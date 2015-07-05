@@ -41,3 +41,8 @@ block content
               .progress-bar.progress-bar-success(style='width:0%;', data-dz-uploadprogress='')
       //- following div will be used to hold previews
       #previews.previews-container
+block js-addons
+  //- Dropzone 
+  script(src="/plugins/dropzone/dropzone.js")
+  //- Following is for layout small animation control
+  script(src="/javascripts/layout_control.js")

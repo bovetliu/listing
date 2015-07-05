@@ -10,6 +10,38 @@ html{
     // .fullHeightMinus(66px);
     .fullHeightMinus(45px);
     width: 100%;
+    .bg-slider-wrapper{
+      z-index: -1;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top:0px;
+      left:0px;
+      .bg-slider{
+        border: 0px;
+        .slides{
+
+          .slide{
+            .background-size(cover);
+            width: 100%;
+            height: 780px;
+            background-position: 50% 50%; //put image at center of its container!
+            background-repeat: no-repeat;
+
+          }
+          .slide.slide-1{
+            background-image: url("http://s3-us-west-2.amazonaws.com/esimgserver/staic_public/bg-cover1.jpg");
+          }
+          .slide.slide-2{
+            background-image: url("https://s3-us-west-2.amazonaws.com/esimgserver/staic_public/bg-cover2.jpg");
+          }
+          // .slide.slide-3{
+          //   background-image: url("../img/portfolio/banner_bg4.jpg");
+          // }
+
+        }
+      }
+    }
     #cover-image-container{
       z-index: -1;
       height: 100%;

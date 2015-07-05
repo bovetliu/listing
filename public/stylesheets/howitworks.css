@@ -251,6 +251,31 @@ html #cover-container {
   height: -o-calc(100% -  45px);
   width: 100%;
 }
+html #cover-container .bg-slider-wrapper {
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+html #cover-container .bg-slider-wrapper .bg-slider {
+  border: 0px;
+}
+html #cover-container .bg-slider-wrapper .bg-slider .slides .slide {
+  -webkit-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  height: 780px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+html #cover-container .bg-slider-wrapper .bg-slider .slides .slide.slide-1 {
+  background-image: url("http://s3-us-west-2.amazonaws.com/esimgserver/staic_public/bg-cover1.jpg");
+}
+html #cover-container .bg-slider-wrapper .bg-slider .slides .slide.slide-2 {
+  background-image: url("https://s3-us-west-2.amazonaws.com/esimgserver/staic_public/bg-cover2.jpg");
+}
 html #cover-container #cover-image-container {
   z-index: -1;
   height: 100%;

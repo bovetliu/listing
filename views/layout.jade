@@ -186,10 +186,15 @@ html
     script(src="/javascripts/jquery.min.js") 
     // Include all compiled plugins (below), or include individual files as needed 
     script(src="/javascripts/bootstrap.min.js")
-    //Dropzone 
-    script(src="/plugins/dropzone/dropzone.js")
-    //- Following is for layout small animation control
-    script(src="/javascripts/layout_control.js")  
+    
+    
+
+    block js-addons
+    //- posible addons  
+    //- Dropzone 
+    //- script(src="/plugins/dropzone/dropzone.js")
+    //- //- Following is for layout small animation control
+    //- script(src="/javascripts/layout_control.js")
 
     script#preview_template(type='text/template')
       .preview-container.dz-image-preview.text-center
