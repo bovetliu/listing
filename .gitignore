@@ -1,7 +1,9 @@
 # Compiled source #
+*.sh~
+*~
 ###################
 node_modules/*
-*~
+
 *post/*
 *.com
 *.class

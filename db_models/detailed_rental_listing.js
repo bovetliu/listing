@@ -54,7 +54,8 @@ var detailed_rental_listing_schema = new mongoose.Schema({
   "user_behavior": {
       "cat": Number,
       "target_whole_unit": Boolean,
-      "target_single_room": Boolean
+      "target_single_room": Boolean,
+      "target_shared_place":Boolean
   },
   "listing_related": {
       "title": String,

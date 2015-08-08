@@ -19,6 +19,7 @@ var mongoose = require('mongoose'),  // newly added, regarding init express
 /*routers*/
 var index_rt = require('./routes/index.js');
 var s3lib = require('./routes/s3lib.js');
+var data_api_router = require('./routes/data_api_router.js');
 var template = require('./routes/template.js'); 
 var listing_lib = require('./routes/listing_lib.js');
 var app = express();
@@ -46,22 +47,24 @@ app.use(function(req, res, next){
 app.use('/', index_rt);
 
 app.use('/template', template);
+app.use('/data_api', data_api_router);
+
+/*edit mode*/
 app.get('/edit/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,true);
 });
 
+/*listing mode*/
 app.get('/listing/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 app.post('/listing', function(req,res,next){
   var instance = new req.db_model( JSON.parse(req.body.model) );
-  console.log(req.body.model)
+  // console.log(req.body.model)
   // console.log(JSON.stringify(instance));
   instance.save(function(e){
     if (e) return next(e);
     res.send(instance.toObject());
-    // console.log("created following new instance:")
-    // console.log(instance);
   });
 })
 app.delete('/edit/:id/:filename', s3lib.procDeleteObject);
