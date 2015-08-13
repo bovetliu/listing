@@ -48,8 +48,7 @@ var detailed_rental_listing_schema = new mongoose.Schema({
           "first_aid_kit": Boolean,
           "safety_card": Boolean,
           "fire_extinguisher": Boolean
-      },
-      "availability": String
+      }
   },
   "user_behavior": {
       "cat": Number,
@@ -65,6 +64,10 @@ var detailed_rental_listing_schema = new mongoose.Schema({
       "cover_image":String,
       "images":Array,
       "simplified_rental_data_id":mongoose.Schema.ObjectId,
+      "availability": {
+        "begin":Number,
+        "end":Number
+      },
       "optional_traits_switch":{
         "unit_traits_description":Boolean,
         "unit_traits_house_rules":Boolean,

@@ -1,13 +1,29 @@
 should be able to find one
-http://localhost:3000/data_api/listing/conditional?unit_traits.lat_lb=30&unit_traits.lat_hb=31    passed at 11:14am 08/07
+http://localhost:3000/data_api/listing/conditional?unit_traits.lat-lb=29&unit_traits.lat-hb=32    passed at 11:14am 08/07
 should not find one
-http://localhost:3000/data_api/listing/conditional?unit_traits.lat_lb=20&unit_traits.lat_hb=21    passed at 11:14am 08/07
+http://localhost:3000/data_api/listing/conditional?unit_traits.lat-lb=20&unit_traits.lat-hb=21    passed at 11:14am 08/07
 
 see what happens
-http://localhost:3000/data_api/listing_core/conditional?unit_traits.lat_lb=30&unit_traits.lat_hb=31
+http://localhost:3000/data_api/listing_core/conditional?unit_traits.lat-lb=30&unit_traits.lat-hb=31
 
 should find one
 http://localhost:3000/data_api/listing/5593aa9e48f2890a9a0f2929
+
+/*online situation*/
+should be able to find one
+http://listingtest-u7yhjm.rhcloud.com/data_api/listing/conditional?unit_traits.lat-lb=29&unit_traits.lat-hb=32    passed at 11:14am 08/07
+should not find one
+http://listingtest-u7yhjm.rhcloud.com/data_api/listing/conditional?unit_traits.lat-lb=20&unit_traits.lat-hb=21    passed at 11:14am 08/07
+
+see what happens
+http://listingtest-u7yhjm.rhcloud.com/data_api/listing_core/conditional?unit_traits.lat-lb=30&unit_traits.lat-hb=31
+
+should find one
+http://listingtest-u7yhjm.rhcloud.com/data_api/listing/55910d94008d84ed2912e1ae
+
+
+
+
 
 https://www.airbnb.com/rooms/2525228  逆向的页面
 
@@ -130,10 +146,12 @@ document.getElementById('console').innerHTML = JSON.stringify({
     "apartment_type_options"=["apartment","house","duplex"]
 });
 
+/*remove all*/
+db.detailed_rental_listing.remove()
 
 /*delete those other lists, in local listing database*/
 db.detailed_rental_listing.remove(
-{_id: {$ne:  ObjectId("558b32440ca2f11b1cf1b0a2")}}
+{_id: {$ne:  ObjectId("5593aa9e48f2890a9a0f2929")}}
 )
 
 /*delete online listing server other data*/

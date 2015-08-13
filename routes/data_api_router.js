@@ -8,11 +8,13 @@ var router = express.Router();
 
 /*helper functions*/
 /*This function try to devide origin_lat_lb  ->  ['origin_lat', 'lb']  lat_lb -> ['lat','lb']*/
+var $or_candidates = ["user_behavior.target_whole_unit", "user_behavior.target_single_room","user_behavior.target_shared_place"];
+
 var specialSplit = function (key) {
-  key = key.split('_');
+  key = key.split('-');
 
   if (key.length >2) {
-    return [key.slice(0,-1).join('_'),key[key.length-1]]
+    return [key.slice(0,-1).join('-'),key[key.length-1]]
   }
   else return key;
 
@@ -33,7 +35,15 @@ var genQuery = function (  query_object ){
       query[attr][decoration] = query_object[key];
     }
     else {
-      if ( key =="cat") query[key] =  parseInt(query_object[key] );
+
+      if ( key =="user_behavior.cat") query[key] =  parseInt(query_object[key] );
+      else if ($or_candidates.indexOf(key)>-1){
+        // which means this should be in or clause of query
+        if ( ! query['$or']){query['$or'] = [] }
+        var tempobj = {};
+        tempobj[key] = query_object[key];
+        query['$or'].push(tempobj);
+      }
       else if ( query_object[key] =="false" ) {
         query[key] = false;
       }
@@ -46,18 +56,18 @@ var genQuery = function (  query_object ){
       
     }
   }); 
-  console.log(query);
+  console.log("to_be_run_query: " +  JSON.stringify(query));
   return query;
 }
 
 /*useful routes: 
-  1./listing/conditional?[query]
-  2./listing_core/considtion?[query]
-  3./listing/:id               
+  1./data_api/listing/conditional?[query]
+  2./data_api/listing_core/conditional?[query]
+  3./data_api/listing/:id               
 */
 
 router.get('/', function(req, res, next) {
-  res.send("API Usage: [document.origin]/data_api/listing/conditional?unit_traits.lat_lb=30&unit_traits.lat_hb=31");
+  res.send("API Usage: [document.origin]/data_api/listing/conditional?unit_traits.lat-lb=30&unit_traits.lat-hb=31");
 });
 
 router.get('/listing/conditional',function(req, res, next){ 
