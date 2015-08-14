@@ -140,7 +140,8 @@ a:hover {
 /*This part is for suojiansuode v0.04*/
 /*This part is to make the editable*/
 .editable,
-.selectable {
+.selectable,
+.editable-date {
   -webkit-transition: all 0.2s;
   /* For Safari 3.1 to 6.0 */
   transition: all 0.2s;
@@ -148,7 +149,8 @@ a:hover {
   position: relative;
 }
 .editable:hover,
-.selectable:hover {
+.selectable:hover,
+.editable-date:hover {
   background-color: #baeeff;
 }
 .edit-field {

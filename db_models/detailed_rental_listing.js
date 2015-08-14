@@ -4,8 +4,7 @@ var detailed_rental_listing_schema = new mongoose.Schema({
   "unit_traits": {
       "lat": { type:Number, max: 85, min:-85},
       "lng": { type:Number, max:180, min:-180},
-      "price_single": {type:Number, min:0},
-      "price_total": {type:Number, min:0},
+      "price": {type:Number, min:0},
       "community": String,
       "addr": String,
       "beds": {type:Number, min:0, max:20},
@@ -52,9 +51,7 @@ var detailed_rental_listing_schema = new mongoose.Schema({
   },
   "user_behavior": {
       "cat": Number,
-      "target_whole_unit": Boolean,
-      "target_single_room": Boolean,
-      "target_shared_place":Boolean
+      "target_range": Number // 1: target whole unit 2: target room 3: target shared place
   },
   "listing_related": {
       "title": String,

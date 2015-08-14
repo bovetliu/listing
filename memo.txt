@@ -160,6 +160,17 @@ db.detailed_rental_listing.remove(
 {_id: {$ne:  ObjectId("55910d94008d84ed2912e1ae")}}
 )
 
+/*modify target_range */
+db.detailed_rental_listing.update({},
+  { $set:{"user_behavior.target_range":2}},
+  {multi:true}
+);
+
+db.detailed_rental_listing.update({ "_id": ObjectId("55cc051e2db48c0d19116dfe")},
+  { $set:{"unit_traits.price":420}}
+);
+
+
 03:51 test successfully
 curl -X "DELETE" http://localhost:3000/edit/558b32440ca2f11b1cf1b0a2/7115050.png
 

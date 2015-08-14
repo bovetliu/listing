@@ -56,6 +56,7 @@ block summary
   -var adaptiveEditable =function(){
   -  return (editing)?"editable":""
   -}
+  //- following method, class_name can be "selectable", "editable"
   -var adaptiveEditingClass =function(class_name){
   -  return (editing)?class_name:""
   -}
@@ -133,6 +134,8 @@ block #details
   -var ppForHTMl = function(text) { return text.replace(/\r?\n/g, '\n<br>')};
 
   - var html_about_this_listing  = result.listing_related.about_this_listing.replace(/\r?\n/g, '\n<br>');
+  
+
   mixin checkbox(bool, key)
     -var content = key.split("_").join(" ")
     .checkbox
@@ -155,6 +158,16 @@ block #details
     else 
       .row-space-1
         del #{key}     
+  mixin listing_purpose(cat)
+    case cat
+      when 1
+        | to lease
+      when 2
+        | to rent
+      when 3
+        | seek co-lessee
+      default
+        | system error
   mixin group_checkbox_listingmode(start, end, jsobject, isBold)
     - var n = 0
     each val, key in jsobject
@@ -206,6 +219,12 @@ block #details
                       div
                         | Pet Friendly: 
                         strong(data-dbtarget="unit_traits.pet_friendly" class="#{adaptiveEditingClass('selectable')}") #{result.unit_traits.pet_friendly.toString()}
+                  .row
+                    .col-md-12
+                      div
+                        | Listing Purpose: 
+                        strong(data-dbtarget="user_behavior.cat" class="#{adaptiveEditingClass('selectable')}")
+                          +listing_purpose(result.user_behavior.cat)
               hr
               .row.amenities
 
@@ -274,19 +293,31 @@ block #details
                       .row
                         .col-md6.margin-top-2x.margin-left-right-2x
                           #price-slider(data-dbtarget="unit_traits.price_single")
-              hr.hidden
-              .row.availability.hidden
+              hr
+              .row.availability
                 .col-md-3
                   .text-muted
                     | Availability
                 .col-md-9
+                  -function formatDate(date){
+                  -  return (date.getMonth()+1).toString() + "/" +date.getDate().toString() +"/"+date.getFullYear()
+                  -}
+                  -var begin_date = new Date(result.listing_related.availability.begin);
+                  -var end_date = new Date(result.listing_related.availability.end);
                   .row
-                    .col-md-6
-                      strong 1 night
-                      |  minimum stay
-                    .col-md-6
-                      a#view-calendar(href='#')
-                        strong View Calendar
+                    .col-md-2.text-muted
+                      | From:
+                    .col-md-4
+                      div(class="#{adaptiveEditingClass('editable-date')}", data-dbtarget="listing_related.availability.begin")=formatDate(begin_date)
+                    .col-md-2.text-muted
+                      | To:
+                    .col-md-4
+                      div(class="#{adaptiveEditingClass('editable-date')}", data-dbtarget="listing_related.availability.end")=formatDate(end_date)
+                      
+                  //- if (editing)
+                  //-   .row
+                  //-     .col-md-6 editing begin date
+                  //-     .col-md-6 editing end date
               hr
               .row.description
                 .col-md-3.text-muted

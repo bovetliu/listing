@@ -26,7 +26,6 @@ $(document).ready(function(){
           if (!data._id){
             console.log([data,status]);
           } else if (data._id) {
-            console.log(data);
             onsuccessCB(attr, value);
           }
           else{
@@ -360,20 +359,14 @@ $(document).ready(function(){
         "unit_traits.beds":[1,2,3,4,5,6],
         "unit_traits.baths":[1,1.5,2,2.5,3,3.5,4,4.5,5,6],
         "unit_traits.property_type":["apartment","house","duplex"],
-        "unit_traits.pet_friendly":[true,false]
+        "unit_traits.pet_friendly":[true,false],
+        "user_behavior.cat": {"1":"to lease", "2":"to rent", "3":"seek co-lessee"} 
       } 
     },
     apiServerURL:  "http://localhost:3000",
     db_id:"123",
 
-    mapOptionsIntoHTML:_.template(
-      '<div style="display:inline-block"> \
-        <select class="form-control cancel-padding-tb"> \
-        <% _.each(options, function(element, index, array){%> \
-          <option <%if (selected == element.toString()){%> selected <%}%>  value="<%= element%>"><%=element%></option>\
-        <%}); %>\
-        </select> \
-      </div>'),
+    mapOptionsIntoHTML:_.template($('#selectable_options_template').html()),
 
     ppForHTML:function(text){
       return text.replace(/\r?\n/g, '\n<br>')
@@ -396,6 +389,32 @@ $(document).ready(function(){
     addEditField:function( DOMobject){
       this.addRightIconField(DOMobject, "fa-pencil");
     },
+
+    processDateEditable:function(DOMobject){
+      var ClassRef = this;
+      var JQ_DOMobject = $(DOMobject);
+      var JQ_DOMobject_Parent = $(DOMobject).parent();
+
+      JQ_DOMobject.html(JQ_DOMobject.text().trim());
+      var temp_input = $('<input type="text" class="form-control"  value="'+ JQ_DOMobject.text() +'">');
+      temp_input.datepicker();
+      temp_input.change(function(){
+        var temp_date = new Date($(this).val());
+        temp_date.setHours(12);
+        ClassRef.updateAttr(JQ_DOMobject.attr("data-dbtarget"), temp_date.getTime(), function(){
+          JQ_DOMobject_Parent.empty();
+          JQ_DOMobject_Parent.append(JQ_DOMobject);
+          JQ_DOMobject.text(temp_input.val());
+          ClassRef.processDateEditable(DOMobject);
+        });
+      });
+
+      JQ_DOMobject.click(function(){
+        JQ_DOMobject.replaceWith(temp_input);
+      });
+      ClassRef.addSelectField(DOMobject);
+    }
+    ,
     processEditable:function(DOMobject){
       var ClassRef =this;
       var DOMobject_bf = $(DOMobject).clone()[0];
@@ -442,7 +461,7 @@ $(document).ready(function(){
     processSelectable:function (DOMobject){
       var ClassRef = this; //var DOMobject_bf = $(DOMobject).clone()[0]; 
       $(DOMobject).html($(DOMobject).text().trim());
-      console.log(DOMobject);
+      // console.log(DOMobject);
       // var JQ_parent = $(DOMobject).parent();
       // console.log( ClassRef.get("options"));
       var text = $(DOMobject).text();
@@ -457,7 +476,11 @@ $(document).ready(function(){
           $(DOMobject).attr('data-dbtarget').toString(), 
           jq_select_container.find("select").val(),
           function(attr, value){
-            $(DOMobject).text(value);
+            if ( !Array.isArray(ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")])){
+              $(DOMobject).text( ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")][parseInt(value)] );
+            }else {
+              $(DOMobject).text(value);
+            }
             jq_select_container.replaceWith(DOMobject);
             $(DOMobject).click(function(){
               ClassRef.processSelectable(DOMobject);
@@ -492,6 +515,12 @@ $(document).ready(function(){
         });
         ClassRef.addSelectField(DOMobject);
       });
+
+      $.each($(".editable-date"), function(index, DOMobject){
+        ClassRef.processDateEditable(DOMobject);
+        ClassRef.addSelectField(DOMobject);
+      });
+
 
       /*process slide bar*/
       $( "#price-slider" ).slider({

@@ -8,7 +8,7 @@ var router = express.Router();
 
 /*helper functions*/
 /*This function try to devide origin_lat_lb  ->  ['origin_lat', 'lb']  lat_lb -> ['lat','lb']*/
-var $or_candidates = ["user_behavior.target_whole_unit", "user_behavior.target_single_room","user_behavior.target_shared_place"];
+var $or_candidates = ["user_behavior.target_range"];
 
 var specialSplit = function (key) {
   key = key.split('-');
@@ -40,9 +40,13 @@ var genQuery = function (  query_object ){
       else if ($or_candidates.indexOf(key)>-1){
         // which means this should be in or clause of query
         if ( ! query['$or']){query['$or'] = [] }
-        var tempobj = {};
-        tempobj[key] = query_object[key];
-        query['$or'].push(tempobj);
+        query_object[key] = query_object[key].split(',');
+        //user_behavior.target_range = [1,2,3]
+        query_object[key].forEach(function(element,index, ar){
+          var tempobj = {};
+          tempobj[key] = element;
+          query['$or'].push(tempobj);
+        });
       }
       else if ( query_object[key] =="false" ) {
         query[key] = false;

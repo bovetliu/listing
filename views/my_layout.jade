@@ -233,7 +233,21 @@ html
     //Dropzone 
     script(src="/plugins/dropzone/dropzone.js")
 
-    script(src="/javascripts/my_layout_control.js") 
+    script(src="/javascripts/my_layout_control.js")
+
+    script#selectable_options_template(type='text/template').
+      <div style="display:inline-block">
+        <select class="form-control cancel-padding-tb">
+        <% _.each(options, function(element, index, array){%> 
+          <%if ( Array.isArray(options)) {%>
+            <option <%if (selected == element.toString()){%> selected <%}%>  value="<%=element%>"><%=element%></option>
+          <% } else  { %>
+            <option <%if (selected == element){%> selected <%}%>  value="<%=index%>"><%=element%></option>
+          <%}%>
+        <%}); %>
+        </select> 
+      </div>
+
     script#preview_template(type='text/template')
       .preview-container.dz-image-preview.text-center
         //-  This is used as the file preview template

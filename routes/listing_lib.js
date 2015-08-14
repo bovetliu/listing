@@ -90,7 +90,9 @@ exports.dbUpdateAttr =function(req, res , next){
       res.status(404).send("requested resource cannot be found").end();
       return;
     }
+    
     updateAttr(instance, instance, req.body['attr_path'], req.body['value']);
+
     console.log("end of updateAttr()")
   });
 }
