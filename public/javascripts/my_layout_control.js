@@ -360,7 +360,8 @@ $(document).ready(function(){
         "unit_traits.baths":[1,1.5,2,2.5,3,3.5,4,4.5,5,6],
         "unit_traits.property_type":["apartment","house","duplex"],
         "unit_traits.pet_friendly":[true,false],
-        "user_behavior.cat": {"1":"to lease", "2":"to rent", "3":"seek co-lessee"} 
+        "user_behavior.target_range":{"1":"entire unit", "2": "single room", "3":"shared place"},
+        "user_behavior.cat": {"1":"to lease", "2":"to rent", "3":"seek co-lessee"}
       } 
     },
     apiServerURL:  "http://localhost:3000",

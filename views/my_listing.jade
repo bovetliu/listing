@@ -67,7 +67,7 @@ block summary
   -  temp.cover_image = result.listing_related.cover_image;
   -  return JSON.stringify(temp);
   -}
-  -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
+  -function returnPrice(){return (result.unit_traits.price)?result.unit_traits.price:100 };
   meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
   .container
     .row
@@ -157,7 +157,17 @@ block #details
           span #{key}
     else 
       .row-space-1
-        del #{key}     
+        del #{key} 
+  mixin target_range(target_range)
+     case target_range
+      when 1
+        | Entire unit
+      when 2
+        | Single room
+      when 3
+        | Shared place
+      default
+        | system error user_behavior.target_range   
   mixin listing_purpose(cat)
     case cat
       when 1
@@ -167,7 +177,7 @@ block #details
       when 3
         | seek co-lessee
       default
-        | system error
+        | system error user_behavior.cat
   mixin group_checkbox_listingmode(start, end, jsobject, isBold)
     - var n = 0
     each val, key in jsobject
@@ -225,6 +235,12 @@ block #details
                         | Listing Purpose: 
                         strong(data-dbtarget="user_behavior.cat" class="#{adaptiveEditingClass('selectable')}")
                           +listing_purpose(result.user_behavior.cat)
+                    .col-md-12
+                      div
+                        | Target Range:
+                        strong(data-dbtarget="user_behavior.target_range" class="#{adaptiveEditingClass('selectable')}")
+                          +target_range(result.user_behavior.target_range)
+
               hr
               .row.amenities
 
@@ -276,7 +292,7 @@ block #details
                             //- put button save and cancel here
               hr
               .row.prices
-                -function returnPrice(){return (result.unit_traits.price_single)?result.unit_traits.price_single:100 };
+                -function returnPrice(){return (result.unit_traits.price)?result.unit_traits.price:100 };
                 .col-md-3
                     .text-muted Prices
                   .col-md-9
@@ -292,7 +308,7 @@ block #details
                     if (editing)
                       .row
                         .col-md6.margin-top-2x.margin-left-right-2x
-                          #price-slider(data-dbtarget="unit_traits.price_single")
+                          #price-slider(data-dbtarget="unit_traits.price")
               hr
               .row.availability
                 .col-md-3
