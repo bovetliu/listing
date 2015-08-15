@@ -521,6 +521,16 @@ $(document).ready(function(){
         ClassRef.addSelectField(DOMobject);
       });
 
+      $("#btn-mark-outdated").click(function(){
+        var btn = this;
+        ClassRef.updateAttr(
+          $(btn).attr('data-dbtarget').toString(), 
+          JSON.parse($(btn).attr('data-dbvalue')), 
+          function (attr, value){  // in updateAttr declaration, this cb will be taken these two params
+            location.reload();
+          }
+        );// end of invoking updateAttr
+      }); 
 
       /*process slide bar*/
       $( "#price-slider" ).slider({

@@ -22,13 +22,15 @@ exports.renderJade = function( req, res, next, is_editing){
 }
 var global_res = "";
 var global_next = "";
+
 var updateAttr = function(instance, object, attr_path, value){
   var jb =3;
+  // attr_path is one array
   if (attr_path.length == 1){
     // console.log("updateAttr updating value");
     // console.log(attr_path[0]);
     // console.log(value);
-    if (value){
+    if (value != null && typeof value != 'undefined'){
       // updating 
       if (typeof value  =='object') {
         _.each( _.keys(object[attr_path[0]].toObject()), function(keyname, index, array){
@@ -73,6 +75,7 @@ exports.dbUpdateAttr =function(req, res , next){
   global_res = res;
   global_next = next;
   _.each(req.body, function(element, key, list){
+    console.log(element+"  " + key);
     req.body[key] = JSON.parse(req.body[key]);
   });
   // console.log(req.body);
@@ -84,7 +87,7 @@ exports.dbUpdateAttr =function(req, res , next){
       res.status(404).send("requested resource cannot be found").end();
       return;
     }
-    
+
     updateAttr(instance, instance, req.body['attr_path'], req.body['value']);
 
     console.log("end of updateAttr()")

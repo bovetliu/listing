@@ -68,6 +68,13 @@ block summary
   -  return JSON.stringify(temp);
   -}
   -function returnPrice(){return (result.unit_traits.price)?result.unit_traits.price:100 };
+
+  mixin outdateOrActivate(isexpired)
+    case isexpired
+      when true
+        #btn-mark-outdated.btn.btn-success(data-dbtarget="listing_related.isexpired" data-dbvalue="false" ) Activate
+      when false
+        #btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Mark outdated
   meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
   .container
     .row
@@ -121,6 +128,8 @@ block summary
                 else    
                   .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
                     a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) enter listing mode
+                    | &nbsp;&nbsp;
+                    +outdateOrActivate(result.listing_related.isexpired)
                 div(class="other-actions text-center margin-top-3x") Share:&nbsp;&nbsp;
                   i.fa.fa-at.fa-lg.text-muted &nbsp;
                   i.fa.fa-facebook.fa-lg.text-muted &nbsp; 
