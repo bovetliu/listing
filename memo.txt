@@ -170,6 +170,11 @@ db.detailed_rental_listing.update({},
   {multi:true}
 );
 
+db.detailed_rental_listing.update({},
+  { $set:{"listing_related.availability.begin":1441929600000,"listing_related.availability.end":1455494400000 }},
+  {multi:true}
+);
+
 /*unset one key*/
 db.detailed_rental_listing.update({},
   { $unset:

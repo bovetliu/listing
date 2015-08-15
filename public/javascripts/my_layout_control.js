@@ -80,7 +80,6 @@ $(document).ready(function(){
       url: "./"+ helpers.db_id +"/upload_image", // Set the url
       thumbnailWidth: 120,
       thumbnailHeight: 120,
-      parallelUploads: 20,
       previewTemplate: previewTemplate,
       autoQueue: false, // Make sure the files aren't queued until manually added
       // autoProcessQueue:false,

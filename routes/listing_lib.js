@@ -18,12 +18,6 @@ exports.renderJade = function( req, res, next, is_editing){
         "current_page_url":current_page_url,
         "editing":is_editing
       });
-      // _.each( instance.toObject().unit_traits.amenities_status, function( element, index, list) {
-      //   if (list.hasOwnProperty(index)){
-      //     console.log(element);
-      //   }
-      // });
-
   });  
 }
 var global_res = "";
