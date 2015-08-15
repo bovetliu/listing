@@ -1,6 +1,7 @@
 # Compiled source #
 *.sh~
 *~
+start_app.sh
 ###################
 node_modules/*
 
