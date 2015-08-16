@@ -18,6 +18,7 @@ block fb_share_metas
   meta(property='og:title', content='#{title}')
   meta(property='og:description', content='#{result.listing_related.about_this_listing}')
   meta(property='og:image', content='#{cover_img_path()}')
+
 block photo
   -var server_path = 'https://esimgserver.s3.amazonaws.com/'
   -var folder_path = server_path + result._id+'/'
