@@ -13,8 +13,10 @@ exports.renderJade = function( req, res, next, is_editing){
         res.status(404).send("requested resource cannot be found").end();
         return;
       }
+      var instance_result = instance.toObject();
       res.render("my_listing.jade",{
-        "result":instance.toObject(),
+        "title": instance_result.listing_related.title,
+        "result":instance_result,
         "current_page_url":current_page_url,
         "editing":is_editing
       });
