@@ -50,7 +50,12 @@ block photo
       //- .modal-dialog.modal-lg
       .modal-dialog.modal-fullscreen-custom
         .modal-content.transparent-bg
-          .galleria
+          .row
+            .col-xs-1.pull-right
+              button.close.modal-exit-button(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') x
+          .row
+            .galleria
 
 block summary
   -var adaptiveEditable =function(){
