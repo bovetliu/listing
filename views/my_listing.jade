@@ -1,4 +1,23 @@
 extends my_layout.jade
+block fb_share_metas
+  -var server_path = 'https://esimgserver.s3.amazonaws.com/'
+  -var folder_path = server_path + result._id+'/'
+  -var processPhotoData = function( onelist) {
+  -   var tbr = []
+  -   onelist.forEach( function (element, index, ar){
+  -     tbr.push({"image":folder_path+element, "thumb":folder_path+element});
+  -   });
+  -   return JSON.stringify(tbr)}
+  -var cover_img_path = function(){
+  - if (result.listing_related.images.length == 0) {result.listing_related.cover_image = "default.png"}
+  - var tbr = (result.listing_related.cover_image == "default.png")?(server_path+"default.png"):(folder_path+result.listing_related.cover_image)
+  - return tbr;
+  -}  
+  meta(property='og:url', content="#{current_page_url +'listing/' + result._id}")
+  meta(property='og:type', content='website')
+  meta(property='og:title', content='#{title}')
+  meta(property='og:description', content='#{result.listing_related.about_this_listing}')
+  meta(property='og:image', content='#{cover_img_path()}')
 block photo
   -var server_path = 'https://esimgserver.s3.amazonaws.com/'
   -var folder_path = server_path + result._id+'/'
@@ -10,7 +29,6 @@ block photo
   -   return JSON.stringify(tbr)}
   -var cover_img_path = function(){
   - var tbr = (result.listing_related.cover_image == "default.png")?(server_path+"default.png"):(folder_path+result.listing_related.cover_image)
-  - 
   - return tbr;
   -}  
   meta#photo-data-modal(name="photo-data-modal" content="#{processPhotoData(result.listing_related.images)}")
@@ -153,7 +171,7 @@ block summary
                         i(class="fa fa-envelope-o fa-1")
                         | &nbsp;Mail
                       -var target_url = encodeURIComponent(current_page_url + 'listing/' + result._id);
-                      a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" target="_blank")
+                      a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" rel="nofollow" target="_blank")
                         i.fa.fa-facebook
                         | &nbsp;Facebook
                       a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");") ... More
