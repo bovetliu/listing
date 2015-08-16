@@ -152,7 +152,7 @@ block summary
                       a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");")
                         i(class="fa fa-envelope-o fa-1")
                         | &nbsp;Mail
-                      -var target_url = encodeURIComponent(current_page_url + 'listing/' + result.id);
+                      -var target_url = encodeURIComponent(current_page_url + 'listing/' + result._id);
                       a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" target="_blank")
                         i.fa.fa-facebook
                         | &nbsp;Facebook
@@ -193,7 +193,7 @@ block summary
                   a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");")
                     i(class="fa fa-envelope-o fa-1")
                     | &nbsp;Mail
-                  -var target_url = encodeURIComponent(current_page_url + 'listing/' + result.id);
+                  -var target_url = encodeURIComponent(current_page_url + 'listing/' + result._id);
                   a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" target="_blank")
                     i.fa.fa-facebook
                     | &nbsp;Facebook
