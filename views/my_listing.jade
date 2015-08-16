@@ -78,7 +78,7 @@ block summary
     if editing
       a.btn.btn-default(href=current_page_url +'listing/' + result._id) Enter Listing Mode
     else
-      a.btn.btn-default(href=current_page_url +'edit/' + result._id) Enter Edit Mode
+      a.btn.btn-default.hidden-xs.hidden-sm.hidden-md(href=current_page_url +'edit/' + result._id) Enter Edit Mode
   
   mixin outdateOrActivate(isexpired)
     if editing
