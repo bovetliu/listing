@@ -74,7 +74,7 @@ block summary
       when true
         #btn-mark-outdated.btn.btn-success(data-dbtarget="listing_related.isexpired" data-dbvalue="false" ) Activate
       when false
-        #btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Mark outdated
+        #btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Deactivate
   meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
   .container
     .row
@@ -83,16 +83,16 @@ block summary
         .row: .col-lg-9.col-lg-offset-2: div(data-dbtarget="unit_traits.addr" class="#{adaptiveEditable()}") #{result.unit_traits.addr}
         .row: .col-lg-9.col-lg-offset-2.text-center
           .row.margin-bottom-3x
-            .col-md-4
+            .col-sm-4
               i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
               | bathsIcon
-            .col-md-4
+            .col-sm-4
               i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
               | bedsIcon
-            .col-m3-4
+            .col-sm-4
               i.fa.fa-bar-chart.fa-2x.block-it.margin-bottom-2x.margin-top-2x
               | propertyTypeIcon
-      .col-lg-4
+      .col-lg-4.hidden-xs.hidden-sm.hidden-md
         form(id="book_it_form" method="post" )
           #pricing
             #price_amount(class="book-it-price-amount pull-left h3") $#{returnPrice()}
@@ -124,16 +124,61 @@ block summary
                     | Save to Wish List
                 if (!editing)    
                   .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
-                    a#edit-button.btn.btn-primary(href=current_page_url +'edit/' + result._id) enter edit mode
+                    a#edit-button.btn.btn-primary(href=current_page_url +'edit/' + result._id) Enter Edit Mode
                 else    
                   .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
-                    a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) enter listing mode
+                    a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) Enter Listing Mode
                     | &nbsp;&nbsp;
                     +outdateOrActivate(result.listing_related.isexpired)
                 div(class="other-actions text-center margin-top-3x") Share:&nbsp;&nbsp;
                   i.fa.fa-at.fa-lg.text-muted &nbsp;
                   i.fa.fa-facebook.fa-lg.text-muted &nbsp; 
                   i.fa.fa-twitter.fa-lg.text-muted  &nbsp;
+    .row.hidden-lg
+      .col-sm-12
+        form#book_it_form_responsive
+          #pricing-responsive.margin-bottom-2x
+            //- put date here
+            .row.price-row-responsive
+              .col-xs-2
+                | $795
+              .col-xs-4
+                | Per Night
+          #book_it_responsive
+            .row
+              .btn-group.btn-group-justified(role='group', aria-label='...')
+                .btn-group(role='group')
+                  button.btn.btn-default(type='button') Left
+                .btn-group(role='group')
+                  button.btn.btn-default(type='button') Middle
+                .btn-group(role='group')
+                  button.btn.btn-default(type='button') Right
+
+
+              //- .col-sm-3
+              //-   .btn.btn-primary.margin-bottom-3x(type='button') Contact Listing Person
+              //- .col-sm-3
+              //-   .btn.btn-default.margin-bottom-3x(type='button')
+              //-     i.fa.fa-heart-o.padding-left-right-1x
+              //-     | Save to Wish List
+              //-   //- .wishlist-wrapper.margin-bottom-3x
+              //-   //-   input(type="checkbox" class="hide" name="wishlist-button" id="wishlist-button")
+              //-   //-   label(for="wishlist-button" class="btn btn-default btn-block btn-large")  
+              //-   //-     i.fa.fa-heart-o.padding-left-right-1x
+              //-   //-     | Save to Wish List
+              //- .col-sm-3
+              //-   .edit-buttons-wrapper.margin-bottom-3x
+              //-     if (editing)
+              //-       a.btn.btn-primary(href=current_page_url +'listing/' + result._id) Enter Listing Mode
+              //-     else
+              //-       a.btn.btn-primary(href=current_page_url +'edit/' + result._id) Enter Edit Mode
+              //- .col-sm-3
+              //-   +outdateOrActivate(result.listing_related.isexpired)
+
+              //- .col-sm-3.margin-bottom-3x
+                .btn.btn-primary(type='button') Enter Edit Mode
+
+            //- put three buttons here
 
 block #details
   //-I need to process some raw database data here

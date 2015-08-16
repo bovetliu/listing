@@ -413,7 +413,7 @@ footer .contact .fa-lg {
   position: relative;
 }
 #book_it_form #pricing {
-  width: 358px;
+  width: 313px;
   background-color: rgba(60, 63, 64, 0.9);
   border: 0;
   height: 40px;
@@ -434,7 +434,7 @@ footer .contact .fa-lg {
 }
 #book_it_form #book_it {
   position: absolute;
-  width: 358px;
+  width: 313px;
 }
 #book_it_form #pricing.fixed {
   position: fixed;
@@ -446,6 +446,11 @@ footer .contact .fa-lg {
 }
 #book_it_form #book_it.bottom {
   position: absolute;
+}
+#book_it_form_responsive .price-row-responsive {
+  background-color: rgba(60, 63, 64, 0.9);
+  color: #fff;
+  line-height: 40px;
 }
 #details {
   background-color: #f5f5f5;

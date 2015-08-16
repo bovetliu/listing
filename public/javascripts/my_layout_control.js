@@ -2,7 +2,8 @@
 //gloabl variabl Galleria is reserved word
 $(document).ready(function(){
   page_useful_info = JSON.parse($("meta[name=\"page_useful_info\"]").attr("content"));
-  
+
+
   var helpers = {
     db_id : page_useful_info.db_id,
     deleteURL:function( filename ){
