@@ -24,10 +24,10 @@ block photo
             span Add files...
           button.btn.btn-primary.start(type='submit')
             i.glyphicon.glyphicon-upload.margin-left-right-1x
-            span Start upload
+            span Upload
           button.btn.btn-warning.cancel(type='reset')
             i.glyphicon.glyphicon-ban-circle.margin-left-right-1x
-            span Cancel upload
+            span Cancel
         .col-lg-5
           // The global file processing state
           span.fileupload-process
@@ -69,12 +69,19 @@ block summary
   -}
   -function returnPrice(){return (result.unit_traits.price)?result.unit_traits.price:100 };
 
+  mixin listingOrEditButton(editing)
+    if editing
+      a.btn.btn-default(href=current_page_url +'listing/' + result._id) Enter Listing Mode
+    else
+      a.btn.btn-default(href=current_page_url +'edit/' + result._id) Enter Edit Mode
+  
   mixin outdateOrActivate(isexpired)
-    case isexpired
-      when true
-        #btn-mark-outdated.btn.btn-success(data-dbtarget="listing_related.isexpired" data-dbvalue="false" ) Activate
-      when false
-        #btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Deactivate
+    if editing
+      case isexpired
+        when true
+          .btn-mark-outdated.btn.btn-success(data-dbtarget="listing_related.isexpired" data-dbvalue="false" ) Activate
+        when false
+          .btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Deactivate
   meta#page_useful_info(name="page_useful_info" content=stringifyUsefulInfo())
   .container
     .row
@@ -140,20 +147,19 @@ block summary
           #pricing-responsive.margin-bottom-2x
             //- put date here
             .row.price-row-responsive
-              .col-xs-2
-                | $795
+              .col-xs-2#price_amount_responsive
+                | $#{returnPrice()}
               .col-xs-4
                 | Per Night
-          #book_it_responsive
+          #book_it_responsive.margin-bottom-8x
             .row
               .btn-group.btn-group-justified(role='group', aria-label='...')
-                .btn-group(role='group')
-                  button.btn.btn-default(type='button') Left
-                .btn-group(role='group')
-                  button.btn.btn-default(type='button') Middle
-                .btn-group(role='group')
-                  button.btn.btn-default(type='button') Right
-
+                a.btn.btn-primary(href="#") Contact Listing Person
+                a.btn.btn-default(href="#")
+                  i.fa.fa-heart-o.padding-left-right-1x
+                  | Save to Wish List
+                +listingOrEditButton(editing)
+                +outdateOrActivate(result.listing_related.isexpired)
 
               //- .col-sm-3
               //-   .btn.btn-primary.margin-bottom-3x(type='button') Contact Listing Person

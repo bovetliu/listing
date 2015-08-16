@@ -141,7 +141,7 @@ $(document).ready(function(){
 
         var width = Math.round( this.width * ratio);
         var height = Math.round(this.height * ratio);
-        console.log([Math.round((120-height)/2).toString()+"px" , Math.round((120-width)/2).toString()+"px" ]);
+        // console.log([Math.round((120-height)/2).toString()+"px" , Math.round((120-width)/2).toString()+"px" ]);
         var offsetTop = Math.round((120-height)/2).toString()+"px" ;
         var offsetLeft = Math.round((120-width)/2).toString()+"px" 
         jq_img.css({
@@ -520,7 +520,7 @@ $(document).ready(function(){
         ClassRef.addSelectField(DOMobject);
       });
 
-      $("#btn-mark-outdated").click(function(){
+      $(".btn-mark-outdated").click(function(){
         var btn = this;
         ClassRef.updateAttr(
           $(btn).attr('data-dbtarget').toString(), 
@@ -539,7 +539,7 @@ $(document).ready(function(){
         step:5,
         slide:function(event, ui){
           $('#Monthly_price_string').html(ui.value);
-          $('#price_amount').text("$"+ui.value.toString());
+          $('#price_amount,#price_amount_responsive').text("$"+ui.value.toString());
         },
         change:function(event, ui) {
           console.log("going to set price at " + ui.value);
