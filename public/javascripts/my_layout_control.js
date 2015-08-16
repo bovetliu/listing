@@ -308,7 +308,7 @@ $(document).ready(function(){
             console.log("This is will be handled later");
             this.$("#book_it").addClass("bottom");
             // this.$("#book_it").css({top:0});
-            this.$("#book_it").css({top:ClassRef.model.get("higher_bound_of_top") - ClassRef.model.get("summary_top") + $('#my-nav').height()});
+            this.$("#book_it").css({top:ClassRef.model.get("higher_bound_of_top") - ClassRef.model.get("summary_top") +80});
             this.css_status = status;
           }
           break;
@@ -324,7 +324,8 @@ $(document).ready(function(){
   });
 
   // higher_bound_of_top is the distance of 
-  var higher_bound_of_top = $('#details').height()  + $('#summary').height() + $('#photos').height() + $('#my-nav').height() - $("#pricing").height() - $("#book_it").height();
+  var top_till_bottom_of_photo_minus_40 = $('#photos').height() + $('#my-nav').height() - $("#pricing").height();
+  var higher_bound_of_top = $('#details').height()  + $('#summary').height() + $('#photos').height() + $('#my-nav').height() - $("#pricing").height() - $("#book_it").height() -40;
   var summary_top =  $('#photos').height() + $('#my-nav').height() ;
   console.log([higher_bound_of_top, summary_top]);
 
@@ -336,17 +337,14 @@ $(document).ready(function(){
     }
   );
   $(window).scroll(function(){
-
-    if ($(this).scrollTop() <=408 ) {
-      console.log("scrollTop <= 408")
-      book_panel_01.setStatus("initial")
+    // adaptive to scroolTop() to adjust book panel status
+    if ($(this).scrollTop() <=top_till_bottom_of_photo_minus_40  ) {
+      book_panel_01.setStatus("initial");
     }     
-    else if ($(this).scrollTop() >408 &&  $(this).scrollTop()  < higher_bound_of_top){
-      console.log(">448");
-      book_panel_01.setStatus("fixed")
+    else if ($(this).scrollTop() > top_till_bottom_of_photo_minus_40 && $(this).scrollTop() < higher_bound_of_top){
+      book_panel_01.setStatus("fixed");
 
     }else if ($(this).scrollTop() >= higher_bound_of_top) {
-      console.log("bottom")
       book_panel_01.setStatus("bottom");
     }
   });
