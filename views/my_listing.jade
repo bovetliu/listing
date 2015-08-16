@@ -142,10 +142,21 @@ block summary
                     a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) Enter Listing Mode
                     | &nbsp;&nbsp;
                     +outdateOrActivate(result.listing_related.isexpired)
-                div(class="other-actions text-center margin-top-3x") Share:&nbsp;&nbsp;
-                  i.fa.fa-at.fa-lg.text-muted &nbsp;
-                  i.fa.fa-facebook.fa-lg.text-muted &nbsp; 
-                  i.fa.fa-twitter.fa-lg.text-muted  &nbsp;
+
+                //- i.fa.fa-at.fa-lg.text-muted &nbsp;
+                //- i.fa.fa-facebook.fa-lg.text-muted &nbsp; 
+                //- i.fa.fa-twitter.fa-lg.text-muted  &nbsp;
+                .row(class="other-actions margin-top-3x")
+                  .col-md-12
+                    .btn-group(role='group', aria-label='...')
+                      a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");")
+                        i(class="fa fa-envelope-o fa-1")
+                        | &nbsp;Mail
+                      -var target_url = encodeURIComponent(current_page_url + 'listing/' + result.id);
+                      a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" target="_blank")
+                        i.fa.fa-facebook
+                        | &nbsp;Facebook
+                      a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");") ... More
     .row.hidden-lg
       .col-sm-12
         form#book_it_form_responsive
@@ -157,7 +168,7 @@ block summary
               .col-xs-4
                 | Per Night
           #book_it_responsive.margin-bottom-8x
-            .row.hidden-xs
+            .row.hidden-xs.margin-bottom-2x
               .btn-group.btn-group-justified(role='group', aria-label='...')
                 a.btn.btn-primary(href="#") Contact Listing Person
                 a.btn.btn-default(href="#")
@@ -166,16 +177,28 @@ block summary
                 +listingOrEditButton(editing)
                 +outdateOrActivate(result.listing_related.isexpired)
             .row.visible-xs-block
-              .col-xs-8.margin-bottom-2x
+              .col-xs-8.margin-bottom-2x.padding-left-right-0x
                 a.btn.btn-primary(href="#") Contact Listing Person
-              .col-xs-8.margin-bottom-2x
+              .col-xs-8.margin-bottom-2x.padding-left-right-0x
                 a.btn.btn-default(href="#")
                   i.fa.fa-heart-o.padding-left-right-1x
                   | Save to Wish List
-              .col-xs-8.margin-bottom-2x
-                +listingOrEditButton(editing)
-              .col-xs-8.margin-bottom-2x
-                +outdateOrActivate(result.listing_related.isexpired)
+              //- .col-xs-8.margin-bottom-2x
+              //-   +listingOrEditButton(editing)
+              //- .col-xs-8.margin-bottom-2x
+              //-   +outdateOrActivate(result.listing_related.isexpired)
+            .row
+              .col-xs-12.padding-left-right-0x
+                .btn-group(role='group', aria-label='...')
+                  a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");")
+                    i(class="fa fa-envelope-o fa-1")
+                    | &nbsp;Mail
+                  -var target_url = encodeURIComponent(current_page_url + 'listing/' + result.id);
+                  a.btn.btn-default(href="https://www.facebook.com/sharer/sharer.php?u=#{target_url}" target="_blank")
+                    i.fa.fa-facebook
+                    | &nbsp;Facebook
+                  a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");") ... More
+
 
               //- .col-sm-3
               //-   .btn.btn-primary.margin-bottom-3x(type='button') Contact Listing Person
