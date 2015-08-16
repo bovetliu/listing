@@ -89,6 +89,12 @@ body {
   padding-left: 6.25px;
   padding-right: 6.25px;
 }
+.text-align-left {
+  text-align: left;
+}
+.text-align-right {
+  text-align: right;
+}
 /*general-purpose snippts */
 a.cancel-color,
 a.link-reset {
@@ -390,9 +396,14 @@ footer .contact .fa-lg {
   height: 100%;
 }
 #photos #photo-modal .modal-exit-button {
-  color: white;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 24px;
   line-height: 30px;
+  text-align: left;
+  cursor: pointer;
+}
+#photos #photo-modal .modal-exit-button:hover {
+  color: #ffffff;
 }
 #photos #photo-modal .galleria {
   height: calc(100% -  30px);

@@ -51,8 +51,8 @@ block photo
       .modal-dialog.modal-fullscreen-custom
         .modal-content.transparent-bg
           .row
-            .col-xs-1.pull-right
-              button.close.modal-exit-button(type='button', data-dismiss='modal', aria-label='Close')
+            .col-xs-1.col-xs-offset-11
+              .modal-exit-button( data-dismiss='modal', aria-label='Close')
                 span(aria-hidden='true') x
           .row
             .galleria
@@ -157,13 +157,24 @@ block summary
               .col-xs-4
                 | Per Night
           #book_it_responsive.margin-bottom-8x
-            .row
+            .row.hidden-xs
               .btn-group.btn-group-justified(role='group', aria-label='...')
                 a.btn.btn-primary(href="#") Contact Listing Person
                 a.btn.btn-default(href="#")
                   i.fa.fa-heart-o.padding-left-right-1x
                   | Save to Wish List
                 +listingOrEditButton(editing)
+                +outdateOrActivate(result.listing_related.isexpired)
+            .row.visible-xs-block
+              .col-xs-8.margin-bottom-2x
+                a.btn.btn-primary(href="#") Contact Listing Person
+              .col-xs-8.margin-bottom-2x
+                a.btn.btn-default(href="#")
+                  i.fa.fa-heart-o.padding-left-right-1x
+                  | Save to Wish List
+              .col-xs-8.margin-bottom-2x
+                +listingOrEditButton(editing)
+              .col-xs-8.margin-bottom-2x
                 +outdateOrActivate(result.listing_related.isexpired)
 
               //- .col-sm-3
