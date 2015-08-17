@@ -3,7 +3,6 @@
 $(document).ready(function(){
   page_useful_info = JSON.parse($("meta[name=\"page_useful_info\"]").attr("content"));
 
-
   var helpers = {
     db_id : page_useful_info.db_id,
     deleteURL:function( filename ){
@@ -41,8 +40,9 @@ $(document).ready(function(){
   var photo_data = JSON.parse($("meta[name='photo-data-modal']").attr("content"));   
   
   var galleria_control = new (Backbone.Model.extend({
-    b_Galleria_started:false,  
+    b_Galleria_started:false,
     launchGalleria: function(){
+
       if (Galleria) {
         console.log("Launch Galleria");
         Galleria.loadTheme('/plugins/galleria/themes/classic/galleria.classic.min.js');
@@ -132,7 +132,7 @@ $(document).ready(function(){
       /*The dataUrl can be used to display the thumbnail image*/
       console.log("thumbnail event handler");
       // $(file.previewElement).css("background-image", "url("+dataUrl+")");
-      console.log(file);
+      // console.log(file);
       var jq_img = $(file.previewElement).find('img');
 
       jq_img[0].onload = function(){
@@ -242,7 +242,7 @@ $(document).ready(function(){
         $(this).find('.preview-info-control').css("opacity",0);
       });
     });
-  }// end of if(editing)
+  }// end of if (helpers.isEditing()) 
 
  
   var jq_li_ar = $('#subnav-container li');
@@ -324,7 +324,7 @@ $(document).ready(function(){
     }
   });
 
-  // higher_bound_of_top is the distance of 
+  //following about 30 lines are to control book-panel status
   var top_till_bottom_of_photo_minus_40 = $('#photos').height() + $('#my-nav').height() - $("#pricing").height();
   var higher_bound_of_top = $('#details').height()  + $('#summary').height() + $('#photos').height() + $('#my-nav').height() - $("#pricing").height() - $("#book_it").height() -40;
   var summary_top =  $('#photos').height() + $('#my-nav').height() ;
@@ -350,240 +350,243 @@ $(document).ready(function(){
     }
   });
 
-  /*editable */
-  var Editables_Controler = Backbone.Model.extend({
-    defaults:{
-      options:{
-        "unit_traits.beds":[1,2,3,4,5,6],
-        "unit_traits.baths":[1,1.5,2,2.5,3,3.5,4,4.5,5,6],
-        "unit_traits.property_type":["apartment","house","duplex"],
-        "unit_traits.pet_friendly":[true,false],
-        "user_behavior.target_range":{"1":"entire unit", "2": "single room", "3":"shared place"},
-        "user_behavior.cat": {"1":"to lease", "2":"to rent", "3":"seek co-lessee"}
-      } 
-    },
-    apiServerURL:  "http://localhost:3000",
-    db_id:"123",
+  /*editable,  */
+  if (helpers.isEditing()) {  // reduce JavaScript compiling time when not editing page
+    var Editables_Controler = Backbone.Model.extend({
+      defaults:{
+        options:{
+          "unit_traits.beds":[1,2,3,4,5,6],
+          "unit_traits.baths":[1,1.5,2,2.5,3,3.5,4,4.5,5,6],
+          "unit_traits.property_type":["apartment","house","duplex"],
+          "unit_traits.pet_friendly":[true,false],
+          "user_behavior.target_range":{"1":"entire unit", "2": "single room", "3":"shared place"},
+          "user_behavior.cat": {"1":"to lease", "2":"to rent", "3":"seek co-lessee"}
+        } 
+      },
+      apiServerURL:  "http://localhost:3000",
+      db_id:"123",
 
-    mapOptionsIntoHTML:_.template($('#selectable_options_template').html()),
+      mapOptionsIntoHTML:_.template($('#selectable_options_template').html()),
 
-    ppForHTML:function(text){
-      return text.replace(/\r?\n/g, '\n<br>')
-    },
-    escapeHTML:function(text){
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    },
-    updateAttr: helpers.updateAttr,
-    addRightIconField:function(DOMobject, font_awesome_icon_id){
-      var ClassRef = this;
+      ppForHTML:function(text){
+        return text.replace(/\r?\n/g, '\n<br>')
+      },
+      escapeHTML:function(text){
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      },
+      updateAttr: helpers.updateAttr,
+      addRightIconField:function(DOMobject, font_awesome_icon_id){
+        var ClassRef = this;
 
-      $(DOMobject).append('<span class="edit-field edit-button" style="opacity: 0;"> <i class="fa '+font_awesome_icon_id+'"></i><span>');
-      var temp_button = $(DOMobject).find('.edit-button');
-      $(DOMobject).mouseenter(function(){
-        temp_button.css("opacity",1);
-      }).mouseleave(function(){
-        temp_button.css("opacity",0);
-      });
-    },
-    addEditField:function( DOMobject){
-      this.addRightIconField(DOMobject, "fa-pencil");
-    },
-
-    processDateEditable:function(DOMobject){
-      var ClassRef = this;
-      var JQ_DOMobject = $(DOMobject);
-      var JQ_DOMobject_Parent = $(DOMobject).parent();
-
-      JQ_DOMobject.html(JQ_DOMobject.text().trim());
-      var temp_input = $('<input type="text" class="form-control"  value="'+ JQ_DOMobject.text() +'">');
-      temp_input.datepicker();
-      temp_input.change(function(){
-        var temp_date = new Date($(this).val());
-        temp_date.setHours(12);
-        ClassRef.updateAttr(JQ_DOMobject.attr("data-dbtarget"), temp_date.getTime(), function(){
-          JQ_DOMobject_Parent.empty();
-          JQ_DOMobject_Parent.append(JQ_DOMobject);
-          JQ_DOMobject.text(temp_input.val());
-          ClassRef.processDateEditable(DOMobject);
+        $(DOMobject).append('<span class="edit-field edit-button" style="opacity: 0;"> <i class="fa '+font_awesome_icon_id+'"></i><span>');
+        var temp_button = $(DOMobject).find('.edit-button');
+        $(DOMobject).mouseenter(function(){
+          temp_button.css("opacity",1);
+        }).mouseleave(function(){
+          temp_button.css("opacity",0);
         });
-      });
+      },
+      addEditField:function( DOMobject){
+        this.addRightIconField(DOMobject, "fa-pencil");
+      },
 
-      JQ_DOMobject.click(function(){
-        JQ_DOMobject.replaceWith(temp_input);
-      });
-      ClassRef.addSelectField(DOMobject);
-    }
-    ,
-    processEditable:function(DOMobject){
-      var ClassRef =this;
-      var DOMobject_bf = $(DOMobject).clone()[0];
-      var JQ_parent = $(DOMobject).parent();
+      processDateEditable:function(DOMobject){
+        var ClassRef = this;
+        var JQ_DOMobject = $(DOMobject);
+        var JQ_DOMobject_Parent = $(DOMobject).parent();
 
-      var save_btn = $('<button  class="btn btn-primary margin-left-right-1x margin-top-1x margin-bottom-1x">Save</button>');
-      var cancel_btn =$('<button  class="btn btn-default margin-top-1x margin-bottom-1x">Cancel</button>');
-      var row = 1+Math.round($(DOMobject).height() / parseInt($(DOMobject).css("line-height")));
-      var col = 20 + Math.round( $(DOMobject).width() / parseInt($(DOMobject).css("font-size")) )
-      var text_area_edit =$('<textarea class="block-it margin-top-1x" rows="'+row.toString()+'" cols="'+col.toString()+'">'+$(DOMobject).text()+'</textarea>');
-      save_btn.click(function(){
-        console.log($(DOMobject).attr('data-dbtarget'));
-        ClassRef.updateAttr(
-          $(DOMobject).attr('data-dbtarget').toString(), 
-          ClassRef.escapeHTML(text_area_edit.val()), 
-          function(attr, value){  // in updateAttr declaration, this cb will be taken these two params
-            $(DOMobject_bf).html( ClassRef.ppForHTML(value)) ;
-            JQ_parent.empty();
-            JQ_parent.append(DOMobject_bf);
-            $(DOMobject_bf).click(function(){
-              ClassRef.processEditable(DOMobject_bf);
-            });
-            ClassRef.addEditField(DOMobject_bf);
-          }
-        );// end of invoking updateAttr
-      }); 
-
-      cancel_btn.click(function(){
-        $(DOMobject_bf).text($(DOMobject_bf).text()) ;
-        JQ_parent.empty();
-        JQ_parent.append(DOMobject_bf);
-        $(DOMobject_bf).click(function(){
-          ClassRef.processEditable(DOMobject_bf);
+        JQ_DOMobject.html(JQ_DOMobject.text().trim());
+        var temp_input = $('<input type="text" class="form-control"  value="'+ JQ_DOMobject.text() +'">');
+        temp_input.datepicker();
+        temp_input.change(function(){
+          var temp_date = new Date($(this).val());
+          temp_date.setHours(12);
+          ClassRef.updateAttr(JQ_DOMobject.attr("data-dbtarget"), temp_date.getTime(), function(){
+            JQ_DOMobject_Parent.empty();
+            JQ_DOMobject_Parent.append(JQ_DOMobject);
+            JQ_DOMobject.text(temp_input.val());
+            ClassRef.processDateEditable(DOMobject);
+          });
         });
-        ClassRef.addEditField(DOMobject_bf);
-      }); 
 
-      JQ_parent.empty();
-      JQ_parent.append(text_area_edit,save_btn,cancel_btn);
-    },
-    addSelectField:function(DOMobject){
-      this.addRightIconField(DOMobject, "fa-bars");
-    },
-    processSelectable:function (DOMobject){
-      var ClassRef = this; //var DOMobject_bf = $(DOMobject).clone()[0]; 
-      $(DOMobject).html($(DOMobject).text().trim());
-      // console.log(DOMobject);
-      // var JQ_parent = $(DOMobject).parent();
-      // console.log( ClassRef.get("options"));
-      var text = $(DOMobject).text();
-      var jq_select_container = $(ClassRef.mapOptionsIntoHTML({
-        options:ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")],
-        selected: $(DOMobject).text()
-      }));
-      $(DOMobject).replaceWith( jq_select_container);
-      jq_select_container.change(function(){
-        // console.log(jq_select_container.find("select").val());
-        ClassRef.updateAttr(
-          $(DOMobject).attr('data-dbtarget').toString(), 
-          jq_select_container.find("select").val(),
-          function(attr, value){
-            if ( !Array.isArray(ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")])){
-              $(DOMobject).text( ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")][parseInt(value)] );
-            }else {
-              $(DOMobject).text(value);
-            }
-            jq_select_container.replaceWith(DOMobject);
-            $(DOMobject).click(function(){
-              ClassRef.processSelectable(DOMobject);
-            });
-            ClassRef.addSelectField(DOMobject);
-          }//end of call back
-        );
-      });
-    },
-    initialize:function(){
-      var ClassRef = this;
-      //updating position of api server
-      if (window.location.href.slice(0,16) != "http://localhost")
-      ClassRef.set("apiServerURL", "http://listingtest-u7yhjm.rhcloud.com") ;  // this one no need to change into listing.easysublease.com // since this one does not gen visible url
-      else {
-        ClassRef.set("apiServerURL", "http://localhost:3000");
+        JQ_DOMobject.click(function(){
+          JQ_DOMobject.replaceWith(temp_input);
+        });
+        ClassRef.addSelectField(DOMobject);
       }
-      ClassRef.set("db_id", helpers.db_id);
-      console.log("init of editables_controler , anonymous Class(): " + ClassRef.get("db_id"));
+      ,
+      processEditable:function(DOMobject){
+        var ClassRef =this;
+        var DOMobject_bf = $(DOMobject).clone()[0];
+        var JQ_parent = $(DOMobject).parent();
 
-      /*make every editable  eligible for editing!*/
-      $.each($(".editable"),function(index, DOMobject){
-        $(DOMobject).click(function(){
-          ClassRef.processEditable(DOMobject );
-        });
-        ClassRef.addEditField(DOMobject);
-      });
-
-      $.each($(".selectable"), function(index, DOMobject){
-        $(DOMobject).click(function(){
-          ClassRef.processSelectable(DOMobject);
-        });
-        ClassRef.addSelectField(DOMobject);
-      });
-
-      $.each($(".editable-date"), function(index, DOMobject){
-        ClassRef.processDateEditable(DOMobject);
-        ClassRef.addSelectField(DOMobject);
-      });
-
-      $(".btn-mark-outdated").click(function(){
-        var btn = this;
-        ClassRef.updateAttr(
-          $(btn).attr('data-dbtarget').toString(), 
-          JSON.parse($(btn).attr('data-dbvalue')), 
-          function (attr, value){  // in updateAttr declaration, this cb will be taken these two params
-            location.reload();
-          }
-        );// end of invoking updateAttr
-      }); 
-
-      /*process slide bar*/
-      $( "#price-slider" ).slider({
-        value:parseInt($('#Monthly_price_string').html()),
-        max:1500,
-        min:100,
-        step:5,
-        slide:function(event, ui){
-          $('#Monthly_price_string').html(ui.value);
-          $('#price_amount,#price_amount_responsive').text("$"+ui.value.toString());
-        },
-        change:function(event, ui) {
-          console.log("going to set price at " + ui.value);
-
+        var save_btn = $('<button  class="btn btn-primary margin-left-right-1x margin-top-1x margin-bottom-1x">Save</button>');
+        var cancel_btn =$('<button  class="btn btn-default margin-top-1x margin-bottom-1x">Cancel</button>');
+        var row = 1+Math.round($(DOMobject).height() / parseInt($(DOMobject).css("line-height")));
+        var col = 20 + Math.round( $(DOMobject).width() / parseInt($(DOMobject).css("font-size")) )
+        var text_area_edit =$('<textarea class="block-it margin-top-1x" rows="'+row.toString()+'" cols="'+col.toString()+'">'+$(DOMobject).text()+'</textarea>');
+        save_btn.click(function(){
+          console.log($(DOMobject).attr('data-dbtarget'));
           ClassRef.updateAttr(
-            $( "#price-slider" ).attr("data-dbtarget"),
-            ui.value,
-            function(attr, value){
-              console.log("value successfully updated");  
-          });
-        }
-      });
-            /* submit button logic of .selectable-group*/
+            $(DOMobject).attr('data-dbtarget').toString(), 
+            ClassRef.escapeHTML(text_area_edit.val()), 
+            function(attr, value){  // in updateAttr declaration, this cb will be taken these two params
+              $(DOMobject_bf).html( ClassRef.ppForHTML(value)) ;
+              JQ_parent.empty();
+              JQ_parent.append(DOMobject_bf);
+              $(DOMobject_bf).click(function(){
+                ClassRef.processEditable(DOMobject_bf);
+              });
+              ClassRef.addEditField(DOMobject_bf);
+            }
+          );// end of invoking updateAttr
+        }); 
 
-      $.each($('.selectable-group-form'), function(index, value){
-        $(value).on('submit',function(event) {
-        event.preventDefault();
-        
-          var keys = [];
-          var values = [];
-          console.log(value)
-          console.log($(value).serializeArray());
-          _.each($(this).serializeArray(), function( element, index, array){
-            keys.push(element["name"]);
-            values.push(element["value"]== "on");
+        cancel_btn.click(function(){
+          $(DOMobject_bf).text($(DOMobject_bf).text()) ;
+          JQ_parent.empty();
+          JQ_parent.append(DOMobject_bf);
+          $(DOMobject_bf).click(function(){
+            ClassRef.processEditable(DOMobject_bf);
           });
+          ClassRef.addEditField(DOMobject_bf);
+        }); 
+
+        JQ_parent.empty();
+        JQ_parent.append(text_area_edit,save_btn,cancel_btn);
+      },
+      addSelectField:function(DOMobject){
+        this.addRightIconField(DOMobject, "fa-bars");
+      },
+      processSelectable:function (DOMobject){
+        var ClassRef = this; //var DOMobject_bf = $(DOMobject).clone()[0]; 
+        $(DOMobject).html($(DOMobject).text().trim());
+        // console.log(DOMobject);
+        // var JQ_parent = $(DOMobject).parent();
+        // console.log( ClassRef.get("options"));
+        var text = $(DOMobject).text();
+        var jq_select_container = $(ClassRef.mapOptionsIntoHTML({
+          options:ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")],
+          selected: $(DOMobject).text()
+        }));
+        $(DOMobject).replaceWith( jq_select_container);
+        jq_select_container.change(function(){
+          // console.log(jq_select_container.find("select").val());
+          ClassRef.updateAttr(
+            $(DOMobject).attr('data-dbtarget').toString(), 
+            jq_select_container.find("select").val(),
+            function(attr, value){
+              if ( !Array.isArray(ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")])){
+                $(DOMobject).text( ClassRef.get("options")[$(DOMobject).attr("data-dbtarget")][parseInt(value)] );
+              }else {
+                $(DOMobject).text(value);
+              }
+              jq_select_container.replaceWith(DOMobject);
+              $(DOMobject).click(function(){
+                ClassRef.processSelectable(DOMobject);
+              });
+              ClassRef.addSelectField(DOMobject);
+            }//end of call back
+          );
+        });
+      },
+      initialize:function(){
+        var ClassRef = this;
+        //updating position of api server
+        if (window.location.href.slice(0,16) != "http://localhost")
+        ClassRef.set("apiServerURL", "http://listingtest-u7yhjm.rhcloud.com") ;  // this one no need to change into listing.easysublease.com // since this one does not gen visible url
+        else {
+          ClassRef.set("apiServerURL", "http://localhost:3000");
+        }
+        ClassRef.set("db_id", helpers.db_id);
+        console.log("init of editables_controler , anonymous Class(): " + ClassRef.get("db_id"));
+
+        /*make every editable  eligible for editing!*/
+        $.each($(".editable"),function(index, DOMobject){
+          $(DOMobject).click(function(){
+            ClassRef.processEditable(DOMobject );
+          });
+          ClassRef.addEditField(DOMobject);
+        });
+
+        $.each($(".selectable"), function(index, DOMobject){
+          $(DOMobject).click(function(){
+            ClassRef.processSelectable(DOMobject);
+          });
+          ClassRef.addSelectField(DOMobject);
+        });
+
+        $.each($(".editable-date"), function(index, DOMobject){
+          ClassRef.processDateEditable(DOMobject);
+          ClassRef.addSelectField(DOMobject);
+        });
+
+        $(".btn-mark-outdated").click(function(){
+          var btn = this;
+          ClassRef.updateAttr(
+            $(btn).attr('data-dbtarget').toString(), 
+            JSON.parse($(btn).attr('data-dbvalue')), 
+            function (attr, value){  // in updateAttr declaration, this cb will be taken these two params
+              location.reload();
+            }
+          );// end of invoking updateAttr
+        }); 
+
+        /*process slide bar*/
+        $( "#price-slider" ).slider({
+          value:parseInt($('#Monthly_price_string').html()),
+          max:1500,
+          min:100,
+          step:5,
+          slide:function(event, ui){
+            $('#Monthly_price_string').html(ui.value);
+            $('#price_amount,#price_amount_responsive').text("$"+ui.value.toString());
+          },
+          change:function(event, ui) {
+            console.log("going to set price at " + ui.value);
+
+            ClassRef.updateAttr(
+              $( "#price-slider" ).attr("data-dbtarget"),
+              ui.value,
+              function(attr, value){
+                console.log("value successfully updated");  
+            });
+          }
+        });
+              /* submit button logic of .selectable-group*/
+
+        $.each($('.selectable-group-form'), function(index, value){
+          $(value).on('submit',function(event) {
+          event.preventDefault();
           
-          var data = _.object( keys, values );
-          console.log("to be uploaded data " + JSON.stringify(data));
-          ClassRef.updateAttr( $(this).attr('data-dbtarget') , data, function(attr, value){
-            console.log("updateAttr invokded at for selectable-group-form");
-            $('#info_p').text("updated contents to server");
-            $('#info-modal').modal('show');
-            setTimeout(function(){
-              $('#info-modal').modal('hide');
-            },1400)
+            var keys = [];
+            var values = [];
+            console.log(value)
+            console.log($(value).serializeArray());
+            _.each($(this).serializeArray(), function( element, index, array){
+              keys.push(element["name"]);
+              values.push(element["value"]== "on");
+            });
+            
+            var data = _.object( keys, values );
+            console.log("to be uploaded data " + JSON.stringify(data));
+            ClassRef.updateAttr( $(this).attr('data-dbtarget') , data, function(attr, value){
+              console.log("updateAttr invokded at for selectable-group-form");
+              $('#info_p').text("updated contents to server");
+              $('#info-modal').modal('show');
+              setTimeout(function(){
+                $('#info-modal').modal('hide');
+              },1400)
+            });
           });
         });
-      });
-    }
+      }
 
 
-  } );  //end of editables_controler initialization and its class definition
-  var editables_controler_01 = new Editables_Controler();
+    } );  //end of editables_controler initialization and its class definition
+    var editables_controler_01 = new Editables_Controler();
+  }//(if (helper.isEditing()))
+  
   
   /*prepare map*/
   var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content"));
