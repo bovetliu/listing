@@ -2,6 +2,8 @@
 *.sh~
 *~
 start_app.sh
+start_app.bat
+facebook_credentials.txt
 ###################
 node_modules/*
 

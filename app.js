@@ -103,7 +103,6 @@ else{
       res.status(err.status || 500).render('error.jade',{"error":err});
   });
 } 
-
 // var server = http.createServer(app);
 // var boot = function () {
 //   server.listen(app.get('port'), function(){

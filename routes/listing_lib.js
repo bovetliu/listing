@@ -91,7 +91,6 @@ exports.dbUpdateAttr =function(req, res , next){
     }
 
     updateAttr(instance, instance, req.body['attr_path'], req.body['value']);
-
     console.log("end of updateAttr()")
   });
 }
