@@ -4,7 +4,7 @@ var fs = require('fs');
 var listing_lib = require('./listing_lib.js');  // find at local path
 var _ = require('underscore');
 if (process.env.AWS_ACCESS_KEY && process.env.AWS_SECRET_KEY){
-  console.log("[INFO]s3lib.js has been using environmental keys");
+  console.log("[INFO] s3lib.js has been using environmental keys");
 } else console.log("[WARNING]: s3lib.js does not find environmental keys for AWS, might encounter image uploading technical failure ");
 
 /*db*/
