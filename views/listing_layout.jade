@@ -55,32 +55,36 @@ html(xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org
               //- li.subnav-item-container: a.subnav-item Reviews
               //- li.subnav-item-container: a.subnav-item The Host
               li.subnav-item-container: a.subnav-item(href="#map-div") Location
-      #room
-        #photos
-          #cover-img-container
-            //- I have variable photo_data_modal  JSON.stringified
-            block photo
-        #summary.panel.room-section
-          block summary
+      
 
-        #details.details-section
-          block #details
+      block room
+
+      //- #room
+      //-   #photos
+      //-     #cover-img-container
+      //-       //- I have variable photo_data_modal  JSON.stringified
+      //-       block photo
+      //-   #summary.panel.room-section
+      //-     block summary
+
+      //-   #details.details-section
+      //-     block #details
           
-        //- #details.details-section
-        #neighborhood
-          block neighborhood-meta
-          .container-fluid.padding-left-right-0x
-            #map-div.anchor-position-fix
+      //-   //- #details.details-section
+      //-   #neighborhood
+      //-     block neighborhood-meta
+      //-     .container-fluid.padding-left-right-0x
+      //-       #map-div.anchor-position-fix
 
-        #info-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-          .modal-dialog.modal-sm
-            // Modal content
-            .modal-content
-              .modal-header
-                button.close(type='button', data-dismiss='modal') ×
-                h4.modal-title Info
-              .modal-body
-                p#info_p Some text in the modal.
+      //-   #info-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      //-     .modal-dialog.modal-sm
+      //-       // Modal content
+      //-       .modal-content
+      //-         .modal-header
+      //-           button.close(type='button', data-dismiss='modal') ×
+      //-           h4.modal-title Info
+      //-         .modal-body
+      //-           p#info_p Some text in the modal.
 
     //- bascially obtained from velocity template
     footer.footer
