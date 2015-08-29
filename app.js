@@ -9,8 +9,11 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var multer = require("multer");  // newly added, regarding init express
 var cors = require('cors');
+
 var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy; 
 var FacebookStrategy = require('passport-facebook').Strategy;
+
 var FACEBOOK_APP_ID = process.env.FB_APP_ID.trim();
 var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET.trim();
 
@@ -19,6 +22,7 @@ var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET.trim();
 if (!FACEBOOK_APP_ID  || !FACEBOOK_APP_SECRET) console.log("[WARNING] application is running without FB variables, FB_APP_ID:" + FACEBOOK_APP_ID);
 else console.log("[INFO] application is running with FB variables %s, %s",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
 
+/*if this app is running on openshift, env var should have OPENSHIFT_MONGODB_DB_URL*/
 var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
 
 var mongoose = require('mongoose'),  // newly added, regarding init express
@@ -26,36 +30,6 @@ var mongoose = require('mongoose'),  // newly added, regarding init express
     db_url = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://@localhost:27017/',
     db = mongoose.connect(db_url+db_literal, {safe: true}),
     id = mongoose.Types.ObjectId();
-
-/*configure passport*/
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-// Use the FacebookStrategy within Passport.
-//   Strategies in Passport require a `verify` function, which accept
-//   credentials (in this case, an accessToken, refreshToken, and Facebook
-//   profile), and invoke a callback with a user object.
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
-    });
-  }
-));
 
 
 /*routers*/
@@ -68,6 +42,7 @@ var app = express();
  
 // var imageServerPdath='https://esimgserver.s3.amazonaws.com';
 
+// app configuration
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -84,15 +59,66 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
-    cookie:{maxAge:60000000}
+    cookie:{maxAge:2678400}
 }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, 'public')));
+/* passport configuration*/
+/*configure passport*/
+
+// Remind myself: currently not using facebook
+// Use the FacebookStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Facebook
+//   profile), and invoke a callback with a user object.
+
+// passport.use(new FacebookStrategy({
+//     clientID: FACEBOOK_APP_ID,
+//     clientSecret: FACEBOOK_APP_SECRET,
+//     callbackURL: "http://localhost:3000/auth/facebook/callback"
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//     // asynchronous verification, for effect...
+//     process.nextTick(function () {
+      
+//       // To keep the example simple, the user's Facebook profile is returned to
+//       // represent the logged-in user.  In a typical application, you would want
+//       // to associate the Facebook account with a user record in your database,
+//       // and return that user instead.
+//       return done(null, profile);
+//     });
+//   }
+// ));
+
+
+// Use LocalStrategy with Passport
+
+function verifyCredentials(username, password, done) {
+    // Pretend this is using a real database!
+    // this should be changed to retireve information from database
+    if (username === password) {
+        done(null, { id: username, name: username });
+    } else {
+        done(null, null);
+    }
+}
+
+passport.use(new LocalStrategy(verifyCredentials));
+
+// serialize and deserialize 
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    // Query database or cache here!!
+    done(null, { id: id, name: id });
+});
 
 
 app.use(function(req, res, next){
