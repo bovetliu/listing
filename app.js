@@ -13,8 +13,8 @@ var passport = require('passport');
 var passportLocal = require('passport-local'); 
 var FacebookStrategy = require('passport-facebook').Strategy;
 
-var FACEBOOK_APP_ID = process.env.FB_APP_ID.trim();
-var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET.trim();
+var FACEBOOK_APP_ID = process.env.FB_APP_ID;
+var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
 
 // var FACEBOOK_APP_ID = "912860235451001";
 // var FACEBOOK_APP_SECRET = "1161273f59b2a82264d03b692eb48c15";
