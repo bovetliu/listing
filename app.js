@@ -17,8 +17,7 @@ var FACEBOOK_APP_ID = process.env.FB_APP_ID;
 var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
 
 
-// var FACEBOOK_APP_ID = "912860235451001";
-// var FACEBOOK_APP_SECRET = "1161273f59b2a82264d03b692eb48c15";
+// I should be using different FB credentials between local and openshift server
 if (!FACEBOOK_APP_ID  || !FACEBOOK_APP_SECRET) console.log("[WARNING] application is running without FB variables, FB_APP_ID:" + FACEBOOK_APP_ID);
 else console.log("[INFO] application is running with FB variables %s, %s.",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
 

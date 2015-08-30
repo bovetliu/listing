@@ -166,16 +166,16 @@ html(xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org
       // //bottom-bar
     include ./includes/authentication_modals.jade
 
-    // jQuery (necessary for Bootstrap's JavaScript plugins) 
+    // jQuery (necessary for Bootstrap's JavaScript plugins)(must have)
     script(src="/javascripts/jquery.min.js")
-    // include control logic of jQuery-ui
+    // include control logic of jQuery-ui (must have)
     script(src='/plugins/jquery-ui-flick/jquery-ui.js')
-    // Include all compiled plugins (below), or include individual files as needed 
+    // Include all compiled plugins (below), or include individual files as needed (must have)
     script(src="/javascripts/bootstrap.min.js")
     // Inlcude plugin: galleria
     script(src="/plugins/galleria/galleria-1.4.2.min.js") 
 
-    //backbone, its dependency and extending(data-binding)
+    //backbone, its dependency and extending(data-binding)(must have)
     script(src="/plugins/backbone/underscore-min.js")
     script(src="/plugins/backbone/backbone-min.js")
     script(src="/plugins/backbone/backbone.epoxy.min.js")
@@ -184,7 +184,8 @@ html(xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org
     script(src="/plugins/dropzone/dropzone.js")
 
     script(src="/javascripts/my_layout_control.js")
-    //import password hashing function
+    
+    //import password hashing function(must have)
     script(src='/javascripts/sha3.js') 
     script(src="/javascripts/authentiation_scripts.js")
     script#selectable_options_template(type='text/template').

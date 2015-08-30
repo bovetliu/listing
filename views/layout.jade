@@ -2,13 +2,16 @@ doctype html
 html
   head
     title= title
+    meta( charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     // Latest compiled and minified CSS 
     link(rel="stylesheet" href="/stylesheets/yeti_bootstrap.min.css")
     link(rel="stylesheet" href="/stylesheets/fa/css/font-awesome.min.css")
     block css
       
     //- link(rel="stylesheet" href="/stylesheets/specific_01.css")
-    meta( charset='utf-8')
+    
 
   body
     include ./includes/navbar.jade
@@ -154,11 +157,20 @@ html
       // //bottom-bar
     include ./includes/authentication_modals.jade
 
-    // jQuery (necessary for Bootstrap's JavaScript plugins) 
-    script(src="/javascripts/jquery.min.js") 
-    // Include all compiled plugins (below), or include individual files as needed 
+    // jQuery (necessary for Bootstrap's JavaScript plugins) (must have)
+    script(src="/javascripts/jquery.min.js")
+    // include control logic of jQuery-ui (must have)
+    script(src='/plugins/jquery-ui-flick/jquery-ui.js')
+    // Include all compiled plugins (below), or include individual files as needed  (must have)
     script(src="/javascripts/bootstrap.min.js")
-    //import password hashing function
+
+    //backbone, its dependency and extending(data-binding) (must have)
+    script(src="/plugins/backbone/underscore-min.js")
+    script(src="/plugins/backbone/backbone-min.js")
+    script(src="/plugins/backbone/backbone.epoxy.min.js")
+
+
+    //import password hashing function (must have)
     script(src='/javascripts/sha3.js') 
     script(src="/javascripts/authentiation_scripts.js")
     block js-addons

@@ -8,8 +8,9 @@ router.get('/', function(req, res, next) {
   // } else {
   //   console.log("Not Authenticated");
   // }
-  res.render('index', { 
-  	title: 'new easysublease.org listing page demo',
+  res.render('index.jade', { 
+  	title: 'mainsite | EasySublease.org',
+    nav_title:"mainsite | EasySublease",
     online_sample:"559418e1731b61add4b8d532",
     local_sample:"55cc02d52db48c0d19116dfd",
     user: req.user,
@@ -26,6 +27,7 @@ router.get('/interview_demo', function(req, res, next) {
   // }
   res.render('interview_demo.jade', { 
     title: 'new easysublease.org listing page demo',
+    nav_title:"demo | EasySublease",
     online_sample:"559418e1731b61add4b8d532",
     local_sample:"55cc02d52db48c0d19116dfd",
     user: req.user,
