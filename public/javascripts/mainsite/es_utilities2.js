@@ -17,7 +17,7 @@ $(document).ready(function readyAtUtilities2(){
     */
     apiServerURL:function(){
       if ( location.host.search(/localhost/) === -1)
-      return "http://listing.easysublease.org";
+      return "http://listing.easysublease.com";
       else return "http://localhost:3000";
     },
     /*
@@ -92,7 +92,7 @@ $(document).ready(function readyAtUtilities2(){
   
   
   /*
-  * This is the #ROUTER# for EasySublease.org, it is used to inidcate current website status, 
+  * This is the #ROUTER# for EasySublease.com, it is used to inidcate current website status, 
   * And it is able to generate sharable URLs for the website. 
   */
   var ES_Router = Backbone.Router.extend({

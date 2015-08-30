@@ -1,6 +1,6 @@
 // JavaScript Document
 /*
-* This is the utilities page of easysublease.org, This page defines the namespaces, I can see the hierachy clearly.
+* This is the utilities page of easysublease.com, This page defines the namespaces, I can see the hierachy clearly.
 * Also some inportant variables are also defined here, such as 
 *
 */

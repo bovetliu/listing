@@ -1,6 +1,6 @@
 var _ = require('underscore');
 // var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listingtest-u7yhjm.rhcloud.com/";
-var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listing.easysublease.org/";
+var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listing.easysublease.com/";
 
 
 exports.renderJade = function( req, res, next, is_editing){
