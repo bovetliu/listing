@@ -1,5 +1,5 @@
 //listing_layout.jade imports authentication_scripts.js
-//
+// I have imported Crypto.SHA3 before this piece of JavaScript
 $(document).ready(function authReadyCallBack(){
       /*prepare auth_modals*/
     if($('.switch-modal').length > 0){
@@ -17,12 +17,19 @@ $(document).ready(function authReadyCallBack(){
       $(modal).find('.error-info, .success-info').hide();
       $(modal).find('.error-info-p, .success-info-p').text( "");
     }
+    function encryptPassword($target_form) {
+      var origin_password = $target_form.find("input[name=\"password\"]").val()
+      var hashed_password = CryptoJS.SHA3(origin_password);
+      console.log("HASHED PASSWORD " + hashed_password);
+      $target_form.find("input[name=\"password\"]").val(hashed_password);
+    };
 
     $('.modal form').on("submit",function (event){
       event.preventDefault();
       var $target_form = $(this);
       var $pparent = $target_form.parent().parent();
       clearInfo($pparent);
+      encryptPassword($target_form);
       $.ajax({
         url: $target_form.attr("action"),
         data:$target_form.serialize(),

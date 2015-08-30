@@ -16,10 +16,11 @@ var FacebookStrategy = require('passport-facebook').Strategy;    //package.json 
 var FACEBOOK_APP_ID = process.env.FB_APP_ID;
 var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
 
+
 // var FACEBOOK_APP_ID = "912860235451001";
 // var FACEBOOK_APP_SECRET = "1161273f59b2a82264d03b692eb48c15";
 if (!FACEBOOK_APP_ID  || !FACEBOOK_APP_SECRET) console.log("[WARNING] application is running without FB variables, FB_APP_ID:" + FACEBOOK_APP_ID);
-else console.log("[INFO] application is running with FB variables %s, %s",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
+else console.log("[INFO] application is running with FB variables %s, %s.",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
 
 /*if this app is running on openshift, env var should have OPENSHIFT_MONGODB_DB_URL*/
 var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
@@ -73,28 +74,66 @@ app.use(passport.session());
 /*configure passport*/
 
 // Remind myself: currently not using facebook
-// Use the FacebookStrategy within Passport.
+//   Use the FacebookStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and Facebook
 //   profile), and invoke a callback with a user object.
 
-// passport.use(new FacebookStrategy({
-//     clientID: FACEBOOK_APP_ID,
-//     clientSecret: FACEBOOK_APP_SECRET,
-//     callbackURL: "http://localhost:3000/auth/facebook/callback"
-//   },
-//   function(accessToken, refreshToken, profile, done) {
-//     // asynchronous verification, for effect...
-//     process.nextTick(function () {
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
       
-//       // To keep the example simple, the user's Facebook profile is returned to
-//       // represent the logged-in user.  In a typical application, you would want
-//       // to associate the Facebook account with a user record in your database,
-//       // and return that user instead.
-//       return done(null, profile);
-//     });
-//   }
-// ));
+      // To keep the example simple, the user's Facebook profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Facebook account with a user record in your database,
+      // and return that user instead.
+
+      db_models.User.findOne({"facebook_user_id":profile.id},null,{},function (err, instance) {
+        if (err) { 
+          console.log(err.message);
+          return next(err);
+        } 
+        else if (!instance){
+          // use are using un-associated facebook account to login
+          /* for dev. ref.
+            {  // for dev reference
+              "id":"1106067409423006",
+              "displayName":"Bowei Liu",
+              "name":{},
+              "provider":"facebook",
+            }
+          */
+          var new_user = {};
+          new_user.email = null;
+          new_user.password_hash = null;
+          var name_arr = profile.displayName.split(" ");
+          new_user.first_name = name_arr[0];
+          new_user.last_name = name_arr[name_arr.length-1] ;
+          new_user.receive_updates = true;
+          new_user.auth_level = 1;     // 1 is common user
+          new_user.facebook_user_id = profile.id;   // This line is important
+          new_user = new db_models.User(new_user);
+          new_user.save(function (error){
+            if (error) return next(error);
+            delete new_user.password_hash;
+            done(null, new_user.toObject());
+          });
+        }
+        else {
+          // find associated account
+          var instance_result = instance.toObject();
+          delete instance_result.password_hash;
+          done(null, instance_result);
+        }
+      }) // end of findOne
+    });
+  }
+));
 
 passport.use(new passportLocal.Strategy({
   usernameField: 'email',
@@ -102,6 +141,7 @@ passport.use(new passportLocal.Strategy({
   },
   verifyCredentials));
 
+// The verification function used by Passport Local strategy
 function verifyCredentials(email, password, done) {
     // Pretend this is using a real database!
     //Model.findOne(query, [fields], [options], [callback(error, doc)]): finds the first document that matches the query
@@ -116,7 +156,7 @@ function verifyCredentials(email, password, done) {
         var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
         if (instance_result.password_hash === password){
           delete instance_result.password_hash;
-          done(null, instance_result);
+          done(null, instance_result);  // pass the whole user profile
         } else{
           // Not authenticated
           done(null, null);
@@ -129,12 +169,12 @@ function verifyCredentials(email, password, done) {
 /*passport is gonna invoke this function for dev.*/
 /*added by author ad 37:00*/
 passport.serializeUser(function(user, done) {
-    done(null, user.email);
+    done(null, user._id);
 });
 
-passport.deserializeUser(function(email, done) {
+passport.deserializeUser(function(_id, done) {
     // Query database or cache here!!
-    db_models.User.findOne({"email":email},null,{},function(err, instance){
+    db_models.User.findOne({"_id":_id},null,{},function(err, instance){
       //instance is an instance of User Model
       if (err) { 
         console.log(err.message);
@@ -182,6 +222,38 @@ app.post('/user/signup', function handlerSignUp (req, res, next){
   });
 });
 
+
+// GET /auth/facebook
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Facebook authentication will involve
+//   redirecting the user to facebook.com.  After authorization, Facebook will
+//   redirect the user back to this application at /auth/facebook/callback
+app.get('/auth/facebook',
+  passport.authenticate('facebook'),
+  function(req, res){
+    // The request will be redirected to Facebook for authentication, so this
+    // function will not be called.
+});
+
+// GET /auth/facebook/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/facebook/callback', 
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('back');
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('back');  
+});
+
+
+
+
 app.post('/user/reset_password', function handlerResetPassword (req, res, next){
   // TODO 
   req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, instance){
@@ -223,35 +295,6 @@ app.post('/edit/:id', listing_lib.dbUpdateAttr);
 
 
 
-
-
-// // GET /auth/facebook
-// //   Use passport.authenticate() as route middleware to authenticate the
-// //   request.  The first step in Facebook authentication will involve
-// //   redirecting the user to facebook.com.  After authorization, Facebook will
-// //   redirect the user back to this application at /auth/facebook/callback
-// app.get('/auth/facebook',
-//   passport.authenticate('facebook'),
-//   function(req, res){
-//     // The request will be redirected to Facebook for authentication, so this
-//     // function will not be called.
-// });
-
-// // GET /auth/facebook/callback
-// //   Use passport.authenticate() as route middleware to authenticate the
-// //   request.  If authentication fails, the user will be redirected back to the
-// //   login page.  Otherwise, the primary route function function will be called,
-// //   which, in this example, will redirect the user to the home page.
-// app.get('/auth/facebook/callback', 
-//   passport.authenticate('facebook', { failureRedirect: '/' }),
-//   function(req, res) {
-//     res.redirect('/');
-// });
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('back');  
-});
 
 
 

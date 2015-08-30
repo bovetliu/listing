@@ -256,6 +256,14 @@ POST: /edit/:id        // update attribute  this one realized: known attribute p
 
 
 
+facebook profile returned from facebook
+
+{
+  "id":"1106067409423006",
+  "displayName":"Bowei Liu",
+  "name":{},
+  "provider":"facebook",
+}
 
 
 
