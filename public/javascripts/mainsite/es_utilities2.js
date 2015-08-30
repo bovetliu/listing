@@ -17,7 +17,7 @@ $(document).ready(function readyAtUtilities2(){
     */
     apiServerURL:function(){
       if ( location.host.search(/localhost/) === -1)
-      return "http://wwww.easysublease.com";
+      return "http://www.easysublease.com";
       else return "http://localhost:3000";
     },
     /*
