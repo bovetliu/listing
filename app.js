@@ -78,7 +78,7 @@ app.use(passport.session());
 //   credentials (in this case, an accessToken, refreshToken, and Facebook
 //   profile), and invoke a callback with a user object.
 
-var callbackURL = (process.env.OPENSHIFT_MONGODB_DB_URL)?"http://listing.easysublease.com/auth/facebook/callback":"http://localhost:3000/auth/facebook/callback";
+var callbackURL = (process.env.OPENSHIFT_MONGODB_DB_URL)?"http://www.easysublease.com/auth/facebook/callback":"http://localhost:3000/auth/facebook/callback";
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
