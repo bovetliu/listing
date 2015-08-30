@@ -4,7 +4,7 @@ block css
 block content
   .container
     .row
-      .col-md-12
+      .col-md-12.margin-bottom-8x
 
         h1= title
         p Welcome to #{title}
@@ -20,5 +20,9 @@ block content
           a(href="https://www.airbnb.com/rooms/2525228" target="_blank") target page
         p: a(href="/listing/#{local_sample}") local test listing/#{local_sample}
         p: a(href="/listing/#{online_sample}") online test listing/#{online_sample}
+    .row
+      .col-md-12.margin-bottom-8x
+    .row
+      .col-md-12.margin-bottom-8x
 
 block js-addons
