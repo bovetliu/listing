@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var http = require('http');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var session = require('express-session');
@@ -11,7 +10,7 @@ var multer = require("multer");  // newly added, regarding init express
 var cors = require('cors');
 
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy; 
+var passportLocal = require('passport-local'); 
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 var FACEBOOK_APP_ID = process.env.FB_APP_ID.trim();
@@ -35,7 +34,8 @@ var mongoose = require('mongoose'),  // newly added, regarding init express
 /*routers*/
 var index_rt = require('./routes/index.js');
 var s3lib = require('./routes/s3lib.js');
-var data_api_router = require('./routes/data_api_router.js');
+var data_api_router = require('./routes/data_api_router.js'),
+    user_router = require('./routes/user_router.js');
 var template = require('./routes/template.js'); 
 var listing_lib = require('./routes/listing_lib.js');
 var app = express();
@@ -51,9 +51,10 @@ app.set('port', process.env.OPENSHIFT_NODEJS_PORT|| 3000);
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(cors());
 app.use(logger('dev'));
-app.use(cookieParser());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(methodOverride());
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
@@ -95,41 +96,108 @@ app.use(passport.session());
 //   }
 // ));
 
+passport.use(new passportLocal.Strategy({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
+  verifyCredentials));
 
-// Use LocalStrategy with Passport
-
-function verifyCredentials(username, password, done) {
+function verifyCredentials(email, password, done) {
     // Pretend this is using a real database!
-    // this should be changed to retireve information from database
-    if (username === password) {
-        done(null, { id: username, name: username });
-    } else {
+    //Model.findOne(query, [fields], [options], [callback(error, doc)]): finds the first document that matches the query
+    db_models.User.findOne({"email":email},null,{},function(err, instance){
+      if (err) { 
+        console.log(err.message);
+        return next(err);
+      }
+      else if(!instance) {
         done(null, null);
-    }
+      } else{
+        var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
+        if (instance_result.password_hash === password){
+          delete instance_result.password_hash;
+          done(null, instance_result);
+        } else{
+          // Not authenticated
+          done(null, null);
+        }
+      }
+    });// end of findOne
 }
 
-passport.use(new LocalStrategy(verifyCredentials));
-
-// serialize and deserialize 
+/* seems that javascript obj cannot be serialized into session*/
+/*passport is gonna invoke this function for dev.*/
+/*added by author ad 37:00*/
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    done(null, user.email);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(email, done) {
     // Query database or cache here!!
-    done(null, { id: id, name: id });
+    db_models.User.findOne({"email":email},null,{},function(err, instance){
+      //instance is an instance of User Model
+      if (err) { 
+        console.log(err.message);
+        return next(err);
+      }
+      else if(!instance) {
+        done(null, null);
+      } else{
+        var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
+        delete instance_result.password_hash;
+        done(null, instance_result);
+      }
+    });
 });
 
 
+// every req has db_model as DetailedRentalListing
 app.use(function(req, res, next){
-  req.db_model = db_models.DetailedRentalListing;
+  req.DB_Listing = db_models.DetailedRentalListing;
+  req.DB_USER = db_models.User;
   return next();
 })
-app.use('/', index_rt);
 
+app.use('/', index_rt);
 app.use('/template', template);
 app.use('/data_api', data_api_router);
+// app.post('/user/login', user_router.login);  // user_router.login is method returns to 
 
+app.post('/user/login', passport.authenticate('local'), function(req, res) {
+  res.redirect('back');   
+}); 
+
+app.post('/user/signup', function handlerSignUp (req, res, next){
+  var new_user = {};
+  new_user.email = req.body.email;
+  new_user.password_hash = req.body.password;   //TODO one method is needed here
+  new_user.first_name = req.body.first_name;
+  new_user.last_name = req.body.last_name;
+  new_user.receive_updates = req.body.receive_updates|| false;
+  new_user.auth_level = 1;     // 1 is common user
+  new_user = new req.DB_USER(new_user);
+  new_user.save(function (error){
+    if (error) return next(error);
+    res.json(new_user.email);   // TODO send email here
+  });
+});
+
+app.post('/user/reset_password', function handlerResetPassword (req, res, next){
+  // TODO 
+  req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, instance){
+    if (err) { 
+      console.log(err.message);
+      return next(err);
+    }
+    else if(!instance) {
+      res.status(404).send("cannot find user: " + req.body.email);
+    } else{
+      var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
+      // TODO: send reset link to target email
+      res.send("reset link has been sent to " + instance_result.email + ".");
+    }
+  });
+});
 /*edit mode*/
 app.get('/edit/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,true);
@@ -140,13 +208,12 @@ app.get('/listing/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 app.post('/listing', function(req,res,next){
-
-  var instance = new req.db_model( JSON.parse(req.body.model) );
+  var instance = new req.DB_Listing( JSON.parse(req.body.model) );
   console.log(req.body.model)
   // console.log(JSON.stringify(instance));
   instance.save(function(e){
     if (e) return next(e);
-    res.send(instance.toObject());
+    res.redirect('back'); 
     
   });
 })
@@ -158,32 +225,32 @@ app.post('/edit/:id', listing_lib.dbUpdateAttr);
 
 
 
-// GET /auth/facebook
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Facebook authentication will involve
-//   redirecting the user to facebook.com.  After authorization, Facebook will
-//   redirect the user back to this application at /auth/facebook/callback
-app.get('/auth/facebook',
-  passport.authenticate('facebook'),
-  function(req, res){
-    // The request will be redirected to Facebook for authentication, so this
-    // function will not be called.
-});
+// // GET /auth/facebook
+// //   Use passport.authenticate() as route middleware to authenticate the
+// //   request.  The first step in Facebook authentication will involve
+// //   redirecting the user to facebook.com.  After authorization, Facebook will
+// //   redirect the user back to this application at /auth/facebook/callback
+// app.get('/auth/facebook',
+//   passport.authenticate('facebook'),
+//   function(req, res){
+//     // The request will be redirected to Facebook for authentication, so this
+//     // function will not be called.
+// });
 
-// GET /auth/facebook/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
-app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/');
-});
+// // GET /auth/facebook/callback
+// //   Use passport.authenticate() as route middleware to authenticate the
+// //   request.  If authentication fails, the user will be redirected back to the
+// //   login page.  Otherwise, the primary route function function will be called,
+// //   which, in this example, will redirect the user to the home page.
+// app.get('/auth/facebook/callback', 
+//   passport.authenticate('facebook', { failureRedirect: '/' }),
+//   function(req, res) {
+//     res.redirect('/');
+// });
 
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('back');  
 });
 
 

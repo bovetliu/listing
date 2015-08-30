@@ -1,0 +1,146 @@
+.modal.auth-modal.fade#login_modal(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')
+  .modal-dialog.modal-sm
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4.modal-title Log In
+      .modal-body
+        .row.error-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.error-info-p.alert.alert-danger
+              | info here
+        .row.success-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.success-info-p.alert.alert-success
+              | info here
+        .row
+          .col-md-12
+            a(class="btn btn-primary btn-block btn-facebook") 
+              span.fa.fa-lg.fa-facebook.pull-left
+              | Log in with Facebook
+        .row.margin-top-2x
+          .col-md-12
+            a.btn.btn-default.btn-block
+              span.fa.fa-lg.fa-google-plus.pull-left
+              | Log in with Google
+        hr
+        form#login_form(action="/user/login" method="post")
+          .row
+            .col-md-12
+              input#login_email.form-control(type='text', placeholder='Username(email)', name="email")   
+          .row.margin-top-2x
+            .col-md-12
+              input#login_password.form-control(type='password', placeholder='Password', name="password")
+          .row.margin-top-2x
+            .col-md-12
+              label.pull-left.es-login-checkbox-lable
+                input(type='checkbox', name="remeberme" value="true")
+                | Remeber me
+              span.resemble-link.pull-right.switch-modal(data-es-switch-modal="#reset_psw_modal" data-es-close-modal="#login_modal") Forgot password?
+          .row.margin-top-2x
+            .col-md-12
+              button.btn.btn-primary.btn-block Log In
+
+        hr
+        .row
+          .col-md-12
+            | Don't have an account? 
+            span.resemble-link.switch-modal(data-es-switch-modal="#signup_modal" data-es-close-modal="#login_modal") Sign Up
+      //- .modal-footer
+      //-   button.btn.btn-default(type='button', data-dismiss='modal') Close
+      //-   button.btn.btn-primary(type='button') Save changes
+
+
+.modal.auth-modal.fade#signup_modal(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabe2')
+  .modal-dialog.modal-sm
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4.modal-title Sigu Up
+      .modal-body
+        .row.error-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.error-info-p.alert.alert-danger
+              | info here
+        .row.success-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.success-info-p.alert.alert-success
+              | info here
+        .row
+          .col-md-12
+            a(class="btn btn-primary btn-block btn-facebook") 
+              span.fa.fa-lg.fa-facebook.pull-left
+              | Sign up with Facebook
+        .row.margin-top-2x
+          .col-md-12
+            a.btn.btn-default.btn-block
+              span.fa.fa-lg.fa-google-plus.pull-left
+              | Sign up with Google
+        hr
+        form#signup_form(action="/user/signup" method="post")
+          .row
+            .col-md-12
+              input#signup_email.form-control(type='email', placeholder='Email Address', name="email")
+          .row.margin-top-2x
+            .col-md-12
+              input#signup_password.form-control(type='password', placeholder='Password', name="password")
+          .row.margin-top-2x
+            .col-md-12
+              input#signup_first_name.form-control(type='text', placeholder='First Name', name="first_name")
+          .row.margin-top-2x
+            .col-md-12
+              input#signup_last_name.form-control(type='text', placeholder='Last Name', name="last_name")
+          .row.margin-top-2x
+            .col-md-12
+              label.es-checkbox-lable
+                input(type='checkbox', name="receive_updates" value="true")
+                | I’d like to receive coupons and inspiration
+          .row.margin-top-2x
+            .col-md-12
+              | By signing up, I agree to Easysublease's Terms of Service, Privacy Policy, Guest Refund Policy, and Host Guarantee Terms.
+          .row.margin-top-2x
+            .col-md-12
+              button.btn.btn-primary.btn-block(type="submit") Sign Up
+        hr
+        .row
+          .col-md-12
+            | Already an Easysublease member? 
+            span.resemble-link.switch-modal(data-es-switch-modal="#login_modal" data-es-close-modal="#signup_modal") Log In
+      //- .modal-footer
+      //-   button.btn.btn-default(type='button', data-dismiss='modal') Close
+      //-   button.btn.btn-primary(type='button') Save changes
+
+
+.modal.auth-modal.fade#reset_psw_modal(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')
+  .modal-dialog.modal-sm
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4.modal-title Reset Passpord
+      .modal-body
+        .row.error-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.error-info-p.alert.alert-danger
+              | info here
+        .row.success-info.margin-bottom-2x(style="display:none;")
+          .col-md-12
+            p.success-info-p.alert.alert-success
+              | info here
+        form#reset_email_form(action="/user/reset_password" method="post")
+          .row
+            .col-md-12
+              input#reset_email.form-control(type='text', placeholder='Email Address', name="email")
+          .row.margin-top-2x
+            .col-md-12
+              button.btn.btn-primary.btn-block(type="submit") Reset Passpord
+        hr
+        .row
+          .col-md-12
+            | Remeber your passpord now? 
+            span.resemble-link.switch-modal(data-es-switch-modal="#login_modal" data-es-close-modal="#reset_psw_modal") Log In
+      //- .modal-footer
+      //-   button.btn.btn-default(type='button', data-dismiss='modal') Close
+      //-   button.btn.btn-primary(type='button') Save changes

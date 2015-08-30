@@ -195,6 +195,12 @@ db.detailed_rental_listing.update({ "_id": ObjectId("55cc051e2db48c0d19116dfe")}
   { $set:{"unit_traits.price":420}}
 );
 
+modify password_hash
+db.user.update({"first_name":"Bowei"},
+  { $set:{"password_hash":"wstianxdy"}},
+  {multi:false}
+);
+
 
 03:51 test successfully
 curl -X "DELETE" http://localhost:3000/edit/558b32440ca2f11b1cf1b0a2/7115050.png
@@ -228,7 +234,7 @@ https://esimgserver.s3.amazonaws.com/558b32440ca2f11b1cf1b0a2/img2.jpg
 index.js:
 /
 /howitworks
-
+/login
 
 template.js
 /template

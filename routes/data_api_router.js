@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/**req.db_model = db_models.DetailedRentalListing;
+/**req.DB_Listing = db_models.DetailedRentalListing;
    Common prefix of paths is "/data_api"
 */
 /* refer to espi, how to write a api. */
@@ -76,7 +76,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/listing/conditional',function(req, res, next){ 
                   // query              ,fields,options, callback
-  req.db_model.find( genQuery(req.query),null , {}, function(error, results) {
+  req.DB_Listing.find( genQuery(req.query),null , {}, function(error, results) {
     if (error) return next(error);
     if (results == null) res.send([]);
     else res.send( results);    
@@ -100,7 +100,7 @@ router.get('/listing_core/conditional',function(req, res, next){
     "listing_related":1
   };
   //{"unit_traits.lat":1, "unit_traits.lng":1}
-  req.db_model.find( genQuery(req.query),selected_field, {}, function(error, results) {
+  req.DB_Listing.find( genQuery(req.query),selected_field, {}, function(error, results) {
     if (error) return next(error);
     if (results == null) res.send([]);
     else res.send( results);    
@@ -108,7 +108,7 @@ router.get('/listing_core/conditional',function(req, res, next){
 });
 
 router.get('/listing/:id', function (req, res, next){
-  req.db_model.findOne({_id:req.params.id}, null,{},function(err, instance){
+  req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);

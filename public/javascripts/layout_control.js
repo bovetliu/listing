@@ -202,6 +202,4 @@ $(document).ready(function(){
       $(this).find('.preview-info-control').css("opacity",0);
     });
   });
-
-
 }); // end of read();

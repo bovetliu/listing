@@ -105,6 +105,10 @@ a {
 a:hover {
   text-decoration: none;
 }
+span.resemble-link {
+  cursor: pointer;
+  color: #008cba;
+}
 .standard-list {
   list-style-type: none;
   margin: 0;
@@ -472,4 +476,29 @@ footer .contact .fa-lg {
 #neighborhood #map-div {
   width: 100%;
   height: 80%;
+}
+/*login in modal*/
+.auth-modal .modal-body span.fa {
+  line-height: 1.4;
+}
+.auth-modal .modal-body .btn-facebook {
+  border-color: #3B5998;
+  border-bottom-color: #263a63;
+  background-color: #3B5998;
+  color: #fff;
+}
+.auth-modal .modal-body .btn-facebook:hover {
+  border-color: #4568b2;
+  border-bottom-color: #2d4575;
+  background-color: #4568b2;
+  color: #fff;
+}
+.auth-modal .modal-body label.es-checkbox-lable {
+  line-height: 1.4;
+  font-size: 15px;
+  cursor: pointer;
+}
+.auth-modal .modal-body label.es-checkbox-lable input {
+  position: relative;
+  top: 2px;
 }

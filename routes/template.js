@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-  // req.db_model.findOne({_id:req.params.id}, null,{},function(err, instance){
+  // req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
   //     if (err) { 
   //       console.log(err.message);
   //       return next(err);
@@ -31,7 +31,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/dropzone', function(req, res, next){
 
-  req.db_model.findOne({_id: "5593aa9e48f2890a9a0f2929"}, null,{},function(err, instance){
+  req.DB_Listing.findOne({_id: "5593aa9e48f2890a9a0f2929"}, null,{},function(err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
@@ -42,13 +42,14 @@ router.get('/dropzone', function(req, res, next){
       }
       res.render("dropzone.jade",{
         "result":instance.toObject(),
+        "user": req.user,
+        "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
       });
   }); 
 })
 
 router.get('/dropzone_online', function(req, res, next){
-
-  req.db_model.findOne({_id: "55910d94008d84ed2912e1ae"}, null,{},function(err, instance){
+  req.DB_Listing.findOne({_id: "55910d94008d84ed2912e1ae"}, null,{},function(err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
@@ -59,6 +60,8 @@ router.get('/dropzone_online', function(req, res, next){
       }
       res.render("dropzone.jade",{
         "result":instance.toObject(),
+        "user": req.user,
+        "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
       });
   }); 
 })

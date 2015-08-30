@@ -586,7 +586,7 @@ $(document).ready(function(){
     } );  //end of editables_controler initialization and its class definition
     var editables_controler_01 = new Editables_Controler();
   }//(if (helper.isEditing()))
-  
+
   
   /*prepare map*/
   var neighborhood_data = JSON.parse($("#neighborhood-data").attr("content"));
@@ -599,6 +599,8 @@ $(document).ready(function(){
     title:"target_property"
   });
   
+
+
 
 }); // end of ready()
 

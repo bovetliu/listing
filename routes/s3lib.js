@@ -53,7 +53,7 @@ var to_be_exported = {
     console.log("[INFO]file_path_in_bucket"+file_path_in_bucket);
 
     /*updating Database*/
-    req.db_model.findOne({_id:req.params.id}, null,{},function(err, instance){
+    req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
@@ -136,7 +136,7 @@ var to_be_exported = {
               return res.status(500).send('failed to upload to s3').end();
           }
 
-          req.db_model.findOne({_id:req.params.id}, null,{},function(err, instance){  // Payattention, here is Callback
+          req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){  // Payattention, here is Callback
             if (err) { 
               console.log(err.message);
               return next(err);

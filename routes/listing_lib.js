@@ -4,7 +4,7 @@ var current_page_url = (process.env.local)?"http://localhost:3000/":"http://list
 
 
 exports.renderJade = function( req, res, next, is_editing){
-  req.db_model.findOne({_id:req.params.id}, null,{},function(err, instance){
+  req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
@@ -18,7 +18,9 @@ exports.renderJade = function( req, res, next, is_editing){
         "title": instance_result.listing_related.title,
         "result":instance_result,
         "current_page_url":current_page_url,
-        "editing":is_editing
+        "editing":is_editing,
+        "user": req.user,
+        "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
       });
   });  
 }
@@ -81,7 +83,7 @@ exports.dbUpdateAttr =function(req, res , next){
     req.body[key] = JSON.parse(req.body[key]);
   });
   // console.log(req.body);
-  req.db_model.findOne({_id:req.params.id} , null, {}, function(err, instance){
+  req.DB_Listing.findOne({_id:req.params.id} , null, {}, function(err, instance){
     if (err) {
       return next(err);
     }
