@@ -1,17 +1,17 @@
-var express = require('express');
+var express = require('express');       //package.json has info
 var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var multer = require("multer");  // newly added, regarding init express
-var cors = require('cors');
+var favicon = require('serve-favicon');     //package.json has info
+var logger = require('morgan');             //package.json has info
+var session = require('express-session');   //package.json has info
+var cookieParser = require('cookie-parser'); //package.json has info
+var bodyParser = require('body-parser');      //package.json has info
+var methodOverride = require('method-override');  //package.json has info
+var multer = require("multer");  // newly added, regarding init express   //package.json has info
+var cors = require('cors');    //package.json has info
 
-var passport = require('passport');
-var passportLocal = require('passport-local'); 
-var FacebookStrategy = require('passport-facebook').Strategy;
+var passport = require('passport');    //package.json has info
+var passportLocal = require('passport-local');     //package.json has info
+var FacebookStrategy = require('passport-facebook').Strategy;    //package.json has info
 
 var FACEBOOK_APP_ID = process.env.FB_APP_ID;
 var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
