@@ -161,10 +161,10 @@ block room
                       label(for="wishlist-button" class="btn btn-default btn-block btn-large")  
                         i.fa.fa-heart-o.padding-left-right-1x
                         | Save to Wish List
-                    if (!editing)    
+                    if (!editing && editable)  
                       .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
                         a#edit-button.btn.btn-primary(href=current_page_url +'edit/' + result._id) Enter Edit Mode
-                    else    
+                    else if (editing)  
                       .edit-buttons-wrapper.margin-top-3x.margin-bottom-3x
                         a#edit-button.btn.btn-primary(href=current_page_url +'listing/' + result._id) Enter Listing Mode
                         | &nbsp;&nbsp;

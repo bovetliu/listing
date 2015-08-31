@@ -160,6 +160,17 @@ db.detailed_rental_listing.remove(
 {_id: {$ne:  ObjectId("55910d94008d84ed2912e1ae")}}
 )
 
+/*remove specific one*/
+
+db.detailed_rental_listing.remove(
+{_id: ObjectId("55e3f2ecdcc7c53f1e812bfd") }
+)
+
+"listing_related.title":"Listing Title"
+db.detailed_rental_listing.remove(
+{"listing_related.title":"Listing Title"}, {multi:true}
+)
+
 /*modify target_range */
 db.detailed_rental_listing.update({},
   { $set:{"user_behavior.target_range":2}},
@@ -174,6 +185,12 @@ db.detailed_rental_listing.update({},
   { $set:{"listing_related.availability.begin":1441929600000,"listing_related.availability.end":1455494400000 }},
   {multi:true}
 );
+
+db.detailed_rental_listing.update({},
+  { $set:{"listing_related.lister":ObjectId("55e2b290ffe2b75a0d59944d")}},
+  {multi:true}
+);
+
 
 /*unset one key*/
 db.detailed_rental_listing.update({},
@@ -266,7 +283,17 @@ facebook profile returned from facebook
 }
 
 
-
+user: me :55e2b290ffe2b75a0d59944d
+{
+  "_id" : ObjectId("55e2b290ffe2b75a0d59944d"),
+  "email" : "bowei_liu@ymail.com",
+  "password_hash" : "94339ff3793583410ad207ed1e68d8a5a363e9b542ee934ea3c5c3b85693953b82bc1999a0e5a65185b3c478ba09abcbf9b8d477ae7bb76eabde68f9dfaa6ab1",
+  "first_name" : "Bowei",
+  "last_name" : "Liu",
+  "receive_updates" : false,
+  "auth_level" : 1,
+  "__v" : 0
+}
 
 
 

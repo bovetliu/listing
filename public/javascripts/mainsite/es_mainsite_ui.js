@@ -202,18 +202,36 @@ $(document).ready(function es_mainsite_ui_doc_ready(){
     // now have this context as custom_marker
     var custom_marker = this;
     var controller = custom_marker._controller;
-    console.log(controller.get("mongo_model"));
+    // console.log(controller.get("mongo_model"));
     controller.set("datacontent",{"displayedText":"Preparing..."})
-    EasySubOrg.comm_unit.postDetailedListing( controller.get("mongo_model"), function(dataReturned, status){
-      // dataReturned  is instance.toObject()
-      var url = EasySubOrg.comm_unit.apiServerURL()+"/listing/" + dataReturned._id;
-      if (status == "success"){
-        console.log(dataReturned);
-        controller.set("datacontent",{"displayedText":'<a href=\"'+url+'\" target="_blank">Good to go! Click me again</a>'}) 
-        $(custom_marker.getDOM()).addClass(userCatLookUp[controller.get("mongo_model").user_behavior.cat] );
-        controller.set("click",null);
-      }
-    });
+    $(custom_marker.getDOM()).addClass(userCatLookUp[controller.get("mongo_model").user_behavior.cat] );
+    EasySubOrg.comm_unit.postDetailedListing( controller.get("mongo_model"), 
+
+      function successCB (dataReturned, status){
+        // dataReturned  is instance.toObject()
+        var url = EasySubOrg.comm_unit.apiServerURL()+"/listing/" + dataReturned._id;
+        if (status == "success"){
+          // console.log(dataReturned);
+          controller.set("datacontent",{"displayedText":'<a href=\"'+url+'\" target="_blank">Good to go! Click me again</a>'}) 
+          $(custom_marker.getDOM()).addClass(userCatLookUp[controller.get("mongo_model").user_behavior.cat] );
+          controller.set("click",null);
+        } 
+
+      }, 
+      function errorCB (jqXHR, textStatus, errorThrown){
+        console.log(JSON.stringify(jqXHR));
+        switch(jqXHR.status){
+          case 401:
+            controller.set("datacontent",{"displayedText":'401 Unauthorized, log in needed'}) 
+            $(custom_marker.getDOM()).addClass(userCatLookUp[controller.get("mongo_model").user_behavior.cat] );
+            controller.set("click",null);
+            break;
+          default:
+            alert("Unhandled error: " + jqXHR.status);
+            controller.set("click",null);
+            break
+        }
+      });
   }// click handler
 
   // This is the only marker used to helper users do their list

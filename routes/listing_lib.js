@@ -13,6 +13,7 @@ exports.renderJade = function( req, res, next, is_editing){
         res.status(404).send("requested resource cannot be found").end();
         return;
       }
+
       var instance_result = instance.toObject();
       res.render("my_listing.jade",{
         "title": instance_result.listing_related.title,
@@ -20,9 +21,12 @@ exports.renderJade = function( req, res, next, is_editing){
         "current_page_url":current_page_url,
         "editing":is_editing,
         "user": req.user,
-        "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
+        "isAuthenticated": req.isAuthenticated(),  // req.isAuthenticated() is a method added by passport
+        "editable": (req.isAuthenticated() )?req.user._id.toString() === instance_result.listing_related.lister.toString() :false
       });
+    // console.log("test editable: " + (req.user)?req.user._id === instance_result.listing_related.lister : false);
   });  
+
 }
 var global_res = "";
 var global_next = "";

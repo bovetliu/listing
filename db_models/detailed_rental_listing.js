@@ -54,6 +54,7 @@ var detailed_rental_listing_schema = new mongoose.Schema({
       "target_range": Number // 1: target whole unit 2: target room 3: target shared place
   },
   "listing_related": {
+      "lister":mongoose.Schema.ObjectId,
       "title": String,
       "about_this_listing": String,
       "isexpired": Boolean,

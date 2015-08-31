@@ -79,6 +79,7 @@ app.use(passport.session());
 //   profile), and invoke a callback with a user object.
 
 var callbackURL = (process.env.OPENSHIFT_MONGODB_DB_URL)?"http://www.easysublease.com/auth/facebook/callback":"http://localhost:3000/auth/facebook/callback";
+
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
@@ -164,6 +165,18 @@ function verifyCredentials(email, password, done) {
       }
     });// end of findOne
 }
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    // var my_error = new Error("Unauthorized behaviro");
+    // my_error.status = 401;
+    // next(my_error);
+    res.status(401).send("Unauthorized action, loggin required");
+  }
+}
+
 
 /* seems that javascript obj cannot be serialized into session*/
 /*passport is gonna invoke this function for dev.*/
@@ -270,6 +283,36 @@ app.post('/user/reset_password', function handlerResetPassword (req, res, next){
     }
   });
 });
+
+// make sure that right person is operating on right resource
+function ensureRightUser(req, res, next){
+  if (req.isAuthenticated()){
+    db_models.DetailedRentalListing.findOne({ _id:req.params.id },null,{},function(error, instance){
+      if (error){
+        return res.status(error.status).send(JSON.stringify(error));
+      }
+      else if(!instance) {
+        res.status(404).send("requested resource cannot be found").end();
+        return;
+      }
+      else {
+        var instance_result = instance.toObject();
+        console.log(JSON.stringify(instance_result));
+        if (instance_result.listing_related.lister.toString()=== req.user._id.toString() ){
+          next();
+        } else{
+          res.status(401).send("Unauthorized action, correct user needed or need log in");
+          return;
+        }
+      }
+    });
+  } else {
+    res.status(401).send("Unauthorized action, correct user needed or need log in");
+    return; 
+  }
+}
+app.use('/edit/:id', ensureRightUser);
+
 /*edit mode*/
 app.get('/edit/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,true);
@@ -279,14 +322,15 @@ app.get('/edit/:id', function(req, res, next){
 app.get('/listing/:id', function(req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
-app.post('/listing', function(req,res,next){
+
+app.post('/listing', ensureAuthenticated, function(req,res,next){
   var instance = new req.DB_Listing( JSON.parse(req.body.model) );
-  console.log(req.body.model)
+  // console.log(req.body.model)
   // console.log(JSON.stringify(instance));
+  instance.listing_related.lister = req.user._id;
   instance.save(function(e){
     if (e) return next(e);
-    res.redirect('back'); 
-    
+    res.json(instance);
   });
 })
 app.delete('/edit/:id/:filename', s3lib.procDeleteObject);

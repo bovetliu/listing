@@ -29,7 +29,7 @@ $(document).ready(function readyAtUtilities2(){
       else
         return this.get("listingServerURL") + "/edit/" + _id;
     },
-    postDetailedListing:function(tobeSubmittedModel, callback){
+    postDetailedListing:function(tobeSubmittedModel, successCallback, errorCallback){
       // tobeSubmittedModel is JSON stringified
       tobeSubmittedModel = JSON.stringify(tobeSubmittedModel);
       targetURL = this.get("listingServerURL") + "/listing";
@@ -38,10 +38,10 @@ $(document).ready(function readyAtUtilities2(){
         url:  targetURL,
         data: {model:tobeSubmittedModel},
         crossDomain: true,
-
-        dataType:"json",
+        dataType: "json",
         type:"POST",
-        success: callback  
+        success: successCallback,
+        error: errorCallback
       });
     },
     /*
