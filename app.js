@@ -198,7 +198,8 @@ passport.deserializeUser(function(_id, done) {
       } else{
         var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
         delete instance_result.password_hash;
-        done(null, instance_result);
+        // done(null, instance_result);
+        done(null, instance);  // hoping req.User is one Mongoose Model instance
       }
     });
 });
@@ -311,18 +312,16 @@ function ensureRightUser(req, res, next){
     return; 
   }
 }
-app.use('/edit/:id', ensureRightUser);
-
-/*edit mode*/
-app.get('/edit/:id', function(req, res, next){
-  listing_lib.renderJade(req,res,next,true);
-});
 
 /*listing mode*/
-app.get('/listing/:id', function(req, res, next){
+app.get('/listing/:id', function (req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 
+app.post('/addToWishList/:listingId', ensureAuthenticated, listing_lib.addListingToWishList);
+
+
+/*publish new listing*/
 app.post('/listing', ensureAuthenticated, function(req,res,next){
   var instance = new req.DB_Listing( JSON.parse(req.body.model) );
   // console.log(req.body.model)
@@ -333,6 +332,15 @@ app.post('/listing', ensureAuthenticated, function(req,res,next){
     res.json(instance);
   });
 })
+
+app.use('/edit/:id', ensureRightUser);
+
+/*edit mode*/
+app.get('/edit/:id', function (req, res, next){
+  listing_lib.renderJade(req,res,next,true);
+});
+
+
 app.delete('/edit/:id/:filename', s3lib.procDeleteObject);
 app.post('/edit/:id/upload_image',multer(), s3lib.procUpload); // the multer() between '/upload_image' and 's3lib.procUpload' is very importatn
 app.post('/edit/:id', listing_lib.dbUpdateAttr);

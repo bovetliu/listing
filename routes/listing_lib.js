@@ -2,6 +2,12 @@ var _ = require('underscore');
 // var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listingtest-u7yhjm.rhcloud.com/";
 var current_page_url = (process.env.local)?"http://localhost:3000/":"http://www.easysublease.com/";
 
+function processReqUser ( req_user){  
+  if (req_user) var temp_user = req_user.toObject();
+  else return null;
+  delete temp_user.password_hash; 
+  return temp_user;
+}
 
 exports.renderJade = function( req, res, next, is_editing){
   req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
@@ -13,16 +19,17 @@ exports.renderJade = function( req, res, next, is_editing){
         res.status(404).send("requested resource cannot be found").end();
         return;
       }
-
       var instance_result = instance.toObject();
+      console.log(processReqUser(req.user));
       res.render("my_listing.jade",{
         "title": instance_result.listing_related.title,
         "result":instance_result,
         "current_page_url":current_page_url,
         "editing":is_editing,
-        "user": req.user,
+        "user": processReqUser(req.user),
         "isAuthenticated": req.isAuthenticated(),  // req.isAuthenticated() is a method added by passport
-        "editable": (req.isAuthenticated() )?req.user._id.toString() === instance_result.listing_related.lister.toString() :false
+        "editable": (req.isAuthenticated() )?req.user._id.toString() === instance_result.listing_related.lister.toString() :false,
+        "saved": (req.isAuthenticated())?req.user.wishlist.indexOf( instance_result._id.toString()) : -1
       });
     // console.log("test editable: " + (req.user)?req.user._id === instance_result.listing_related.lister : false);
   });  
@@ -79,7 +86,7 @@ var updateAttr = function(instance, object, attr_path, value){
   }
 }
 
-exports.dbUpdateAttr =function(req, res , next){
+exports.dbUpdateAttr = function(req, res , next){
   global_res = res;
   global_next = next;
   _.each(req.body, function(element, key, list){
@@ -99,4 +106,22 @@ exports.dbUpdateAttr =function(req, res , next){
     updateAttr(instance, instance, req.body['attr_path'], req.body['value']);
     console.log("end of updateAttr()")
   });
+}
+
+// req.user
+//POST '/addToWishList/:id'  content:  "user_id":"id literal"
+exports.addListingToWishList = function (req, res, next) {
+  var user_id = req.user._id.toString();
+  var listing_id = req.params.listingId;
+  var purpose  = req.body.purpose;
+
+  req.DB_Listing.findOne({_id:listing_id}, null ,{} , function (err, target_listing) {
+    if (err) return next (err);
+    if (!target_listing) return res.status(404).send("requested listing cannot be found");
+    // now I know this listing is a valid one
+
+    req.user.addOneListingToWishList(listing_id, purpose);
+    res.json( processReqUser(req.user));
+  })
+
 }

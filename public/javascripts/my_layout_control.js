@@ -318,9 +318,35 @@ $(document).ready(function(){
           break;
       }
     }, // end of setStatus
+
+    handleSaveToWishList : function () {
+      var $wishListButton = $('#wishlist-button');
+      if ($wishListButton.prop('checked') === true){
+        // add to wishlist
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"add"}, function successCB(data, textStatus, jqXHR){
+          alert(JSON.stringify(data));
+          
+        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+
+        });
+
+      } else {
+        //cancel status
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"cancel"}, function successCB(data, textStatus, jqXHR){
+          alert(JSON.stringify(data));
+          
+        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+
+        });
+      }
+
+    },
+
     initialize:function(){
+      var ClassRef = this;
       $('#subnav-container').hide();
       this.setStatus("initial");
+      $('#wishlist-button').change(ClassRef.handleSaveToWishList);
     }
   });
 

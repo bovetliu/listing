@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
+function processReqUser ( req_user){  
+  if (req_user) var temp_user = req_user.toObject();
+  else return null;
+  delete temp_user.password_hash; 
+  return temp_user;
+}
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.render('template.jade', {"similar_listing":"similar_listing 1 2 3"});
@@ -42,7 +48,7 @@ router.get('/dropzone', function(req, res, next){
       }
       res.render("dropzone.jade",{
         "result":instance.toObject(),
-        "user": req.user,
+        "user": processReqUser(req.user),
         "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
       });
   }); 
@@ -60,7 +66,7 @@ router.get('/dropzone_online', function(req, res, next){
       }
       res.render("dropzone.jade",{
         "result":instance.toObject(),
-        "user": req.user,
+        "user": processReqUser(req.user),
         "isAuthenticated": req.isAuthenticated()  // req.isAuthenticated() is a method added by passport
       });
   }); 

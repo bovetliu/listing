@@ -87,7 +87,7 @@ detailed_rental_listing_schema.method({
     }
     this.listing_related.images.push(filename);
     this.listing_related.images = _.uniq(this.listing_related.images);
-    console.log("[debug] check result of this.listing_related.images: " + JSON.stringify(this.listing_related.images) + " sentIn filename: " + filename);
+    // console.log("[debug] check result of this.listing_related.images: " + JSON.stringify(this.listing_related.images) + " sentIn filename: " + filename);
     this.save( saveCB);
   },
   deleteOneImage:function( filename){
