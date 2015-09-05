@@ -1,4 +1,4 @@
-// This is javascript file, this script will be run in client side
+// This is javascript file, this script will be run in client side, mainly reponsible for listing page
 //gloabl variabl Galleria is reserved word
 $(document).ready(function(){
   page_useful_info = JSON.parse($("meta[name=\"page_useful_info\"]").attr("content"));
@@ -319,24 +319,43 @@ $(document).ready(function(){
       }
     }, // end of setStatus
 
+    handleWishListButton: function(wishlist){
+      var ClassRef = this;
+      var $label = $("label.wishlist-label");
+      if (wishlist.indexOf(page_useful_info.db_id) > -1){
+        // $label.html('<span class="fa fa-heart padding-left-right-1x"></span>In Wish List');
+        $label.find(".fa").removeClass("fa-heart-o").addClass("fa-heart");
+        $label.find(".text").text("In Wish List");
+
+      } else  {
+        // $label.html('<span class="fa fa-heart-o padding-left-right-1x"></span>Add to Wish List');
+        $label.find(".fa").removeClass("fa-heart").addClass("fa-heart-o");
+        $label.find(".text").text("Save to Wish List");
+      }
+    },
     handleSaveToWishList : function () {
+      var ClassRef = this;
       var $wishListButton = $('#wishlist-button');
       if ($wishListButton.prop('checked') === true){
         // add to wishlist
-        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"add"}, function successCB(data, textStatus, jqXHR){
-          alert(JSON.stringify(data));
-          
-        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"add"}, function successCB(user, textStatus, jqXHR){
+          // user should be intelli-sensed as json object
+          // alert(JSON.stringify(typeof data));
+          ClassRef.handleWishListButton(user.wishlist);
 
+
+        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.status +": " + jqXHR.responseText + "(TODO: modal notification)");
         });
 
       } else {
         //cancel status
-        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"cancel"}, function successCB(data, textStatus, jqXHR){
-          alert(JSON.stringify(data));
-          
-        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"cancel"}, function successCB(user, textStatus, jqXHR){
+          // alert(JSON.stringify(data));
+          ClassRef.handleWishListButton(user.wishlist);
 
+        }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.status +": " + jqXHR.responseText + "(TODO: modal notification)");
         });
       }
 
@@ -346,7 +365,7 @@ $(document).ready(function(){
       var ClassRef = this;
       $('#subnav-container').hide();
       this.setStatus("initial");
-      $('#wishlist-button').change(ClassRef.handleSaveToWishList);
+      $('#wishlist-button').change(ClassRef.handleSaveToWishList.bind(ClassRef));
     }
   });
 
