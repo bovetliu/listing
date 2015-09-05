@@ -179,7 +179,7 @@ block room
                           span.instant-book.hide
                             i.fa.fa-bolt.h4
                             | Instant Book
-                          span.book-now Contact Listing Person
+                          span.book-now(onclick="alert(\"Not implemented yet\");") Contact Listing Person
                     +wishListButtonWrapper (saved)
 
                     //- whether display edit mode button
@@ -219,13 +219,13 @@ block room
               #book_it_responsive.margin-bottom-8x
                 .row.hidden-xs.margin-bottom-2x
                   .btn-group.btn-group-justified(role='group', aria-label='...')
-                    a.btn.btn-primary(href="#") Contact Listing Person
+                    a.btn.btn-primary(href="#" onclick="alert(\"Not implemented yet\");") Contact Listing Person
                     +wishListMixin(saved)  
                     +listingOrEditButton(editing)
                     +outdateOrActivate(result.listing_related.isexpired)
                 .row.visible-xs-block
                   .col-xs-8.margin-bottom-2x.padding-left-right-0x
-                    a.btn.btn-primary(href="#") Contact Listing Person
+                    a.btn.btn-primary(href="#" onclick="alert(\"Not implemented yet\");") Contact Listing Person
                   .col-xs-8.margin-bottom-2x.padding-left-right-0x
                     +wishListMixin(saved)  
                 .row
@@ -239,33 +239,6 @@ block room
                         i.fa.fa-facebook
                         | &nbsp;Facebook
                       a.btn.btn-default(href="#" onclick="alert(\"Not implemented yet\");") ... More
-
-
-                  //- .col-sm-3
-                  //-   .btn.btn-primary.margin-bottom-3x(type='button') Contact Listing Person
-                  //- .col-sm-3
-                  //-   .btn.btn-default.margin-bottom-3x(type='button')
-                  //-     i.fa.fa-heart-o.padding-left-right-1x
-                  //-     | Save to Wish List
-                  //-   //- .wishlist-wrapper.margin-bottom-3x
-                  //-   //-   input(type="checkbox" class="hide" name="wishlist-button" id="wishlist-button")
-                  //-   //-   label(for="wishlist-button" class="btn btn-default btn-block btn-large")  
-                  //-   //-     i.fa.fa-heart-o.padding-left-right-1x
-                  //-   //-     | Save to Wish List
-                  //- .col-sm-3
-                  //-   .edit-buttons-wrapper.margin-bottom-3x
-                  //-     if (editing)
-                  //-       a.btn.btn-primary(href=current_page_url +'listing/' + result._id) Enter Listing Mode
-                  //-     else
-                  //-       a.btn.btn-primary(href=current_page_url +'edit/' + result._id) Enter Edit Mode
-                  //- .col-sm-3
-                  //-   +outdateOrActivate(result.listing_related.isexpired)
-
-                  //- .col-sm-3.margin-bottom-3x
-                    .btn.btn-primary(type='button') Enter Edit Mode
-
-                //- put three buttons here
-
 
     #details.details-section
       //-I need to process some raw database data here

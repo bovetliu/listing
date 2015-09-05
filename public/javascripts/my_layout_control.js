@@ -373,7 +373,7 @@ $(document).ready(function(){
   var top_till_bottom_of_photo_minus_40 = $('#photos').height() + $('#my-nav').height() - $("#pricing").height();
   var higher_bound_of_top = $('#details').height()  + $('#summary').height() + $('#photos').height() + $('#my-nav').height() - $("#pricing").height() - $("#book_it").height() -40;
   var summary_top =  $('#photos').height() + $('#my-nav').height() ;
-  console.log([higher_bound_of_top, summary_top]);
+  // console.log([higher_bound_of_top, summary_top]);
 
   var book_panel_01 = new BookPanel( 
     { model: new Backbone.Model({ 
