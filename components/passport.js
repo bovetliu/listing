@@ -27,6 +27,15 @@ function verifyCredentials(email, password, done) {
     });// end of findOne
 }
 
+function ensureAPIAuthenticated ( req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    var error = new Error("Not authorized"); error.status =  401;
+    return res.status(401).json({"error":error});
+  }
+}
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     next();
@@ -36,6 +45,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 exports.verifyCredentials = verifyCredentials;
+exports.ensureAPIAuthenticated = ensureAPIAuthenticated;
 exports.ensureAuthenticated = ensureAuthenticated;
 exports.configurePasssport = function (app, db_models, passport){
   // initialize passport

@@ -63,6 +63,7 @@ passport = PassportConfigure.configurePasssport(app, db_models, passport);
 app.use(function(req, res, next){
   req.DB_Listing = db_models.DetailedRentalListing;
   req.DB_USER = db_models.User;
+  req.db_models = db_models;
   return next();
 })
 
@@ -152,7 +153,8 @@ app.get('/listing/:id', function (req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 
-app.post('/addToWishList/:listingId', PassportConfigure.ensureAuthenticated, listing_lib.addListingToWishList);
+// API style
+app.post('/addToWishList/:listingId', PassportConfigure.ensureAPIAuthenticated , listing_lib.addListingToWishList);
 
 /*publish new listing*/
 app.post('/listing', PassportConfigure.ensureAuthenticated, function(req,res,next){

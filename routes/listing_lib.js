@@ -2,7 +2,7 @@ var _ = require('underscore');
 // var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listingtest-u7yhjm.rhcloud.com/";
 var current_page_url = (process.env.local)?"http://localhost:3000/":"http://www.easysublease.com/";
 var helper = require("../components/helper.js");
-
+var async = require("async");
 function processReqUser ( req_user){  
   if (req_user) var temp_user = req_user.toObject();
   else return null;
@@ -11,16 +11,27 @@ function processReqUser ( req_user){
 }
 
 function renderJade (req, res, next, is_editing) {
-  req.DB_Listing.findOne({_id:req.params.id}, null,{},function  renderJadeFindListingCallback (err, instance){
-      if (err) { 
-        console.log(err.message);
-        return next(err);
+
+  async.parallel([
+      function firstOne (cb){
+        req.DB_Listing.findOne({_id:req.params.id}).exec(cb);
+      },
+      function secondOne (cb){
+        var operater_id = (req.user )? req.user._id : null;
+        req.db_models.Relation.findOne({operater_id:operater_id, operation_receiver_id: req.params.id, operation_name:"wishlist"}).exec(cb);
       }
-      if(!instance) {
-        return next(helper.populateError(new Error(),404, "requested resource could not be found"));
+
+    ], function callback (err, instances){
+      if (err){
+        if (Array.isArray(err)){
+          return next( err[0]);
+        } else{return next(err);} 
       }
-      var instance_result = instance.toObject();
-      console.log(processReqUser(req.user));
+      if (!instances[0]){
+        return next(helper.populateError(new Error(), 404, "requested resouce could be found"));
+      }
+      instance_result = instances[0];
+
       res.render("my_listing.jade",{
         "title": instance_result.listing_related.title,
         "result":instance_result,
@@ -29,11 +40,10 @@ function renderJade (req, res, next, is_editing) {
         "user": processReqUser(req.user),
         "isAuthenticated": req.isAuthenticated(),  // req.isAuthenticated() is a method added by passport
         "editable": (req.isAuthenticated() )?req.user._id.toString() === instance_result.listing_related.lister.toString() :false,
-        "saved": (req.isAuthenticated())?req.user.wishlist.indexOf( instance_result._id.toString()) : -1
+        "saved": !(instances[1] === null)
       });
-    // console.log("test editable: " + (req.user)?req.user._id === instance_result.listing_related.lister : false);
-  });  
-}
+ });
+}  // end of renderJade
 exports.renderJade = renderJade;
 function ensureRightUser(req, res, next){
   if (req.isAuthenticated()){
@@ -133,20 +143,43 @@ exports.dbUpdateAttr = function(req, res , next){
   });
 }
 
-// req.user
+// req.user, this is one API style callback
 //POST '/addToWishList/:id'  content:  "user_id":"id literal"
 exports.addListingToWishList = function (req, res, next) {
   var user_id = req.user._id.toString();
   var listing_id = req.params.listingId;
   var purpose  = req.body.purpose;
-
-  req.DB_Listing.findOne({_id:listing_id}, null ,{} , function (err, target_listing) {
-    if (err) return next (err);
-    if (!target_listing) return res.status(404).send("requested listing cannot be found");
-    // now I know this listing is a valid one
-
-    req.user.addOneListingToWishList(listing_id, purpose);
-    res.json( processReqUser(req.user));
-  })
-
+  var new_relation = {
+    operater_id:user_id,
+    operation_receiver_id:listing_id,
+    operation_name: "wishlist",
+    operation_value:1
+  };
+  if (purpose  === "add"){
+    req.db_models.Relation.addRelation(new_relation, function (err, added_relation){
+      if (err) return helper.handleAPIError(err, res);
+      res.json(new_relation);
+    });
+  } else if (purpose === "cancel") {
+    req.db_models.Relation.findOneAndRemove(new_relation,{}, function onRemove(err, target_relation){
+      if (err) return helper.handleAPIError(err, res);
+      if (!target_relation) {
+        var error = new Error("could not find this relationship");
+        error.status = 404;
+        return helper.handleAPIError(error, res); 
+      }
+      new_relation.operation_value = 0;
+      res.json(new_relation);
+    });
+  } else {
+    // return next(helper.populateError(new Error(), 500, "does not recoginize this relation"));
+    return res.status(500).send("does not recoginize")
+  }
+/*
+var relation_schema = new mongoose.Schema({
+  "operater_id":{type:mongoose.Schema.ObjectId, ref:'User'},
+  "operation_receiver_id" :mongoose.Schema.ObjectId,   
+  "operation"  :{"operation_name":String, "operation_value": Number}
+},{ collection:'relation'});
+*/
 }

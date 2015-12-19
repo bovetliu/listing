@@ -3,7 +3,8 @@ var _ = require('underscore');
 var relation_schema = new mongoose.Schema({
   "operater_id":{type:mongoose.Schema.ObjectId, ref:'User'},
   "operation_receiver_id" :mongoose.Schema.ObjectId,   
-  "operation"  :{"operation_name":String, "operation_value": Number}
+  "operation_name":String, 
+  "operation_value": Number
 },{ collection:'relation'});
 
 // define instance methods
@@ -17,14 +18,17 @@ relation_schema.static({
   },
   addRelation: function (relation, exec){
     var Model = this;
-    Model.findOne({operater_id: relation.operater_id, operation_receiver_id: relation.operation_receiver_id, "operation.operation_name": relation.operation.operation_name},
+    Model.findOne({
+      operater_id: relation.operater_id, 
+      operation_receiver_id: relation.operation_receiver_id, 
+      "operation_name": relation.operation_name
+    },
     function (err, db_relation){
       if (err){
         console.log("[ERROR] : " + JSON.stringify(err))
         exec(err, null);
       }
       else if (!db_relation){
-        console.log("relation.js: " + "going to new");
         var new_relation = new Model(relation);
         new_relation.save( function (err) {
           if (err) {

@@ -319,10 +319,10 @@ $(document).ready(function(){
       }
     }, // end of setStatus
 
-    handleWishListButton: function(wishlist){
+    handleWishListButton: function(relation){
       var ClassRef = this;
       var $label = $("label.wishlist-label");
-      if (wishlist.indexOf(page_useful_info.db_id) > -1){
+      if ( relation.operation_value === 1){
         // $label.html('<span class="fa fa-heart padding-left-right-1x"></span>In Wish List');
         $label.find(".fa").removeClass("fa-heart-o").addClass("fa-heart");
         $label.find(".text").text("In Wish List");
@@ -338,10 +338,8 @@ $(document).ready(function(){
       var $wishListButton = $('#wishlist-button');
       if ($wishListButton.prop('checked') === true){
         // add to wishlist
-        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"add"}, function successCB(user, textStatus, jqXHR){
-          // user should be intelli-sensed as json object
-          // alert(JSON.stringify(typeof data));
-          ClassRef.handleWishListButton(user.wishlist);
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"add"}, function successCB(relation, textStatus, jqXHR){
+          ClassRef.handleWishListButton(relation);
 
 
         }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
@@ -350,10 +348,8 @@ $(document).ready(function(){
 
       } else {
         //cancel status
-        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"cancel"}, function successCB(user, textStatus, jqXHR){
-          // alert(JSON.stringify(data));
-          ClassRef.handleWishListButton(user.wishlist);
-
+        $.post("/addToWishList/" + page_useful_info.db_id, {"purpose":"cancel"}, function successCB(relation, textStatus, jqXHR){
+          ClassRef.handleWishListButton(relation);
         }).fail(function faillCB ( jqXHR, textStatus, errorThrown) {
           alert(jqXHR.status +": " + jqXHR.responseText + "(TODO: modal notification)");
         });

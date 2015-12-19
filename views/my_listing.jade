@@ -115,7 +115,7 @@ block room
             when false
               .btn-mark-outdated.btn.btn-danger(data-dbtarget="listing_related.isexpired" data-dbvalue="true") Deactivate
       mixin wishListButtonWrapper (saved)
-        if saved >= 0
+        if saved 
           .wishlist-wrapper
             input(type="checkbox" checked="" class="hide" name="wishlist-button" id="wishlist-button")
             label(for="wishlist-button" class="btn btn-default btn-block btn-large wishlist-label")  

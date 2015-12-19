@@ -23,8 +23,6 @@ var user_schema = new mongoose.Schema({
   "email":String,
   "auth_level":{type:Number, min:0, max:4},
   "receive_updates":Boolean,
-  "wishlist":Array,    // ObjectId literal array
-  //regarding OAuth
   "facebook_user_id":Number,
   "google_user_id":Number, // currently I don't know how google user id is specified
   "passwordreset":String
