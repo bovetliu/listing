@@ -20,6 +20,7 @@ var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
 // I should be using different FB credentials between local and openshift server
 if (!FACEBOOK_APP_ID  || !FACEBOOK_APP_SECRET) console.log("[WARNING] application is running without FB variables, FB_APP_ID:" + FACEBOOK_APP_ID);
 else console.log("[INFO] application is running with FB variables %s, %s.",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
+console.log("[INFO] application is running gmail account: %s, pass %s.", process.env.EMAIL_ACCOUNT, process.env.EMAIL_PSW);
 
 /*if this app is running on openshift, env var should have OPENSHIFT_MONGODB_DB_URL*/
 var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
@@ -266,21 +267,36 @@ app.get('/logout', function(req, res){
 });
 
 
-
+app.get('/user/reset_password', function (req, res, next){
+  req.DB_USER.findOne({"passwordreset": req.query.passwordreset}).exec(function (err, user){
+    if (err) return next (err);
+    if (!user){
+      var e = new Error("requested user could be found");
+      e.status = 404;
+      return next(e);
+    }
+    user.passwordreset = undefined;
+    user.save();
+    return res.send("reset page not implemented");
+  })
+});
 
 app.post('/user/reset_password', function handlerResetPassword (req, res, next){
   // TODO 
-  req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, instance){
+  req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, user){
     if (err) { 
       console.log(err.message);
       return next(err);
     }
-    else if(!instance) {
-      res.status(404).send("cannot find user: " + req.body.email);
+    else if(!user) {
+      return res.status(404).send("cannot find user: " + req.body.email);
     } else{
-      var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
+      // var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
       // TODO: send reset link to target email
-      res.send("reset link has been sent to " + instance_result.email + ".");
+      user.resetPassword(function callBack(){
+        if (err) return next(err);
+        res.send("reset link has been sent to " + user.email + ".");
+      });
     }
   });
 });
