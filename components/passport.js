@@ -1,12 +1,13 @@
 // var passport = require('passport');    //package.json has info
 var passportLocalStrategy = require('passport-local').Strategy;     //package.json has info
 var FacebookStrategy = require('passport-facebook').Strategy;    //package.json has info
+var helper = require('./helper.js');
 local_utilities ={}; // this one will be populated when configurePassport() is invoked
 // The verification function used by Passport Local strategy
 function verifyCredentials(email, password, done) {
     // Pretend this is using a real database!
     //Model.findOne(query, [fields], [options], [callback(error, doc)]): finds the first document that matches the query
-    local_utilities['db_models'].User.findOne({"email":email},null,{},function(err, instance){
+    local_utilities['db_models'].User.findOne({"email":email},null,{}, function verifyCredentialsCB (err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
@@ -30,7 +31,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     next();
   } else {
-    res.status(401).send("Unauthorized action, loggin required");
+    return next(helper.poulateError(new Error, 401, "Unauthorized action, loggin required"));
   }
 }
 

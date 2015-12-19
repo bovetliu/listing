@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');      //package.json has info
 var methodOverride = require('method-override');  //package.json has info
 var multer = require("multer");  // newly added, regarding init express   //package.json has info
 var cors = require('cors');    //package.json has info
-
 var passport = require('passport');    //package.json has info
 // var passportLocalStrategy = require('passport-local').Strategy;     //package.json has info
 // var FacebookStrategy = require('passport-facebook').Strategy;    //package.json has info
@@ -22,6 +21,8 @@ var mongoose = require('mongoose'),  // newly added, regarding init express
     db = mongoose.connect(db_url+db_literal, {safe: true}),
     id = mongoose.Types.ObjectId();
 
+/*helper functions*/
+var helper = require('./components/helper.js');
 
 /*routers*/
 var index_rt = require('./routes/index.js');
@@ -55,7 +56,7 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var PassportConfigure = require('./configureComponents/passport.js');
+var PassportConfigure = require('./components/passport.js');
 passport = PassportConfigure.configurePasssport(app, db_models, passport);
 
 // every req has db_model as DetailedRentalListing
@@ -122,11 +123,8 @@ app.get('/logout', function(req, res){
 app.get('/user/reset_password', function (req, res, next){
   req.DB_USER.findOne({"passwordreset": req.query.passwordreset}).exec(function (err, user){
     if (err) return next (err);
-    if (!user){
-      var e = new Error("requested user could be found");
-      e.status = 404;
-      return next(e);
-    }
+    if (!user)
+      return next(helper.populateError(new Error(), 404,"reuested user could not be found"));
     user.passwordreset = undefined;
     user.save();
     return res.send("reset page not implemented");
@@ -134,52 +132,20 @@ app.get('/user/reset_password', function (req, res, next){
 });
 
 app.post('/user/reset_password', function handlerResetPassword (req, res, next){
-  // TODO 
   req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, user){
     if (err) { 
-      console.log(err.message);
       return next(err);
     }
     else if(!user) {
-      return res.status(404).send("cannot find user: " + req.body.email);
+      return next(helper.populateError(new Error(), 404, "requested user could not be found"));
     } else{
-      // var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
-      // TODO: send reset link to target email
-      user.resetPassword(function callBack(){
+      user.resetPassword(function callBack(err){
         if (err) return next(err);
         res.send("reset link has been sent to " + user.email + ".");
       });
     }
   });
 });
-
-// make sure that right person is operating on right resource
-function ensureRightUser(req, res, next){
-  if (req.isAuthenticated()){
-    db_models.DetailedRentalListing.findOne({ _id:req.params.id },null,{},function(error, instance){
-      if (error){
-        return res.status(error.status).send(JSON.stringify(error));
-      }
-      else if(!instance) {
-        res.status(404).send("requested resource cannot be found").end();
-        return;
-      }
-      else {
-        var instance_result = instance.toObject();
-        console.log(JSON.stringify(instance_result));
-        if (instance_result.listing_related.lister.toString()=== req.user._id.toString() ){
-          next();
-        } else{
-          res.status(401).send("Unauthorized action, correct user needed or need log in");
-          return;
-        }
-      }
-    });
-  } else {
-    res.status(401).send("Unauthorized action, correct user needed or need log in");
-    return; 
-  }
-}
 
 /*listing mode*/
 app.get('/listing/:id', function (req, res, next){
@@ -188,20 +154,17 @@ app.get('/listing/:id', function (req, res, next){
 
 app.post('/addToWishList/:listingId', PassportConfigure.ensureAuthenticated, listing_lib.addListingToWishList);
 
-
 /*publish new listing*/
 app.post('/listing', PassportConfigure.ensureAuthenticated, function(req,res,next){
   var instance = new req.DB_Listing( JSON.parse(req.body.model) );
-  // console.log(req.body.model)
-  // console.log(JSON.stringify(instance));
   instance.listing_related.lister = req.user._id;
   instance.save(function(e){
     if (e) return next(e);
     res.json(instance);
   });
 })
-
-app.use('/edit/:id', ensureRightUser);
+// make sure that right person is operating on right resource
+app.use('/edit/:id', listing_lib.ensureRightUser );
 
 /*edit mode*/
 app.get('/edit/:id', function (req, res, next){
@@ -213,18 +176,12 @@ app.delete('/edit/:id/:filename', s3lib.procDeleteObject);
 app.post('/edit/:id/upload_image',multer(), s3lib.procUpload); // the multer() between '/upload_image' and 's3lib.procUpload' is very importatn
 app.post('/edit/:id', listing_lib.dbUpdateAttr);
 
-
-
-
-
-
-
 // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
+app.use(function(req, res, next) {
+  var err = new Error('Not Found: doest not match any routes');
+  err.status = 404;
+  next(err);
+});
 
 // error handlers
 // development error handler
@@ -247,6 +204,18 @@ else{
       res.status(err.status || 500).render('error.jade',{"error":err});
   });
 } 
+
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var ip   = process.env.OPENSHIFT_NODEJS_IP  || '127.0.0.1'
+
+app.listen(port,ip ,null, function(){
+  console.log( "server listening: " + ip + ":" +port );
+});
+
+
+
+
+
 // var server = http.createServer(app);
 // var boot = function () {
 //   server.listen(app.get('port'), function(){
@@ -264,9 +233,3 @@ else{
 //   exports.shutdown = shutdown;
 //   exports.port = app.get('port');
 // }
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-var ip   = process.env.OPENSHIFT_NODEJS_IP  || '127.0.0.1'
-
-app.listen(port,ip ,null, function(){
-  console.log( "server listening: " + ip + ":" +port );
-});

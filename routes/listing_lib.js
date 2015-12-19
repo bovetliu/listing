@@ -1,6 +1,7 @@
 var _ = require('underscore');
 // var current_page_url = (process.env.local)?"http://localhost:3000/":"http://listingtest-u7yhjm.rhcloud.com/";
 var current_page_url = (process.env.local)?"http://localhost:3000/":"http://www.easysublease.com/";
+var helper = require("../components/helper.js");
 
 function processReqUser ( req_user){  
   if (req_user) var temp_user = req_user.toObject();
@@ -9,15 +10,14 @@ function processReqUser ( req_user){
   return temp_user;
 }
 
-exports.renderJade = function( req, res, next, is_editing){
-  req.DB_Listing.findOne({_id:req.params.id}, null,{},function(err, instance){
+function renderJade (req, res, next, is_editing) {
+  req.DB_Listing.findOne({_id:req.params.id}, null,{},function  renderJadeFindListingCallback (err, instance){
       if (err) { 
         console.log(err.message);
         return next(err);
       }
       if(!instance) {
-        res.status(404).send("requested resource cannot be found").end();
-        return;
+        return next(helper.populateError(new Error(),404, "requested resource could not be found"));
       }
       var instance_result = instance.toObject();
       console.log(processReqUser(req.user));
@@ -33,8 +33,33 @@ exports.renderJade = function( req, res, next, is_editing){
       });
     // console.log("test editable: " + (req.user)?req.user._id === instance_result.listing_related.lister : false);
   });  
-
 }
+exports.renderJade = renderJade;
+function ensureRightUser(req, res, next){
+  if (req.isAuthenticated()){
+    req.DB_Listing.findOne({ _id:req.params.id },null,{},function(error, instance){
+      if (error){
+        return next(error);
+      }
+      else if(!instance) {
+        return next(helper.populateError(new Error(),404,"requested resource could not be found"));
+      }
+      else {
+        var instance_result = instance.toObject();
+        // console.log(JSON.stringify(instance_result));
+        if (instance_result.listing_related.lister.toString()=== req.user._id.toString() ){
+          next();
+        } else{
+          return next(helper.populateError(new Error(), 401, "Unauthorized action, although you loggied in"));
+        }
+      }
+    });
+  } else {
+    return next(helper.populateError(new Error(), 401, "Unauthorized action, correct user needed or need log in"));
+  }
+}
+exports.ensureRightUser = ensureRightUser;
+
 var global_res = "";
 var global_next = "";
 
