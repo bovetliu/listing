@@ -10,18 +10,9 @@ var multer = require("multer");  // newly added, regarding init express   //pack
 var cors = require('cors');    //package.json has info
 
 var passport = require('passport');    //package.json has info
-var passportLocal = require('passport-local');     //package.json has info
-var FacebookStrategy = require('passport-facebook').Strategy;    //package.json has info
-
-var FACEBOOK_APP_ID = process.env.FB_APP_ID;
-var FACEBOOK_APP_SECRET = process.env.FB_APP_SECRET;
-
-
-// I should be using different FB credentials between local and openshift server
-if (!FACEBOOK_APP_ID  || !FACEBOOK_APP_SECRET) console.log("[WARNING] application is running without FB variables, FB_APP_ID:" + FACEBOOK_APP_ID);
-else console.log("[INFO] application is running with FB variables %s, %s.",FACEBOOK_APP_ID, FACEBOOK_APP_SECRET );
+// var passportLocalStrategy = require('passport-local').Strategy;     //package.json has info
+// var FacebookStrategy = require('passport-facebook').Strategy;    //package.json has info
 console.log("[INFO] application is running gmail account: %s, pass %s.", process.env.EMAIL_ACCOUNT, process.env.EMAIL_PSW);
-
 /*if this app is running on openshift, env var should have OPENSHIFT_MONGODB_DB_URL*/
 var db_literal = (process.env.OPENSHIFT_MONGODB_DB_URL)?"listingtest":"esapi";
 
@@ -42,7 +33,6 @@ var listing_lib = require('./routes/listing_lib.js');
 var app = express();
  
 // var imageServerPdath='https://esimgserver.s3.amazonaws.com';
-
 // app configuration
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,146 +55,8 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-app.use(passport.initialize());
-app.use(passport.session());
-
-/* passport configuration*/
-/*configure passport*/
-
-// Remind myself: currently not using facebook
-//   Use the FacebookStrategy within Passport.
-//   Strategies in Passport require a `verify` function, which accept
-//   credentials (in this case, an accessToken, refreshToken, and Facebook
-//   profile), and invoke a callback with a user object.
-
-var callbackURL = (process.env.OPENSHIFT_MONGODB_DB_URL)?"http://www.easysublease.com/auth/facebook/callback":"http://localhost:3000/auth/facebook/callback";
-
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: callbackURL
-  },
-  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
-
-      db_models.User.findOne({"facebook_user_id":profile.id},null,{},function (err, instance) {
-        if (err) { 
-          console.log(err.message);
-          return next(err);
-        } 
-        else if (!instance){
-          // use are using un-associated facebook account to login
-          /* for dev. ref.
-            {  // for dev reference
-              "id":"1106067409423006",
-              "displayName":"Bowei Liu",
-              "name":{},
-              "provider":"facebook",
-            }
-          */
-          var new_user = {};
-          new_user.email = null;
-          new_user.password_hash = null;
-          var name_arr = profile.displayName.split(" ");
-          new_user.first_name = name_arr[0];
-          new_user.last_name = name_arr[name_arr.length-1] ;
-          new_user.receive_updates = true;
-          new_user.auth_level = 1;     // 1 is common user
-          new_user.facebook_user_id = profile.id;   // This line is important
-          new_user = new db_models.User(new_user);
-          new_user.save(function (error){
-            if (error) return next(error);
-            delete new_user.password_hash;
-            done(null, new_user.toObject());
-          });
-        }
-        else {
-          // find associated account
-          var instance_result = instance.toObject();
-          delete instance_result.password_hash;
-          done(null, instance_result);
-        }
-      }) // end of findOne
-    });
-  }
-));
-
-passport.use(new passportLocal.Strategy({
-  usernameField: 'email',
-  passwordField: 'password'
-  },
-  verifyCredentials));
-
-// The verification function used by Passport Local strategy
-function verifyCredentials(email, password, done) {
-    // Pretend this is using a real database!
-    //Model.findOne(query, [fields], [options], [callback(error, doc)]): finds the first document that matches the query
-    db_models.User.findOne({"email":email},null,{},function(err, instance){
-      if (err) { 
-        console.log(err.message);
-        return next(err);
-      }
-      else if(!instance) {
-        done(null, null);
-      } else{
-        var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
-        if (instance_result.password_hash === password){
-          delete instance_result.password_hash;
-          done(null, instance_result);  // pass the whole user profile
-        } else{
-          // Not authenticated
-          done(null, null);
-        }
-      }
-    });// end of findOne
-}
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    // var my_error = new Error("Unauthorized behaviro");
-    // my_error.status = 401;
-    // next(my_error);
-    res.status(401).send("Unauthorized action, loggin required");
-  }
-}
-
-
-/* seems that javascript obj cannot be serialized into session*/
-/*passport is gonna invoke this function for dev.*/
-/*added by author ad 37:00*/
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(function(_id, done) {
-    // Query database or cache here!!
-    db_models.User.findOne({"_id":_id},null,{},function(err, instance){
-      //instance is an instance of User Model
-      if (err) { 
-        console.log(err.message);
-        return next(err);
-      }
-      else if(!instance) {
-        done(null, null);
-      } else{
-        var instance_result = instance.toObject(); // convert mongoose instance into JSON-lized object
-        delete instance_result.password_hash;
-        // done(null, instance_result);
-        done(null, instance);  // hoping req.User is one Mongoose Model instance
-      }
-    });
-});
-
+var PassportConfigure = require('./configureComponents/passport.js');
+passport = PassportConfigure.configurePasssport(app, db_models, passport);
 
 // every req has db_model as DetailedRentalListing
 app.use(function(req, res, next){
@@ -245,7 +97,7 @@ app.post('/user/signup', function handlerSignUp (req, res, next){
 //   redirect the user back to this application at /auth/facebook/callback
 app.get('/auth/facebook',
   passport.authenticate('facebook'),
-  function(req, res){
+  function(req, res, next){
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
 });
@@ -334,11 +186,11 @@ app.get('/listing/:id', function (req, res, next){
   listing_lib.renderJade(req,res,next,false);
 });
 
-app.post('/addToWishList/:listingId', ensureAuthenticated, listing_lib.addListingToWishList);
+app.post('/addToWishList/:listingId', PassportConfigure.ensureAuthenticated, listing_lib.addListingToWishList);
 
 
 /*publish new listing*/
-app.post('/listing', ensureAuthenticated, function(req,res,next){
+app.post('/listing', PassportConfigure.ensureAuthenticated, function(req,res,next){
   var instance = new req.DB_Listing( JSON.parse(req.body.model) );
   // console.log(req.body.model)
   // console.log(JSON.stringify(instance));
