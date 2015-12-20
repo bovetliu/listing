@@ -58,18 +58,34 @@ user_schema.method({
   displayName: function(){
     return this.first_name + " " + this.last_name;
   },
+  getOnePasswordReset :function( attempt, callback){
+    var user = this;
+    user.model("User").findOne({passwordreset: attempt }).exec(function (err, user){
+      if (err) return callback(err, null);
+      if (user){  // find in db, there is another one with the same password reset, so try another random string
+        var new_attempt = randomString(30);
+        return user.getOnePasswordReset(new_attempt, callback);
+      }
+      return callback(null, attempt);
+    });
+  },
   resetPassword: function(cb){
     var user = this;
-    user.passwordreset = randomString(15);
-    var resetUrl = (process.env.local)?'http://127.0.0.1:3000/user/reset_password?passwordreset=':'http://www.easysublease.com/user/reset_password?passwordreset=';
-    user.save(function (err){
-      if (err) throw err;
-      transporter.sendMail({
-        to:user.email,
-        subject:'reset password',
-        text: resetUrl+ user.passwordreset
-      },cb);
+    user.getOnePasswordReset(randomString(30), function (err, valid_passwordreset){
+      if (err) return cb(err);
+      user.passwordreset = valid_passwordreset;
+      var resetUrl = (process.env.local)?'http://127.0.0.1:3000/user/resetpassword?passwordreset=':'http://www.easysublease.com/user/resetpassword?passwordreset=';
+      
+      user.save(function (err){
+        if (err) return cb(err);
+        transporter.sendMail({
+          to:user.email,
+          subject:'reset password',
+          text: resetUrl+ user.passwordreset
+        },cb);
+      }); 
     });
+
   }
 });
 

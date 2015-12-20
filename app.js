@@ -121,24 +121,43 @@ app.get('/logout', function(req, res){
 });
 
 
-app.get('/user/reset_password', function (req, res, next){
+app.get('/user/resetpassword', function (req, res, next){
+  if (!req.query.passwordreset){
+    return next(helper.populateError(new Error(), 404,"This password reset link might have been used or expired"));
+  }
   req.DB_USER.findOne({"passwordreset": req.query.passwordreset}).exec(function (err, user){
     if (err) return next (err);
     if (!user)
       return next(helper.populateError(new Error(), 404,"reuested user could not be found"));
+    return res.render('user/resetpsw.jade', {
+      passwordreset:req.query.passwordreset
+    });
+  });
+  // res.render('user/resetpsw.jade');
+});
+
+app.post('/user/resetpassword', function (req, res, next){
+  if (!req.query.passwordreset){
+    return next(helper.populateError(new Error(), 404,"reuested user could not be found"));
+  }
+  req.DB_USER.findOne({"passwordreset": req.query.passwordreset}).exec(function (err, user){
+    if (err) return next (err);
+    if (!user)
+      return next(helper.populateError(new Error(), 404, "reuested user could not be found"));
+    user.password_hash = req.body.new_password;
     user.passwordreset = undefined;
     user.save();
-    return res.send("reset page not implemented");
-  })
+    return res.redirect("/");
+  });
 });
 
 app.post('/user/reset_password', function handlerResetPassword (req, res, next){
   req.DB_USER.findOne({"email": req.body.email.trim()}, null,{}, function(err, user){
-    if (err) { 
+    if (err) {
       return next(err);
     }
     else if(!user) {
-      return next(helper.populateError(new Error(), 404, "requested user could not be found"));
+      return helper.handleAPIError(new Error("Unable to find"), res);
     } else{
       user.resetPassword(function callBack(err){
         if (err) return next(err);

@@ -1,0 +1,50 @@
+extends ../layout
+block css
+  link(href='/stylesheets/mainsite/es_custom_css2.css', rel='stylesheet', type='text/css')
+  link(href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400', rel='stylesheet', type='text/css')
+  script(src="/assets/angular.min.js")
+block content
+  .container(ng-app="resetpasswordNG" ng-controller="resetpasswordNGCtrl")
+    h3.text-center reset your password
+    .row
+      .col-xs-4.col-xs-offset-4
+        form(method ="post" name="myForm" action="/user/resetpassword?passwordreset=#{passwordreset}")
+          .form-group
+            label(for='new-password') new password
+            input#new-password.form-control(type='password', name="new_password" ,placeholder='new password', ng-model="new_password" required )
+            span(ng-show="invalidPassword() && myForm.new_password.$dirty") at least one number, one lowercase and one uppercase letter at least six characters
+          .form-group
+            label(for='new-password-confirm') new passowrd confirm
+            input#new-password-confirm.form-control(type='password', name="new_password_confirm" , placeholder='new password confirm', ng-model="new_password_confirm" required)
+            span(ng-show="new_password_confirm !== new_password && myForm.new_password_confirm.$dirty" , style="color:red;") Inconsistent two inputs
+          button.btn.btn-default(type='submit' ng-disabled="new_password !== new_password_confirm || myFrom.new_password.$pristine || myForm.new_password_confirm.$pristine || invalidPassword()") Submit
+
+
+
+block js-addons
+
+
+  script(type="text/javascript").
+    var app = angular.module("resetpasswordNG",[]);
+    app.controller("resetpasswordNGCtrl", function ($scope){
+      $scope.new_password = "";
+      $scope.new_password_confirm = "";
+      $scope.invalidPassword = function (){
+        return !(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test($scope.new_password));
+      }
+
+    });
+    var $form = $("form[name=myForm]");
+    $form.submit(function (){
+      //- event.preventDefault();
+      var data = {};
+      _.each($form.serializeArray(), function (pair, index, ar){
+        data[pair.name] = pair.value;
+      });
+      data.new_password = CryptoJS.SHA3(data.new_password);
+      data.new_password_confirm = CryptoJS.SHA3(data.new_password_confirm);
+      $form.find("#new-password").val(data.new_password);
+      $form.find("#new-password-confirm").val(data.new_password_confirm);
+      //- $form.submit();
+      return true;
+    });
