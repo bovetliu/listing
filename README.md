@@ -1,5 +1,29 @@
 ## Listing Service Compoenent of EasySublease
-#### How it works:
+#### How it works English Version and 中文:
+
+English Version
+Website URL http://www.easysublease.com
+
+Students have two important factors in their daily life, 1.apartments and 2.cars. I focus on apartments first, hoping to simplify process of subleasing one apartment and find one. So today I would like to introduce my personal project EasySublease.com. EasySublease is developed by one graduate student in Computer Engineering of Texas A&M. This readme mainly introduces features "right click on map to post" and "in-page editing". They are only features I implemented yet.
+
+Following is the main map of EasySublease. Above the map is the filter. One the map, we can know the titles and categories of each listing. Blue markers means subleasing, Red ones means seeking apartments, and green ones means seeking co-lessees. Some other living utilities like school transit routes are also marked (the routes currently are hard-coded, but I have already implemented CRUD of MVCObjects on another project:[Fire Ant Spatial Information](http://fasids-u7yhjm.rhcloud.com/) ).  
+
+
+![Alt main map](https://boweiliu.files.wordpress.com/2015/12/01indexmap.jpg?w=998 "Optional title")
+
+Then click on marker on map to enter listing page
+![Alt listing page](https://boweiliu.files.wordpress.com/2015/12/02listingpage.jpg?w=998 "Optional title")
+
+I carefully studied listing page of Airbnb. It is one process of learning.
+Major innovation is done on how listing owner can edit listing page. I extended dropzone.js so it can drag and drop pictures to Amazon S3. By clicking titles and introductions, One can directly edit and save it. Think about how Linkedin profile works.  
+
+![Alt edit listing page](https://boweiliu.files.wordpress.com/2015/12/03listingedit.jpg?w=998 "Optional title")
+
+Introduction is over, the purpose of this Readme is looking for some friends so we can make this site more complete and benefit more people. Also it is for the convenience of interviewers who want to know more detail about this project.
+
+Main App program: https://github.com/bovetliu/listing
+
+Self-authored Map Customizing Tool：https://github.com/bovetliu/mapcover
 
 中文版本:
 网址 http://www.easysublease.com
