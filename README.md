@@ -4,9 +4,9 @@
 English Version
 Website URL http://www.easysublease.com
 
-Students have two important factors in their daily life, 1.apartments and 2.cars. I focus on apartments first, hoping to simplify process of subleasing one apartment and find one. So today I would like to introduce my personal project EasySublease.com. EasySublease is developed by one graduate student in Computer Engineering of Texas A&M. This readme mainly introduces features "right click on map to post" and "in-page editing". They are only features I implemented yet.
+Students have two important factors in their daily life, 1.apartments and 2.cars. I focus on apartments first, hoping to simplify process of subleasing one apartment and find one. So today I would like to introduce my personal project EasySublease.com. I am a graduate student in Computer Engineering of Texas A&M. This README.md mainly introduces features "right click on map to post" and "in-page editing". They are only features I implemented yet.
 
-Following is the main map of EasySublease. Above the map is the filter. One the map, we can know the titles and categories of each listing. Blue markers means subleasing, Red ones means seeking apartments, and green ones means seeking co-lessees. Some other living utilities like school transit routes are also marked (the routes currently are hard-coded, but I have already implemented CRUD of MVCObjects on another project:[Fire Ant Spatial Information](http://fasids-u7yhjm.rhcloud.com/) ).  
+Following is screenshot main map of EasySublease. Above the map is the filter. One the map, we can know the titles and categories of each listing. Blue markers means subleasing, Red ones means seeking apartments, and green ones means seeking co-lessees. Some other living utilities like school transit routes are also marked (the routes currently are hard-coded, but I have already implemented CRUD of MVCObjects on another project:[Fire Ant Spatial Information](http://fasids-u7yhjm.rhcloud.com/) ).  
 
 
 ![Alt main map](https://boweiliu.files.wordpress.com/2015/12/01indexmap.jpg?w=998 "Optional title")
