@@ -38,8 +38,9 @@ Self-authored Map Customizing Tool：https://github.com/bovetliu/mapcover
 
 主要的创新在房源主人的对自己房源信息编辑方式，扩展了dropzone.js的，让它可以直接拖拽图片上传到amazon s3， 点击很多比如标题等元素，可以直接替换出编辑框，save后，编辑后的效果就直接显示。03listingedit.jpg
 ![Alt text](https://boweiliu.files.wordpress.com/2015/12/03listingedit.jpg?w=998 "Optional title")
-介绍完毕，我发帖的目的在于寻找一些志同道合的朋友，大家一起把这这些想法实现。gihub地址在
+介绍完毕，我发帖的目的在于寻找一些志同道合的朋友，大家一起把这这些想法实现。同时也方便面试官更仔细得了解简历所写projects如何工作的
 
+gihub地址在
 主程序 https://github.com/bovetliu/listing
 
 自写深度定制地图UI辅助工具：https://github.com/bovetliu/mapcover
